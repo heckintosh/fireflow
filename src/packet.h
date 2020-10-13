@@ -6,10 +6,11 @@
 class packet {
     public:
     packet()
-    : src_ip(0), dst_ip(0), source_port(0), destination_port(0), protocol(0),
+    : sample_ratio(1), src_ip(0), dst_ip(0), source_port(0), destination_port(0), protocol(0),
       length(0), flags(0), number_of_packets(1), ip_fragmented(false), ip_protocol_version(4),
       ttl(0), packet_payload_pointer(NULL), packet_payload_length(0){}
 
+    uint32_t sample_ratio;
     /* IPv4 */
     uint32_t src_ip;
     uint32_t dst_ip;
@@ -28,7 +29,6 @@ class packet {
     uint8_t flags; /* tcp flags */
 
     bool ip_fragmented; /* If IP packet fragmented */
-    bool ip_dont_fragment               = false; /* If IP has don't fragment flag */
 
     struct timeval ts;
     void* packet_payload_pointer;
@@ -42,4 +42,4 @@ class packet {
     int64_t flow_end = 0;
 };
 
-typedef void (*packet_pointer)(packet&);
+typedef void (*packet_process_ptr)(packet&);
