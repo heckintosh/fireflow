@@ -1,41 +1,43 @@
-#include <log4cpp/Appender.hh>
-#include <log4cpp/BasicLayout.hh>
-#include <log4cpp/Category.hh>
-#include <log4cpp/FileAppender.hh>
-#include <log4cpp/Layout.hh>
-#include <log4cpp/OstreamAppender.hh>
-#include <log4cpp/PatternLayout.hh>
-#include <log4cpp/Priority.hh>
+#include "log4cpp/Appender.hh"
+#include "log4cpp/BasicLayout.hh"
+#include "log4cpp/Category.hh"
+#include "log4cpp/FileAppender.hh"
+#include "log4cpp/Layout.hh"
+#include "log4cpp/OstreamAppender.hh"
+#include "log4cpp/PatternLayout.hh"
+#include "log4cpp/Priority.hh"
+#include "log4cpp/PatternLayout.hh"
+#include <fstream>
 #include <iostream>
 #include <string>
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <packet.h>
+#include "packet.h"
 #include <pfring.h>
 
 using namespace std;
-extern log4cpp::Category& logger;
-extern uint64_t total_unparsed_packets;
+log4cpp::Category& logger = log4cpp::Category::getRoot();
+uint64_t total_unparsed_packets;
 bool pfring_main_loop(const char* dev);
 void pfring_packet_process();
-
+string log_file_path = "/tmp/fastnetmon_plugin_tester.log";
 string interface = "eth0";
-packet_process_ptr pfring_packetprocessor_ptr = NULL;
+//packet_process_ptr pfring_packetprocessor_ptr = NULL;
 bool pfring_kernel_parser = true;
 pfring* ring = NULL;
 uint32_t pfring_sampling_rate = 1;
 
-// Choose an ethernet interface to capture, set sampling rate
-void pfring_capture(packet_process_ptr func_ptr){
-    logger << log4cpp::Priority::INFO << "PF_RING plugin started";
-    pfring_packetprocessor_ptr = func_ptr;
-    logger << log4cpp::Priority::INFO << "We selected interface:" << interface;
-    if (interface == "") {
-        logger << log4cpp::Priority::ERROR << "Please specify interface";
-        exit(1);
-    }
-    pfring_packetprocessing_task();
+void init_logging() {
+    log4cpp::PatternLayout* layout = new log4cpp::PatternLayout();
+    layout->setConversionPattern("%d [%p] %m%n");
+
+    log4cpp::Appender* appender = new log4cpp::FileAppender("default", log_file_path);
+    appender->setLayout(layout);
+
+    logger.setPriority(log4cpp::Priority::INFO);
+    logger.addAppender(appender);
+    logger.info("Logger initialized!");
 }
 
 //Start the PFRING loop
@@ -49,7 +51,69 @@ void pfring_packetprocessing_task() {
         exit(1);
     }
 }
+// Choose an ethernet interface to capture, set sampling rate
+void pfring_capture(){
+    logger << log4cpp::Priority::INFO << "PF_RING plugin started";
+    //pfring_packetprocessor_ptr = func_ptr;
+    logger << log4cpp::Priority::INFO << "We selected interface:" << interface;
+    if (interface == "") {
+        logger << log4cpp::Priority::ERROR << "Please specify interface";
+        exit(1);
+    }
+    pfring_packetprocessing_task();
+}
 
+void pfring_packet_parser(const struct pfring_pkthdr* h, const u_char* p, const u_char* user_bytes) {
+    // Description of all fields: http://www.ntop.org/pfring_api/structpkt__parsing__info.html
+    packet packet;
+
+    // We pass only one packet to processing
+    packet.number_of_packets = 1;
+
+    // Now we support only non sampled input from PF_RING
+    packet.sample_ratio = pfring_sampling_rate;
+    memset((void*)&h->extended_hdr.parsed_pkt, 0, sizeof(h->extended_hdr.parsed_pkt));
+
+    // We do not calculate timestamps here because it's useless and consumes so much cpu
+    // https://github.com/ntop/PF_RING/issues/9
+    u_int8_t timestamp = 0;
+    u_int8_t add_hash = 0;
+    pfring_parse_pkt((u_char*)p, (struct pfring_pkthdr*)h, 4, timestamp, add_hash);
+
+    if (h->extended_hdr.parsed_pkt.ip_version != 4 && h->extended_hdr.parsed_pkt.ip_version != 6) {
+        total_unparsed_packets++;
+        return;
+    }
+
+    packet.ip_protocol_version = h->extended_hdr.parsed_pkt.ip_version;
+
+    if (packet.ip_protocol_version == 4) {
+        // IPv4
+
+        /* PF_RING stores data in host byte order but we use network byte order */
+        packet.src_ip = htonl(h->extended_hdr.parsed_pkt.ip_src.v4);
+        packet.dst_ip = htonl(h->extended_hdr.parsed_pkt.ip_dst.v4);
+    } 
+    packet.source_port = h->extended_hdr.parsed_pkt.l4_src_port;
+    packet.destination_port = h->extended_hdr.parsed_pkt.l4_dst_port;
+
+    // We need this for deep packet inspection
+    packet.packet_payload_length = h->len;
+    packet.packet_payload_pointer = (void*)p;
+
+    packet.length = h->len;
+    packet.protocol = h->extended_hdr.parsed_pkt.l3_proto;
+    packet.ts = h->ts;
+
+    // Copy flags from PF_RING header to our pseudo header
+    if (packet.protocol == IPPROTO_TCP) {
+        packet.flags = h->extended_hdr.parsed_pkt.tcp.flags;
+    } else {
+        packet.flags = 0;
+    }
+
+    //pfring_packetprocessor_ptr(packet);
+}
 //Define the flag, snaplen and implementation of PFRING loop
 bool pfring_main_loop(const char* dev) {
 
@@ -121,59 +185,11 @@ bool pfring_main_loop(const char* dev) {
     return true;
 }
 
-void pfring_packet_parser(const struct pfring_pkthdr* h, const u_char* p, const u_char* user_bytes) {
-    // Description of all fields: http://www.ntop.org/pfring_api/structpkt__parsing__info.html
-    packet packet;
-
-    // We pass only one packet to processing
-    packet.number_of_packets = 1;
-
-    // Now we support only non sampled input from PF_RING
-    packet.sample_ratio = pfring_sampling_rate;
-    memset((void*)&h->extended_hdr.parsed_pkt, 0, sizeof(h->extended_hdr.parsed_pkt));
-
-    // We do not calculate timestamps here because it's useless and consumes so much cpu
-    // https://github.com/ntop/PF_RING/issues/9
-    u_int8_t timestamp = 0;
-    u_int8_t add_hash = 0;
-    pfring_parse_pkt((u_char*)p, (struct pfring_pkthdr*)h, 4, timestamp, add_hash);
-
-    if (h->extended_hdr.parsed_pkt.ip_version != 4 && h->extended_hdr.parsed_pkt.ip_version != 6) {
-        total_unparsed_packets++;
-        return;
-    }
-
-    packet.ip_protocol_version = h->extended_hdr.parsed_pkt.ip_version;
-
-    if (packet.ip_protocol_version == 4) {
-        // IPv4
-
-        /* PF_RING stores data in host byte order but we use network byte order */
-        packet.src_ip = htonl(h->extended_hdr.parsed_pkt.ip_src.v4);
-        packet.dst_ip = htonl(h->extended_hdr.parsed_pkt.ip_dst.v4);
-    } 
-    packet.source_port = h->extended_hdr.parsed_pkt.l4_src_port;
-    packet.destination_port = h->extended_hdr.parsed_pkt.l4_dst_port;
-
-    // We need this for deep packet inspection
-    packet.packet_payload_length = h->len;
-    packet.packet_payload_pointer = (void*)p;
-
-    packet.length = h->len;
-    packet.protocol = h->extended_hdr.parsed_pkt.l3_proto;
-    packet.ts = h->ts;
-
-    // Copy flags from PF_RING header to our pseudo header
-    if (packet.protocol == IPPROTO_TCP) {
-        packet.flags = h->extended_hdr.parsed_pkt.tcp.flags;
-    } else {
-        packet.flags = 0;
-    }
-
-    pfring_packetprocessor_ptr(packet);
-}
-
-void stop_pfring_collection() {
+void stop_pfring_capture() {
     pfring_breakloop(ring);
 }
 
+int main(){
+    init_logging();
+    pfring_capture();
+}
