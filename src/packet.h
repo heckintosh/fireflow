@@ -1,3 +1,5 @@
+#ifndef PACKET_HEADER
+#define PACKET_HEADER
 #include <iostream>
 #include <netinet/in.h>
 #include <sys/socket.h>
@@ -43,3 +45,4 @@ class packet {
 };
 
 typedef void (*packet_process_ptr)(packet&);
+#endif
