@@ -88,32 +88,56 @@ Gathering the necessary information for the decision module to decide if there i
 
 *[Assigned to Nguyễn Đức Anh]*
 **- SYN Flood:**
-Then using the flow count we can deduce the probability of each element of the attribute during the window W = 1000:
+Using the flow count we can deduce the probability of each element of the attribute during the window W = 1000, dst_ip for example the first element of dst_ip:
 
-![Equation](https://latex.codecogs.com/gif.latex?P_%7Bdst-ip%7D%5E%7B1%7D%20%3D%20F%28dst-ip1%29/W)
+![Equation](https://latex.codecogs.com/gif.latex?P_%7Bdst%5C_ip_%7Bn%7D%7D%20%3D%20F%28dst%5C_ip_%7Bn%7D%29/W)
+
+> With dst_ip in {10.0.0.1; 10.0.0.2; 10.0.0.3}
 
 Consecutively calculate the probability for the remaining element of the field. Once we have all the information, it is time to calculate the entropy:
 
-![Equation](https://latex.codecogs.com/gif.latex?E_%7Bdst-ip%7D%20%3D%20-%5Csum_%7Bn%3D0%7D%5E%7BM-1%7DP%28dst-ip_%7Bn%7D%29log%28P%28dst-ip_%7Bn%7D%29%29)
+![Equation](https://latex.codecogs.com/gif.latex?E_%7Bdst%5C_ip%7D%20%3D%20-%5Csum_%7Bn%3D0%7D%5E%7BM-1%7DP_%7Bdst%5C_ip_%7Bn%7D%7Dlog%28P_%7Bdst%5C_ip_%7Bn%7D%7D%29)
+
+> With M as the number of elements in dst_ip field.    
 
     Just like that, calculate the entropies of all attributes.
 
+Setup a normal traffic environment to evaluate these threshold values:
+
+- Standard deviation and mean of entropy differences of all attributes for 50000 packets which is 50 windows:
+    - Mean of entropy differences of an attribute: 
+    ![Equation](https://latex.codecogs.com/gif.latex?m_%7Bi%7D%20%3D%20%5Cfrac%7B%5Csum_%7Bw%3D0%7D%5E%7Btw-1%7D%20%5Cleft%20%7CE_%7Bi%7D%28w&plus;1%29-%20E_%7Bi%7D%28w%29%5Cright%20%7C%7D%7Btw%7D)
+
+    > (tw is total of number of windows)
+
+    - Standard deviation of entropy differences of an attribute:
+    ![Equation](https://latex.codecogs.com/gif.latex?%5Csigma_%7Bi%7D%20%3D%20%5Csqrt%7B%5Cfrac%7B1%7D%7Btw%7D%5Csum_%7Bw%3D0%7D%5E%7Btw-1%7D%28%28E_%7Bw&plus;1%7D-E_%7Bw%7D%29-m_%7Bi%7D%29%5E%7B2%7D%7D)
+
+- Maximum and miximum of entropy differences between consecutive windows in all 50 windows:
+    - ![Equation](https://latex.codecogs.com/gif.latex?%28E_%7Bw&plus;1%7D-E_%7Bw%7D%29_%7Bmax%7D)
+    - ![Equation](https://latex.codecogs.com/gif.latex?%28E_%7Bw&plus;1%7D-E_%7Bw%7D%29_%7Bmin%7D)
+
+- Mean and standard deviation of element (such as 10.0.0.1 in dst_ip) entropy of all attributes (dst_ip, src_ip ...) from 50 windows:
+
+    - ![Equation](https://latex.codecogs.com/gif.latex?m_%7Bie%7D%3D%20%5Cfrac%7B%5Csum_%7Bw%3D0%7D%5E%7Btw-1%7DE_%7Bw%7D%7D%7Btw%7D)
+    
+    - ![Equation](https://latex.codecogs.com/gif.latex?%5Csigma_%7Bie%7D%20%3D%20%5Csqrt%7B%5Cfrac%7B1%7D%7Btw%7D%5Csum_%7Bw%3D0%7D%5E%7Btw-1%7D%28E_%7Bw%7D-m_%7Bie%7D%29%5E2%7D)
+
 We have the entropy values of 5 attributes. With all the information available, determine if there is an attack going on through the following conditions:
 
-Raise alert:
-- if 𝐸𝑖(𝑐𝑢𝑟𝑟𝑒𝑛𝑡) - 𝐸𝑖(𝑝𝑟𝑒𝑣) > (2*𝐷𝑖 [𝐶𝑊]𝑠𝑡𝑑𝑒𝑣+𝐷𝑖 [𝐶𝑊]𝑚𝑒𝑎𝑛)
-- if 𝐸𝑖(𝑐𝑢𝑟𝑟𝑒𝑛𝑡) - 𝐸𝑖(𝑝𝑟𝑒𝑣) > 𝐷𝑖 [𝐶𝑊]𝑚𝑎𝑥 || 𝐸𝑖(𝑐𝑢𝑟𝑟𝑒𝑛𝑡) > 𝐸𝑖(𝑁 𝑚𝑎𝑥 OR 𝐸𝑖(𝑐𝑢𝑟𝑟𝑒𝑛𝑡) < 𝐸𝑖(𝑁)𝑚𝑖n
-- if  𝐸𝑖(𝑐𝑢𝑟𝑟𝑒𝑛𝑡) < 𝐸𝑖(𝑁)𝑚𝑒𝑎𝑛- 𝐸𝑖(𝑁)𝑠𝑡𝑑𝑒𝑣 || 𝐸𝑖(𝑐𝑢𝑟𝑟𝑒𝑛𝑡) > 𝐸𝑖(𝑁)𝑚𝑒𝑎𝑛+ 𝐸𝑖(𝑁)𝑠𝑡𝑑𝑒v
+*Raise alert if:*
+- 𝐸𝑖(𝑐𝑢𝑟𝑟𝑒𝑛𝑡) - 𝐸𝑖(𝑝𝑟𝑒𝑣) > (2 * 𝐷𝑖 [𝐶𝑊]𝑠𝑡𝑑𝑒𝑣 + 𝐷𝑖 [𝐶𝑊]𝑚𝑒𝑎𝑛)
+- 𝐸𝑖(𝑐𝑢𝑟𝑟𝑒𝑛𝑡) - 𝐸𝑖(𝑝𝑟𝑒𝑣) > 𝐷𝑖 [𝐶𝑊]𝑚𝑎𝑥 || 𝐸𝑖(𝑐𝑢𝑟𝑟𝑒𝑛𝑡) > 𝐸𝑖(𝑁 𝑚𝑎𝑥 OR 𝐸𝑖(𝑐𝑢𝑟𝑟𝑒𝑛𝑡) < 𝐸𝑖(𝑁)𝑚𝑖n
+- 𝐸𝑖(𝑐𝑢𝑟𝑟𝑒𝑛𝑡) < 𝐸𝑖(𝑁)𝑚𝑒𝑎𝑛- 𝐸𝑖(𝑁)𝑠𝑡𝑑𝑒𝑣 || 𝐸𝑖(𝑐𝑢𝑟𝑟𝑒𝑛𝑡) > 𝐸𝑖(𝑁)𝑚𝑒𝑎𝑛 + 𝐸𝑖(𝑁)𝑠𝑡𝑑𝑒v
 
 with i = {dst_ip, src_ip, dst_port, src_port, packet_length}
-
-With 𝐷𝑖 [𝐶𝑊]𝑠𝑡𝑑𝑒𝑣, 𝐷𝑖 [𝐶𝑊]𝑚𝑒𝑎𝑛, 𝐷𝑖 [𝐶𝑊]𝑚𝑎𝑥, 𝐸𝑖(𝑁)𝑚𝑒𝑎𝑛 and 𝐸𝑖(𝑁)𝑠𝑡𝑑𝑒v are calculated through normal traffic as threshhold values.
 
 *[Assigned to Đoàn Minh Long]*
 **- UDP Flood**
 
 *[Assigned to Vũ Long Dũng and Trần Việt Anh]*
 **- IMCP Flood**
+
 
 *[Assigned to Trần Khánh Dương]*
 ####**D. Testing Environment** 
