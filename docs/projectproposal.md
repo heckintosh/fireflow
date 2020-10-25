@@ -64,11 +64,11 @@ Attackers send SYN packets whose source address ﬁelds are spoofed. The server 
 
 Gathering the necessary information for the decision module to decide if there is a SYN flood attack:
 - The observation period (window) W of the monitoring module is 1000 packets for the interval of 250 packets.
-- The fields to be used for entropy calculations:
+- The **fields** to be used for entropy calculations:
     <span style="font-family:Roboto; font-size:1.5em;">F = {dst_ip, src_ip, dst_port, src_port, packet_length} </span>
     Future versions will include several more fields for entropy calculation and the fields will also be combined into sets for calculating entropy as well.
-- To calculate entropy we need to get the flow count. In particular, for the SYN attack, packets will only be counted if the Flags are set to: <span style="font-family:Roboto; font-size:1.5em;"> {(SYN); (ACK); (RST); (FIN); (SYN,ACK); (SYN,RST); (FIN/ACK)} </span>
-    For example:
+- To calculate entropy we need to get the flow count. In particular, for the SYN attack, packets will only be counted if the Flags are set to: <span style="font-family:Roboto; font-size:1em;"> {(SYN); (ACK); (RST); (FIN); (SYN,ACK); (SYN,RST); (FIN/ACK)} </span>
+    For example (10.0.0.1 is an **attribute**):
 
     |  dst_ip | Flow count  |
     |---------|-------------|
@@ -102,32 +102,39 @@ Consecutively calculate the probability for the remaining element of the field. 
 
     Just like that, calculate the entropies of all attributes.
 
-Setup a normal traffic environment to evaluate these threshold values:
+#### Setup a normal traffic environment to evaluate these threshold values:
 
 - Standard deviation and mean of entropy differences of all attributes for 50000 packets which is 50 windows:
     - Mean of entropy differences of an attribute: 
-    ![Equation](https://latex.codecogs.com/gif.latex?m_%7Bi%7D%20%3D%20%5Cfrac%7B%5Csum_%7Bw%3D0%7D%5E%7Btw-1%7D%20%5Cleft%20%7CE_%7Bi%7D%28w&plus;1%29-%20E_%7Bi%7D%28w%29%5Cright%20%7C%7D%7Btw%7D)
+    $$ m_{diff} = \frac{\sum_{w=0}^{tw-1} \left |E_{attr}(w+1)- E_{attr}(w)\right |}{tw} $$
 
     > (tw is total of number of windows)
 
     - Standard deviation of entropy differences of an attribute:
-    ![Equation](https://latex.codecogs.com/gif.latex?%5Csigma_%7Bi%7D%20%3D%20%5Csqrt%7B%5Cfrac%7B1%7D%7Btw%7D%5Csum_%7Bw%3D0%7D%5E%7Btw-1%7D%28%28E_%7Bw&plus;1%7D-E_%7Bw%7D%29-m_%7Bi%7D%29%5E%7B2%7D%7D)
+    $$ \sigma_{diff} = \sqrt{\frac{1}{tw}\sum_{w=0}^{tw-1}((E_{attr}(w+1)-E_{attr}(w))-m_{i})^{2}} $$
 
-- Maximum and miximum of entropy differences between consecutive windows in all 50 windows:
-    - ![Equation](https://latex.codecogs.com/gif.latex?%28E_%7Bw&plus;1%7D-E_%7Bw%7D%29_%7Bmax%7D)
-    - ![Equation](https://latex.codecogs.com/gif.latex?%28E_%7Bw&plus;1%7D-E_%7Bw%7D%29_%7Bmin%7D)
+- Maximum and minimum of entropy differences between consecutive windows in all 50 windows:
+    - $$ (E_{attr}(w+1)-E_{attr}(w+1))_{max} $$
+    - $$ (E_{attr}(w+1)-E_{attr}(w))_{min} $$
 
-- Mean and standard deviation of element (such as 10.0.0.1 in dst_ip) entropy of all attributes (dst_ip, src_ip ...) from 50 windows:
+- Maximum and minimum of entropy values of all attributes in all windows:
+    - $$ E_{attr}max$$
+    - $$ E_{attr}min$$
 
-    - ![Equation](https://latex.codecogs.com/gif.latex?m_%7Bie%7D%3D%20%5Cfrac%7B%5Csum_%7Bw%3D0%7D%5E%7Btw-1%7DE_%7Bw%7D%7D%7Btw%7D)
+- Mean and standard deviation of entropy of element (such as 10.0.0.1 in dst_ip) of all attributes (dst_ip, src_ip ...) from 50 windows:
+
+    -  $$ m_{ie}= \frac{\sum_{w=0}^{tw-1}E_{w}}{tw} $$
     
-    - ![Equation](https://latex.codecogs.com/gif.latex?%5Csigma_%7Bie%7D%20%3D%20%5Csqrt%7B%5Cfrac%7B1%7D%7Btw%7D%5Csum_%7Bw%3D0%7D%5E%7Btw-1%7D%28E_%7Bw%7D-m_%7Bie%7D%29%5E2%7D)
+    - $$ \sigma_{ie} = \sqrt{\frac{1}{tw}\sum_{w=0}^{tw-1}(E_{w}-m_{ie})^2} $$
 
 We have the entropy values of 5 attributes. With all the information available, determine if there is an attack going on through the following conditions:
 
-*Raise alert if:*
-- 𝐸𝑖(𝑐𝑢𝑟𝑟𝑒𝑛𝑡) - 𝐸𝑖(𝑝𝑟𝑒𝑣) > (2 * 𝐷𝑖 [𝐶𝑊]𝑠𝑡𝑑𝑒𝑣 + 𝐷𝑖 [𝐶𝑊]𝑚𝑒𝑎𝑛)
+#### Raise alert if
+- $$ E_{attr}(current\_wind) - E_{attr}(prev\_wind) > 2 * \sigma_{i} + m_{i} $$
+- $$ E_{attr}(current\_wind) - E_{attr}(prev\_wind) > (E_{w+1}-E_{w})_{max} \; || \; E_{attr}(current) > E_{attr}(max) \; || \; E_{attr}(current) < E_{attr}min$$ 
+
 - 𝐸𝑖(𝑐𝑢𝑟𝑟𝑒𝑛𝑡) - 𝐸𝑖(𝑝𝑟𝑒𝑣) > 𝐷𝑖 [𝐶𝑊]𝑚𝑎𝑥 || 𝐸𝑖(𝑐𝑢𝑟𝑟𝑒𝑛𝑡) > 𝐸𝑖(𝑁 𝑚𝑎𝑥 OR 𝐸𝑖(𝑐𝑢𝑟𝑟𝑒𝑛𝑡) < 𝐸𝑖(𝑁)𝑚𝑖n
+
 - 𝐸𝑖(𝑐𝑢𝑟𝑟𝑒𝑛𝑡) < 𝐸𝑖(𝑁)𝑚𝑒𝑎𝑛- 𝐸𝑖(𝑁)𝑠𝑡𝑑𝑒𝑣 || 𝐸𝑖(𝑐𝑢𝑟𝑟𝑒𝑛𝑡) > 𝐸𝑖(𝑁)𝑚𝑒𝑎𝑛 + 𝐸𝑖(𝑁)𝑠𝑡𝑑𝑒v
 
 with i = {dst_ip, src_ip, dst_port, src_port, packet_length}
