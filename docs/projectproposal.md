@@ -121,23 +121,20 @@ Consecutively calculate the probability for the remaining element of the field. 
     - $$ E_{attr}max$$
     - $$ E_{attr}min$$
 
-- Mean and standard deviation of entropy of element (such as 10.0.0.1 in dst_ip) of all attributes (dst_ip, src_ip ...) from 50 windows:
+- Mean and standard deviation of entropy of all attributes (dst_ip, src_ip ...) from 50 windows:
 
-    -  $$ m_{ie}= \frac{\sum_{w=0}^{tw-1}E_{w}}{tw} $$
+    -  $$ m_{attr}= \frac{\sum_{w=0}^{tw-1}E_{attr}(w)}{tw} $$
     
-    - $$ \sigma_{ie} = \sqrt{\frac{1}{tw}\sum_{w=0}^{tw-1}(E_{w}-m_{ie})^2} $$
+    - $$ \sigma_{attr} = \sqrt{\frac{1}{tw}\sum_{w=0}^{tw-1}(E_{attr}(w)-m_{attr})^2} $$
 
 We have the entropy values of 5 attributes. With all the information available, determine if there is an attack going on through the following conditions:
 
 #### Raise alert if
-- $$ E_{attr}(current\_wind) - E_{attr}(prev\_wind) > 2 * \sigma_{i} + m_{i} $$
-- $$ E_{attr}(current\_wind) - E_{attr}(prev\_wind) > (E_{w+1}-E_{w})_{max} \; || \; E_{attr}(current) > E_{attr}(max) \; || \; E_{attr}(current) < E_{attr}min$$ 
-
-- 𝐸𝑖(𝑐𝑢𝑟𝑟𝑒𝑛𝑡) - 𝐸𝑖(𝑝𝑟𝑒𝑣) > 𝐷𝑖 [𝐶𝑊]𝑚𝑎𝑥 || 𝐸𝑖(𝑐𝑢𝑟𝑟𝑒𝑛𝑡) > 𝐸𝑖(𝑁 𝑚𝑎𝑥 OR 𝐸𝑖(𝑐𝑢𝑟𝑟𝑒𝑛𝑡) < 𝐸𝑖(𝑁)𝑚𝑖n
-
-- 𝐸𝑖(𝑐𝑢𝑟𝑟𝑒𝑛𝑡) < 𝐸𝑖(𝑁)𝑚𝑒𝑎𝑛- 𝐸𝑖(𝑁)𝑠𝑡𝑑𝑒𝑣 || 𝐸𝑖(𝑐𝑢𝑟𝑟𝑒𝑛𝑡) > 𝐸𝑖(𝑁)𝑚𝑒𝑎𝑛 + 𝐸𝑖(𝑁)𝑠𝑡𝑑𝑒v
-
-with i = {dst_ip, src_ip, dst_port, src_port, packet_length}
+- $$ E_{attr}(current) - E_{attr}(prev) > 2 * \sigma_{i} + m_{i} $$
+- $$ E_{attr}(current) - E_{attr}(prev) > (E_{w+1}-E_{w})_{max} \; || \; E_{attr}(current) > E_{attr}(max) \; || \; E_{attr}(current) < E_{attr}min$$ 
+- $$ 𝐸_{attr}(𝑐𝑢𝑟𝑟𝑒𝑛𝑡) <  m_{attr} - \sigma_{i} \; || \; E_{attr}(current) > m_{attr} + \sigma_{i}$$
+  
+ > with attr = {dst_ip, src_ip, dst_port, src_port, packet_length}
 
 *[Assigned to Đoàn Minh Long]*
 **- UDP Flood**
