@@ -27,7 +27,7 @@ class packet {
     unsigned int protocol;
     
     uint64_t length;
-    uint64_t number_of_packets; /* for netflow */
+    uint64_t number_of_packets = 0; /* for netflow */
     uint8_t flags; /* tcp flags */
 
     bool ip_fragmented; /* If IP packet fragmented */

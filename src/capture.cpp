@@ -21,7 +21,7 @@ using namespace std;
 log4cpp::Category& logger = log4cpp::Category::getRoot();
 uint64_t total_unparsed_packets;
 void pfring_packet_process();
-string log_file_path = "/tmp/fastnetmon_plugin_tester.log";
+string log_file_path = "/tmp/fireflow/pfring_init.log";
 string interface = "eth0";
 bool pfring_kernel_parser = true;
 pfring* ring = NULL;
