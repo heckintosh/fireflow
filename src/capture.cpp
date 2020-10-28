@@ -135,7 +135,10 @@ bool start_pfring_packet_preprocessing(const char* dev) {
 
 void parsing_pfring_packet(const struct pfring_pkthdr* h, const u_char* p, const u_char* user_bytes) {
     // Description of all fields: http://www.ntop.org/pfring_api/structpkt__parsing__info.html
-    packet_t packet;
+    packet packet;
+
+    // We pass only one packet to processing
+    packet.number_of_packets = 1;
 
     // Now we support only non sampled input from PF_RING
     packet.sample_ratio = pfring_sampling_rate;
