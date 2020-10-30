@@ -26,6 +26,8 @@ string interface = "eth0";
 bool pfring_kernel_parser = true;
 pfring* ring = NULL;
 uint32_t pfring_sampling_rate = 1;
+int packet::internalPacketCounter;
+
 
 //Function declaration
 void init_logging();
@@ -135,13 +137,10 @@ bool start_pfring_packet_preprocessing(const char* dev) {
 
 void parsing_pfring_packet(const struct pfring_pkthdr* h, const u_char* p, const u_char* user_bytes) {
     // Description of all fields: http://www.ntop.org/pfring_api/structpkt__parsing__info.html
-    packet packet;
-
-    // We pass only one packet to processing
-    packet.number_of_packets = 1;
+    packet current_packet;
 
     // Now we support only non sampled input from PF_RING
-    packet.sample_ratio = pfring_sampling_rate;
+    current_packet.sample_ratio = pfring_sampling_rate;
     memset((void*)&h->extended_hdr.parsed_pkt, 0, sizeof(h->extended_hdr.parsed_pkt));
 
     // We do not calculate timestamps here because it's useless and consumes so much cpu
@@ -156,33 +155,33 @@ void parsing_pfring_packet(const struct pfring_pkthdr* h, const u_char* p, const
         return;
     }
 
-    packet.ip_protocol_version = h->extended_hdr.parsed_pkt.ip_version;
+    current_packet.ip_protocol_version = h->extended_hdr.parsed_pkt.ip_version;
 
-    if (packet.ip_protocol_version == 4) {
+    if (current_packet.ip_protocol_version == 4) {
         // IPv4
 
         /* PF_RING stores data in host byte order but we use network byte order */
-        packet.src_ip = htonl(h->extended_hdr.parsed_pkt.ip_src.v4);
-        packet.dst_ip = htonl(h->extended_hdr.parsed_pkt.ip_dst.v4);
+        current_packet.src_ip = htonl(h->extended_hdr.parsed_pkt.ip_src.v4);
+        current_packet.dst_ip = htonl(h->extended_hdr.parsed_pkt.ip_dst.v4);
     } 
-    packet.source_port = h->extended_hdr.parsed_pkt.l4_src_port;
-    packet.destination_port = h->extended_hdr.parsed_pkt.l4_dst_port;
+    current_packet.src_port = h->extended_hdr.parsed_pkt.l4_src_port;
+    current_packet.dst_port = h->extended_hdr.parsed_pkt.l4_dst_port;
 
     // We need this for deep packet inspection
-    packet.packet_payload_length = h->len;
-    packet.packet_payload_pointer = (void*)p; 
+    current_packet.packet_payload_length = h->len;
+    current_packet.packet_payload_pointer = (void*)p; 
 
-    packet.length = h->len;
-    packet.protocol = h->extended_hdr.parsed_pkt.l3_proto;
-    packet.ts = h->ts;
+    current_packet.length = h->len;
+    current_packet.protocol = h->extended_hdr.parsed_pkt.l3_proto;
+    current_packet.ts = h->ts;
 
     // Copy flags from PF_RING header to our pseudo header
-    if (packet.protocol == IPPROTO_TCP) {
-        packet.flags = h->extended_hdr.parsed_pkt.tcp.flags;
+    if (current_packet.protocol == IPPROTO_TCP) {
+        current_packet.flags = h->extended_hdr.parsed_pkt.tcp.flags;
     } else {
-        packet.flags = 0;
+        current_packet.flags = 0;
     }
-    process_packet(packet);
+    process_packet(current_packet);
 }
 
 void stop_pfring_capture() {
