@@ -4,6 +4,14 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <iterator> 
+
+#define TCP_FIN_FLAG_SHIFT 1
+#define TCP_SYN_FLAG_SHIFT 2
+#define TCP_RST_FLAG_SHIFT 3
+#define TCP_PSH_FLAG_SHIFT 4
+#define TCP_ACK_FLAG_SHIFT 5
+#define TCP_URG_FLAG_SHIFT 6
 
 using namespace std;
 //Function declaration
@@ -38,61 +46,61 @@ string get_flags(uint8_t flag) {
         return "-";
     }
 
-    // taken from pfring.h
-    // (tcp->fin * TH_FIN_MULTIPLIER) + (tcp->syn * TH_SYN_MULTIPLIER) +
-    // (tcp->rst * TH_RST_MULTIPLIER) + (tcp->psh * TH_PUSH_MULTIPLIER) +
-    // (tcp->ack * TH_ACK_MULTIPLIER) + (tcp->urg * TH_URG_MULTIPLIER);
+    vector<string> tcp_flags;
 
-    /*
-        // Required for decoding tcp flags
-        #define TH_FIN_MULTIPLIER   0x01
-        #define TH_SYN_MULTIPLIER   0x02
-        #define TH_RST_MULTIPLIER   0x04
-        #define TH_PUSH_MULTIPLIER  0x08
-        #define TH_ACK_MULTIPLIER   0x10
-        #define TH_URG_MULTIPLIER   0x20
-    */
+    //I do not get the CWR and ECE flags because I do not think that it is necessary.
 
-    vector<string> all_flags;
-
-    if (extract_bit_value(flag_value, TCP_FIN_FLAG_SHIFT)) {
-        all_flags.push_back("fin");
+    if (extract_bit_value(flag, TCP_FIN_FLAG_SHIFT)) {
+        tcp_flags.push_back("FIN");
     }
 
-    if (extract_bit_value(flag_value, TCP_SYN_FLAG_SHIFT)) {
-        all_flags.push_back("syn");
+    if (extract_bit_value(flag, TCP_SYN_FLAG_SHIFT)) {
+        tcp_flags.push_back("SYN");
     }
 
-    if (extract_bit_value(flag_value, TCP_RST_FLAG_SHIFT)) {
-        all_flags.push_back("rst");
+    if (extract_bit_value(flag, TCP_RST_FLAG_SHIFT)) {
+        tcp_flags.push_back("RST");
     }
 
-    if (extract_bit_value(flag_value, TCP_PSH_FLAG_SHIFT)) {
-        all_flags.push_back("psh");
+    if (extract_bit_value(flag, TCP_PSH_FLAG_SHIFT)) {
+        tcp_flags.push_back("PSH");
     }
 
-    if (extract_bit_value(flag_value, TCP_ACK_FLAG_SHIFT)) {
-        all_flags.push_back("ack");
+    if (extract_bit_value(flag, TCP_ACK_FLAG_SHIFT)) {
+        tcp_flags.push_back("ACK");
     }
 
-    if (extract_bit_value(flag_value, TCP_URG_FLAG_SHIFT)) {
-        all_flags.push_back("urg");
+    if (extract_bit_value(flag, TCP_URG_FLAG_SHIFT)) {
+        tcp_flags.push_back("URG");
     }
 
 
-    std::ostringstream flags_as_string;
+    ostringstream flags_as_string;
 
-    if (all_flags.empty()) {
+    if (tcp_flags.empty()) {
         return "-";
     }
 
     // concatenate all vector elements with comma
-    std::copy(all_flags.begin(), all_flags.end() - 1, std::ostream_iterator<std::string>(flags_as_string, ","));
+    copy(tcp_flags.begin(), tcp_flags.end() - 1, ostream_iterator<string>(flags_as_string, ","));
 
     // add last element
-    flags_as_string << all_flags.back();
+    flags_as_string << tcp_flags.back();
 
     return flags_as_string.str();
+}
+uint8_t print_binary(uint8_t flags) {
+    printf("%d", flags);
+    int mask = 128;
+    while (mask != 1){
+        if ((flags & mask) == mask) 
+            cout << 1;
+        else 
+            cout << 0;
+        mask = mask >> 1;
+    }
+    if ((flags & 1) == 1) cout << 1; else cout << 0;
+    return 1;
 }
 
 string log_packet(packet current_packet)
@@ -102,13 +110,14 @@ string log_packet(packet current_packet)
     string dst_ip_as_string = ip_int_to_string(current_packet.dst_ip);
     //print to stdout
     stringstream buffer;
-    buffer << current_packet.internalPacketCounter << " " << src_ip_as_string << ":" << current_packet.src_port  << " " << dst_ip_as_string << ":" << current_packet.dst_port << "\n";
+    buffer << current_packet.internalPacketCounter << " " << src_ip_as_string << ":" << current_packet.src_port  << " " << dst_ip_as_string << ":" << current_packet.dst_port << " flag:" << current_packet.flags << "\n";
 
     //save to a file
     packet_file.open("/tmp/fireflow/packet_logger.txt",ios::app);
     if (packet_file.is_open())
     {
-        packet_file << current_packet.internalPacketCounter << " " << src_ip_as_string << ":" << current_packet.src_port  << " " << dst_ip_as_string << ":" << current_packet.dst_port << " " << current_packet.flags << "\n";
+        print_binary(current_packet.flags);
+        packet_file << current_packet.internalPacketCounter << " " << src_ip_as_string << ":" << current_packet.src_port  << " " << dst_ip_as_string << ":" << current_packet.dst_port << " " << (int)current_packet.flags << "\n";
         packet_file.close();
     }
     else{
