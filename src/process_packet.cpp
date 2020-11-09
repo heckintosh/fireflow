@@ -74,7 +74,6 @@ string get_flags(uint8_t flag) {
         tcp_flags.push_back("URG");
     }
 
-
     ostringstream flags_as_string;
 
     if (tcp_flags.empty()) {
@@ -90,7 +89,8 @@ string get_flags(uint8_t flag) {
     return flags_as_string.str();
 }
 uint8_t print_binary(uint8_t flags) {
-    printf("%d", flags);
+    // 0     0     0     0     0      0     0         0
+    //CWR	ECE	  URG	ACK	  PSH	 RST	SYN	     FIN
     int mask = 128;
     while (mask != 1){
         if ((flags & mask) == mask) 
@@ -110,14 +110,13 @@ string log_packet(packet current_packet)
     string dst_ip_as_string = ip_int_to_string(current_packet.dst_ip);
     //print to stdout
     stringstream buffer;
-    buffer << current_packet.internalPacketCounter << " " << src_ip_as_string << ":" << current_packet.src_port  << " " << dst_ip_as_string << ":" << current_packet.dst_port << " flag:" << current_packet.flags << "\n";
+    buffer << current_packet.internalPacketCounter << " " << src_ip_as_string << " " << current_packet.src_port  << " " << dst_ip_as_string << " " << current_packet.dst_port << " " << get_flags(current_packet.flags) << " " << current_packet.length << "\n";
 
     //save to a file
-    packet_file.open("/tmp/fireflow/packet_logger.txt",ios::app);
+    packet_file.open("/tmp/packet_logger.txt",ios::app);
     if (packet_file.is_open())
     {
-        print_binary(current_packet.flags);
-        packet_file << current_packet.internalPacketCounter << " " << src_ip_as_string << ":" << current_packet.src_port  << " " << dst_ip_as_string << ":" << current_packet.dst_port << " " << (int)current_packet.flags << "\n";
+        packet_file << current_packet.internalPacketCounter << " " << src_ip_as_string << " " << current_packet.src_port  << " " << dst_ip_as_string << " " << current_packet.dst_port << " " << get_flags(current_packet.flags) << " " << current_packet.length << "\n";
         packet_file.close();
     }
     else{

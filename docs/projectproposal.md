@@ -49,7 +49,7 @@ Packets are captured from PF_RING. The packet data is then saved into a file for
 - Timeval ts
 - Packet payload full length      
 
-####**B. Monitoring module**
+#### **B. Monitoring module**
 We utilize the captured data to detect these attacks. In order to observe randomness in a data set of given network traffic, network packet fields can be selected to observe changes. We do not only focus on one attribute like destination IP only. We also focus on other combinations. For different attack types, we consider different packet fields for entropy calculation. 
 
 In general, we consider destination IP, source IP, destination port, source port and packet size
@@ -58,7 +58,9 @@ fields of network packet for entropy calculation.
 But each attack detection method is assigned to each member of the team so it is up to them to implement it, with a restriction that the method is based on entropy computing.
 
 *[Assigned to Nguyễn Đức Anh]*
+
 **- SYN Flood:** 
+
 The SYN flooding attacks exploit the TCP’s three-way handshake mechanism and its limitation in maintaining half-open connections. When a server receives a SYN request, it returns a SYN/ACK packet to the client. Until the SYN/ACK packet is acknowledged by the client, the connection remains in halfopen state for a period of up to the TCP connection timeout, which is typically set to 75 seconds. The server has built in its system memory a backlog queue to maintain all half-open connections. Since this backlog queue is of finite size, once the backlog queue limit is reached, all connection requests will be dropped resulting in denial-of-service.
 Attackers send SYN packets whose source address ﬁelds are spoofed. The server receiving these SYN packets sends SYN/ACK packets to spoofed addresses. If the spoofed address actually exists, it sends an RST packet for the SYN/ACK packet because it did not send the SYN packet. If there is no host having the spoofed address, however, the SYN/ACK packet is discarded by the network and the server waits in vain for an ACK packet to acknowledge it.
 
@@ -84,19 +86,19 @@ Gathering the necessary information for the decision module to decide if there i
 *[Assigned to Vũ Long Dũng and Trần Việt Anh]*
 **- IMCP Flood**
 
-####**C. Decision module:**
+#### **C. Decision module:**
 
 *[Assigned to Nguyễn Đức Anh]*
 **- SYN Flood:**
 Using the flow count we can deduce the probability of each element of the attribute during the window W = 1000, dst_ip for example the first element of dst_ip:
 
-![Equation](https://latex.codecogs.com/gif.latex?P_%7Bdst%5C_ip_%7Bn%7D%7D%20%3D%20F%28dst%5C_ip_%7Bn%7D%29/W)
+$$P_{dst\_ip_{n}} = F(dst\_ip_{n})/W$$
 
 > With dst_ip in {10.0.0.1; 10.0.0.2; 10.0.0.3}
 
 Consecutively calculate the probability for the remaining element of the field. Once we have all the information, it is time to calculate the entropy:
 
-![Equation](https://latex.codecogs.com/gif.latex?E_%7Bdst%5C_ip%7D%20%3D%20-%5Csum_%7Bn%3D0%7D%5E%7BM-1%7DP_%7Bdst%5C_ip_%7Bn%7D%7Dlog%28P_%7Bdst%5C_ip_%7Bn%7D%7D%29)
+$$E_{dst\_ip} = -\sum_{n=0}^{M-1}P_{dst\_ip_{n}}log(P_{dst\_ip_{n}}))$$
 
 > With M as the number of elements in dst_ip field.    
 
@@ -144,5 +146,5 @@ We have the entropy values of 5 attributes. With all the information available, 
 
 
 *[Assigned to Trần Khánh Dương]*
-####**D. Testing Environment** 
+#### **D. Testing Environment** 
 

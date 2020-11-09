@@ -34,7 +34,7 @@ class packet {
 
     struct timeval ts;
     void* packet_payload_pointer;
-    int packet_payload_length;
+    uint32_t packet_payload_length;
     uint32_t packet_payload_full_length = 0; // In case of cropped packets we use this
 
 
