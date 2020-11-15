@@ -5,6 +5,7 @@
 #include <sstream>
 #include <vector>
 #include <iterator> 
+#include <string>
 
 #define TCP_FIN_FLAG_SHIFT 1
 #define TCP_SYN_FLAG_SHIFT 2
@@ -15,13 +16,13 @@
 
 using namespace std;
 //Function declaration
-void process_packet(packet &current_packet);
+void process_packet(packet &current_packet, string *packet_file);
 string ip_int_to_string(uint32_t ip_as_integer);
-string log_packet(packet packet);
+string log_packet(packet packet, string *packet_file);
 
-void process_packet(packet &current_packet)
+void process_packet(packet &current_packet, string *packet_file)
 {
-    cout << log_packet(current_packet);
+    cout << log_packet(current_packet, packet_file);
 }
 
 string ip_int_to_string(uint32_t ip_as_integer)
@@ -103,9 +104,11 @@ uint8_t print_binary(uint8_t flags) {
     return 1;
 }
 
-string log_packet(packet current_packet)
+
+
+string log_packet(packet current_packet, string *packet_file)
 {
-    ofstream packet_file;
+    ofstream packetlog;
     string src_ip_as_string = ip_int_to_string(current_packet.src_ip);
     string dst_ip_as_string = ip_int_to_string(current_packet.dst_ip);
     //print to stdout
@@ -113,14 +116,15 @@ string log_packet(packet current_packet)
     buffer << current_packet.internalPacketCounter << " " << src_ip_as_string << " " << current_packet.src_port  << " " << dst_ip_as_string << " " << current_packet.dst_port << " " << get_flags(current_packet.flags) << " " << current_packet.length << "\n";
 
     //save to a file
-    packet_file.open("/tmp/packet_logger.txt",ios::app);
-    if (packet_file.is_open())
+    packetlog.open(*packet_file,ios::app);
+    if (packetlog.is_open())
     {
-        packet_file << current_packet.internalPacketCounter << " " << src_ip_as_string << " " << current_packet.src_port  << " " << dst_ip_as_string << " " << current_packet.dst_port << " " << get_flags(current_packet.flags) << " " << current_packet.length << "\n";
-        packet_file.close();
+        packetlog << current_packet.internalPacketCounter << " " << src_ip_as_string << " " << current_packet.src_port  << " " << dst_ip_as_string << " " << current_packet.dst_port << " " << get_flags(current_packet.flags) << " " << current_packet.length << "\n";
+        packetlog.close();
     }
     else{
-        cout << "Unable to open file";
+        cout << "Cannot open file to log packet";
+        exit(1);
     }
     return buffer.str();
 }

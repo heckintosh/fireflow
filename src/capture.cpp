@@ -21,8 +21,10 @@ using namespace std;
 log4cpp::Category& logger = log4cpp::Category::getRoot();
 uint64_t total_unparsed_packets;
 void pfring_packet_process();
-string log_file_path = "/tmp/fireflow/pfring_init.log";
 string interface = "eth0";
+string logfile_path = "/tmp/fireflow/pfring_init.log";
+string packet_file = "/tmp/packetlogger.txt";
+string *packet_file_ptr = &packet_file;
 bool pfring_kernel_parser = true;
 pfring* ring = NULL;
 uint32_t pfring_sampling_rate = 1;
@@ -38,7 +40,7 @@ void init_logging() {
     log4cpp::PatternLayout* layout = new log4cpp::PatternLayout();
     layout->setConversionPattern("%d [%p] %m%n");
 
-    log4cpp::Appender* appender = new log4cpp::FileAppender("default", log_file_path);
+    log4cpp::Appender* appender = new log4cpp::FileAppender("default", logfile_path);
     appender->setLayout(layout);
 
     logger.setPriority(log4cpp::Priority::INFO);
@@ -181,14 +183,14 @@ void parsing_pfring_packet(const struct pfring_pkthdr* h, const u_char* p, const
     } else {
         current_packet.flags = 0;
     }
-    process_packet(current_packet);
+    process_packet(current_packet, *packet_file_ptr);
 }
 
 void stop_pfring_capture() {
     pfring_breakloop(ring);
 }
 
-int main(){
+int main(int argc, char* argv[]){
     init_logging();
     start_pfring_capture();
 }
