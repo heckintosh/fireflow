@@ -16,11 +16,11 @@
 
 using namespace std;
 //Function declaration
-void process_packet(packet &current_packet, string *packet_file);
+void process_packet(packet &current_packet, string packet_file);
 string ip_int_to_string(uint32_t ip_as_integer);
-string log_packet(packet packet, string *packet_file);
+string log_packet(packet packet, string packet_file);
 
-void process_packet(packet &current_packet, string *packet_file)
+void process_packet(packet &current_packet, string packet_file)
 {
     cout << log_packet(current_packet, packet_file);
 }
@@ -106,7 +106,7 @@ uint8_t print_binary(uint8_t flags) {
 
 
 
-string log_packet(packet current_packet, string *packet_file)
+string log_packet(packet current_packet, string packet_file)
 {
     ofstream packetlog;
     string src_ip_as_string = ip_int_to_string(current_packet.src_ip);
@@ -116,7 +116,7 @@ string log_packet(packet current_packet, string *packet_file)
     buffer << current_packet.internalPacketCounter << " " << src_ip_as_string << " " << current_packet.src_port  << " " << dst_ip_as_string << " " << current_packet.dst_port << " " << get_flags(current_packet.flags) << " " << current_packet.length << "\n";
 
     //save to a file
-    packetlog.open(*packet_file,ios::app);
+    packetlog.open(packet_file,ios::app);
     if (packetlog.is_open())
     {
         packetlog << current_packet.internalPacketCounter << " " << src_ip_as_string << " " << current_packet.src_port  << " " << dst_ip_as_string << " " << current_packet.dst_port << " " << get_flags(current_packet.flags) << " " << current_packet.length << "\n";
