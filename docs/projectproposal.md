@@ -31,7 +31,7 @@ For the first version, it will only support Port Mirroring, which means it will 
 
 *[Assigned to: Nguyễn Đức Anh]*
 
-####**A. Capturing module** 
+#### **A. Capturing module** 
 Packets are captured from PF_RING. The packet data is then saved into a file for later analysis. Here are the configurations for packet capturing in version 1.0 of Fireflow: 
 - Source IP
 - Destionation IP
@@ -86,7 +86,7 @@ Gathering the necessary information for the decision module to decide if there i
 *[Assigned to Vũ Long Dũng and Trần Việt Anh]*
 **- IMCP Flood**
 
-#### **C. Decision module:**
+#### **C. Detection module:**
 
 *[Assigned to Nguyễn Đức Anh]*
 **- SYN Flood:**
