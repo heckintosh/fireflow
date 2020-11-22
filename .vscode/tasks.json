@@ -6,16 +6,18 @@
             "command": "/usr/bin/g++",
             "args": [
                 "-g",
-                "${file}",
+                "fireflow.cpp",
+                "-I${cwd}/include/",
                 "-o",
-                "../bin/{fileBasenameNoExtension}.o",
+                "../bin/${fileBasenameNoExtension}.o",
+                "capture.cpp",
                 "process_packet.cpp",
                 "-llog4cpp",
                 "-lpfring",
                 "-lpcap",
             ],
             "options": {
-                "cwd": "/home/kali/Tools/fireflow/src"
+                "cwd": "/home/victorcharlie/fireflow/src"
             },
             "problemMatcher": [
                 "$gcc"
