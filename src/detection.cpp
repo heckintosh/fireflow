@@ -14,8 +14,6 @@ void readLogFile(int lines, string filename){
     }
 }
 
-voide 
-
 int main(){
     string filename = "/tmp/packetlogger.txt";
     readLogFile(10, filename);
