@@ -142,6 +142,7 @@ void Capture::parsing_pfring_packet(const struct pfring_pkthdr *header, const u_
     }
     else
     {
+         
         current_packet.flags = 0;
     }
     process_packet(current_packet, *(Capture::packet_file_ptr));
