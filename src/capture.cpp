@@ -21,11 +21,35 @@
 using namespace std;
 log4cpp::Category& logger = log4cpp::Category::getRoot();
 
-uint64_t total_unparsed_packets;
+uint64_t  total_unparsed_packets;
 
+#ifndef FIREFLOW
+#include "CLI11.hpp"
+
+string interface = "";
+string logfile_path = "/tmp/fireflow/pfring_init.log";
+string packet_file = "/tmp/packetlogger.txt";
+
+int main(int argc, char* argv[]){
+    CLI::App app{"FIREFLOW: USTH ANTI_DDOS"};
+
+    std::string filename ;
+    app.add_option("-i,--interface", interface, "Capture interface")->required();
+    app.add_option("--log", logfile_path, "Dump to log file");
+    
+    CLI11_PARSE(app, argc, argv);
+    
+    init_logging();
+    start_pfring_capture();
+    
+}   
+#else
 extern string interface;
 extern string logfile_path;
 extern string packet_file;
+
+#endif
+
 
 string *packet_file_ptr = &packet_file;
 bool pfring_kernel_parser = true;
