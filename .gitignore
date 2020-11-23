@@ -1,5 +1,5 @@
 # Prerequisites
-*.o
+bin/*.o
 *.d
 
 # Compiled Object files
