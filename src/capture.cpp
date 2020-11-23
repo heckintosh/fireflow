@@ -25,11 +25,11 @@ uint64_t      total_unparsed_packets;
 
 extern string logfile_path;                             // Path to log file
 extern string interface;                                // The ethernet interface to capture packet
-extern string packet_file;                              //
+extern string packet_file;                              // The file contains packet's content
 
-string        *packet_file_ptr        = &packet_file;   //
+string        *packet_file_ptr        = &packet_file;   // Just a pointer to the packet file... (maybe if set NULL to then file is shit?)
 pfring        *ring                   = NULL;           // PF_RING socket to capture data
-uint32_t      pfring_sampling_rate    = 1;              //
+uint32_t      pfring_sampling_rate    = 100;            // Sample rate (packets/second?)
 
 int           packet::internalPacketCounter;            // Why this is here ???
 

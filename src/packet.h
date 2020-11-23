@@ -24,8 +24,8 @@ public:
     uint32_t        src_ip;                 /* Host IP */
     uint32_t        dst_ip;                 /* Destination IP */
 
-    uint32_t        input_interface  = 0;
-    uint32_t        output_interface = 0;
+    uint32_t        input_interface  = 0;   /* Input interface */
+    uint32_t        output_interface = 0;   /* Output interface */
 
     uint16_t        src_port;               /* Source port */
     uint16_t        dst_port;               /* Destination port */
@@ -34,12 +34,13 @@ public:
     uint8_t         ip_protocol_version;    /* IPv4 or IPv6 */
 
     uint8_t         ttl;                    /* Time to live */
-    uint64_t        length;
+    uint64_t        length;                 /* Packet length */
     uint8_t         flags;                  /* TCP flags */
 
     bool            ip_fragmented;          /* If IP packet fragmented */
 
-    struct timeval  ts;
+    struct timeval  ts;                     /* ... */
+
     void*           packet_payload_pointer;
     uint32_t        packet_payload_length;
     uint32_t        packet_payload_full_length = 0; // In case of cropped packets we use this
