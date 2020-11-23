@@ -1,4 +1,3 @@
-#include "packet.h"
 #include <arpa/inet.h>
 #include <iostream>
 #include <fstream>
@@ -6,6 +5,8 @@
 #include <vector>
 #include <iterator> 
 #include <string>
+#include "packet.h"
+#include "process_packet.h"
 
 #define TCP_FIN_FLAG_SHIFT 1
 #define TCP_SYN_FLAG_SHIFT 2
@@ -16,9 +17,7 @@
 
 using namespace std;
 //Function declaration
-void process_packet(packet &current_packet, string packet_file);
-string ip_int_to_string(uint32_t ip_as_integer);
-string log_packet(packet packet, string packet_file);
+
 
 void process_packet(packet &current_packet, string packet_file)
 {

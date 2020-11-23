@@ -16,25 +16,26 @@
 #include <pfring.h>
 #include "packet.h"
 #include "process_packet.h"
+#include "capture.h"
 
 using namespace std;
 log4cpp::Category& logger = log4cpp::Category::getRoot();
+
 uint64_t total_unparsed_packets;
-void pfring_packet_process();
-string interface = "eth0";
-string logfile_path = "/tmp/fireflow/pfring_init.log";
-string packet_file = "/tmp/packetlogger.txt";
+
+extern string interface;
+extern string logfile_path;
+extern string packet_file;
+
 string *packet_file_ptr = &packet_file;
 bool pfring_kernel_parser = true;
 pfring* ring = NULL;
 uint32_t pfring_sampling_rate = 1;
-int packet::internalPacketCounter;
+
+int packet::internalPacketCounter; // Why this is here ???
 
 
 //Function declaration
-void init_logging();
-bool start_pfring_packet_preprocessing(const char* dev);
-void parsing_pfring_packet(const struct pfring_pkthdr* h, const u_char* p, const u_char* user_bytes);
 
 void init_logging() {
     log4cpp::PatternLayout* layout = new log4cpp::PatternLayout();
@@ -49,7 +50,7 @@ void init_logging() {
 }
 
 // Choose an ethernet interface to capture, set sampling rate
-void start_pfring_capture(){
+void start_pfring_capture() {
     logger << log4cpp::Priority::INFO << "PF_RING plugin started";
     //pfring_packetprocessor_ptr = func_ptr;
     logger << log4cpp::Priority::INFO << "We selected interface:" << interface;
@@ -190,7 +191,4 @@ void stop_pfring_capture() {
     pfring_breakloop(ring);
 }
 
-int main(int argc, char* argv[]){
-    init_logging();
-    start_pfring_capture();
-}
+
