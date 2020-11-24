@@ -69,14 +69,13 @@ string get_flags(uint8_t flag) {
     if (extract_bit_value(flag, TCP_PSH_FLAG_SHIFT)) tcp_flags.push_back("PSH");
     if (extract_bit_value(flag, TCP_ACK_FLAG_SHIFT)) tcp_flags.push_back("ACK");
     if (extract_bit_value(flag, TCP_URG_FLAG_SHIFT)) tcp_flags.push_back("URG");
-
     if (tcp_flags.empty())
         return "-";
 
     // Concatenate all flags value in the vector, each item seperated by ','
     ostringstream flags_as_string;
     copy(tcp_flags.begin(), tcp_flags.end() - 1, ostream_iterator<string>(flags_as_string, ","));
-    flags_as_string << tcp_flags.back(); // Add final item to the stream to avoid ',' at the end
+    flags_as_string << tcp_flags.back(); // Add final item to the stream seperately to avoid ',' at the end
 
     return flags_as_string.str();
 
@@ -113,30 +112,26 @@ string log_packet(packet current_packet, string packet_file)
     string   src_ip_as_string = ip_int_to_string(current_packet.src_ip);
     string   dst_ip_as_string = ip_int_to_string(current_packet.dst_ip);
 
+    // Defining the content to write to stdout/packet log file
+    #define writeContent    current_packet.internalPacketCounter << " "                 \
+                         << src_ip_as_string << " " << current_packet.src_port << " "   \
+                         << dst_ip_as_string << " " << current_packet.dst_port << " "   \
+                         << get_flags(current_packet.flags) << " "                      \
+                         << current_packet.length                                       \
+                         << "\n"                                                        \
+
     // Write to a stringstream buffer
     stringstream buffer;
-    buffer
-        << current_packet.internalPacketCounter << " "
-        << src_ip_as_string << " " << current_packet.src_port << " "
-        << dst_ip_as_string << " " << current_packet.dst_port << " "
-        << get_flags(current_packet.flags) << " "
-        << current_packet.length
-    << "\n";
+    buffer << writeContent;
 
     // Save to a file
     packetlog.open(packet_file,ios::app);
     if (packetlog.is_open()) {
-        packetlog
-            << current_packet.internalPacketCounter << " "
-            << src_ip_as_string << " " << current_packet.src_port << " "
-            << dst_ip_as_string << " " << current_packet.dst_port << " "
-            << get_flags(current_packet.flags) << " "
-            << current_packet.length
-        << "\n";
+        packetlog << writeContent;
         packetlog.close();
     }
     else {
-        cout << "Cannot open file to log packet";
+        cout << "[!] Cannot open file to log packet!";
         exit(1);
     }
 
