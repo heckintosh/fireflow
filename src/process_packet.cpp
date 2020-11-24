@@ -1,4 +1,5 @@
 #include <arpa/inet.h>
+#include <netinet/in.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -82,6 +83,17 @@ string get_flags(uint8_t flag) {
 }
 
 /*
+    get_protocol():
+        Get protocol of the packet.
+*/
+string get_protocol(uint8_t protocol) {
+    if (protocol == IPPROTO_ICMP) return "ICMP";
+    if (protocol == IPPROTO_TCP)  return "TCP";
+    if (protocol == IPPROTO_UDP)  return "UDP";
+    return "Unhandled, CODE: " + to_string(protocol);
+}
+
+/*
     print_binary():
         Print the binary representations of the flags.
 */
@@ -113,19 +125,19 @@ string log_packet(packet current_packet, string packet_file)
     string   dst_ip_as_string = ip_int_to_string(current_packet.dst_ip);
 
     // Defining the content to write to stdout/packet log file
-    #define writeContent    current_packet.internalPacketCounter << " "                 \
-                         << src_ip_as_string << " " << current_packet.src_port << " "   \
-                         << dst_ip_as_string << " " << current_packet.dst_port << " "   \
-                         << get_flags(current_packet.flags) << " "                      \
-                         << current_packet.length                                       \
-                         << "\n"                                                        \
+    #define writeContent    current_packet.internalPacketCounter << " "                                             \
+                         << src_ip_as_string << " " << current_packet.src_port << " "                               \
+                         << dst_ip_as_string << " " << current_packet.dst_port << " "                               \
+                         << get_protocol(current_packet.protocol) << " " << get_flags(current_packet.flags) << " "  \
+                         << current_packet.length                                                                   \
+                         << "\n"                                                                                    \
 
     // Write to a stringstream buffer
     stringstream buffer;
     buffer << writeContent;
 
     // Save to a file
-    packetlog.open(packet_file,ios::app);
+    packetlog.open(packet_file, ios::app);
     if (packetlog.is_open()) {
         packetlog << writeContent;
         packetlog.close();
