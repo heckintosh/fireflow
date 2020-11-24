@@ -14,7 +14,8 @@ int main(int argc, char* argv[]) {
 
     std::string filename;
     app.add_option("-i, --interface", interface,    "Capture interface")->required();
-    app.add_option("-l",              logfile_path, "Dump to log file");
+    app.add_option("-l",              logfile_path, "Where to dump PF_RING log");
+    app.add_option("-p",              logfile_path, "Where to dump packet log");
 
     CLI11_PARSE(app, argc, argv);
 
