@@ -41,3 +41,7 @@ bin/*.o
 
 # Local History for Visual Studio Code
 .history/
+
+# Ignore temporary folders
+tmp/*
+*/tmp/*
