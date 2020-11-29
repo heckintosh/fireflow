@@ -30,7 +30,6 @@ string packet_file = "/tmp/packet_logger";                         // The file c
 string        *packet_file_ptr        = &packet_file;   // Just a pointer to the packet file... (maybe if set NULL to then file is shit?)
 pfring        *ring                   = NULL;           // PF_RING socket to capture data
 uint32_t      pfring_sampling_rate    = 100;            // Sample rate (packets/second?)
-ofstream      packetlog;
 
 int           packet::internalPacketCounter;            // Why this is here ???
 
@@ -73,7 +72,6 @@ void start_pfring_capture() {
 
     // Initialize PF_RING
     const char* device_name         = interface.c_str();
-    packetlog.open(packet_file, ios::app);
     bool        pfring_init_result  = start_pfring_packet_preprocessing(device_name);
     if (!pfring_init_result) {
         // Internal error in PF_RING
