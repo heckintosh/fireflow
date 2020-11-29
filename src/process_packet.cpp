@@ -143,13 +143,13 @@ string log_packet(packet current_packet, string packet_file)
     string src_ip_as_string = ip_int_to_string(current_packet.src_ip);
     string dst_ip_as_string = ip_int_to_string(current_packet.dst_ip);
 
-// Defining the content to write to stdout/packet log file
-#define writeContent current_packet.internalPacketCounter << " "                                                                                    \
-                                                          << src_ip_as_string << " " << current_packet.src_port << " "                              \
-                                                          << dst_ip_as_string << " " << current_packet.dst_port << " "                              \
-                                                          << get_protocol(current_packet.protocol) << " " << get_flags(current_packet.flags) << " " \
-                                                          << current_packet.length                                                                  \
-                                                          << "\n"
+    // Defining the content to write to stdout/packet log file
+    #define writeContent    packet::internalPacketCounter << " "                                             \
+                         << src_ip_as_string << " " << current_packet.src_port << " "                               \
+                         << dst_ip_as_string << " " << current_packet.dst_port << " "                               \
+                         << get_protocol(current_packet.protocol) << " " << get_flags(current_packet.flags) << " "  \
+                         << current_packet.length                                                                   \
+                         << "\n"                                                                                    \
 
     // Write to a stringstream buffer
     stringstream buffer;
