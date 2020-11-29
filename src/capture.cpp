@@ -19,23 +19,24 @@
 #include "capture.h"
 
 using namespace std;
-log4cpp::Category& logger = log4cpp::Category::getRoot(); // The ultimiate logger!! Used to add settings etc...
+log4cpp::Category &logger = log4cpp::Category::getRoot(); // The ultimiate logger!! Used to add settings etc...
 
-string Capture::logfile_path = "/tmp/fireflow_log"; // Path to log file
-string Capture::interface = "eth0";                        // The ethernet interface to capture packet
-string Capture::packet_file = "/tmp/packet_logger";    // The file contains packet's content
-string *Capture::packet_file_ptr = &Capture::packet_file;
+string Capture::logfile_path = "/tmp/fireflow_log.txt";     // Path to log file
+string Capture::interface = "eth0";                         // The ethernet interface to capture packet
+string Capture::packetfile_path = "/tmp/packet_logger.txt"; // The file contains packet's content
+ofstream Capture::packetlog;
 
 uint32_t Capture::pfring_sampling_rate = 100;
 uint64_t Capture::total_unparsed_packets = 0;
 
-
 Capture::Capture(string user_iface, string user_ringlog, string user_packlog)
 {
-    if (user_iface   != "") Capture::interface   = user_iface;
-    if (user_ringlog != "") Capture::logfile_path = user_ringlog; 
-    if (user_packlog != "") Capture::packet_file = user_packlog; 
-
+    if (user_iface != "")
+        Capture::interface = user_iface;
+    if (user_ringlog != "")
+        Capture::logfile_path = user_ringlog;
+    if (user_packlog != "")
+        Capture::packetfile_path = user_packlog;
 }
 
 void Capture::init_logging()
@@ -64,6 +65,17 @@ void Capture::init_logging()
 
 void Capture::start_pfring_capture()
 {
+    //Create an ofstream object associated with the given packet logger path
+    Capture::packetlog.open(packetfile_path, ios::trunc);
+    if (Capture::packetlog.is_open())
+    {
+        logger << log4cpp::Priority::INFO << "Packet logger is successfully opened";
+    }
+    else
+    {
+        cout << "[!] Cannot open file to log packet!";
+        exit(1);
+    }
 
     // Check if interface is selected
     logger << log4cpp::Priority::INFO << "PF_RING plugin started";
@@ -143,10 +155,10 @@ void Capture::parsing_pfring_packet(const struct pfring_pkthdr *header, const u_
     }
     else
     {
-         
+
         current_packet.flags = 0;
     }
-    process_packet(current_packet, *(Capture::packet_file_ptr));
+    process_packet(current_packet, Capture::packetlog);
 }
 
 /*
@@ -179,7 +191,6 @@ bool Capture::start_pfring_packet_preprocessing(const char *dev)
     if (!pfring_kernel_parser)
         flags |= PF_RING_DO_NOT_PARSE;
     flags |= PF_RING_DNA_SYMMETRIC_RSS; /* Note that symmetric RSS is ignored by non-DNA drivers */
-    // Set length of data in each frame default as "pfcount.c"
     unsigned int snaplen = 128;
     ring = pfring_open(dev, snaplen, flags);
     if (!ring)
@@ -216,7 +227,7 @@ bool Capture::start_pfring_packet_preprocessing(const char *dev)
     }
     // Set wait-for-packet mode & capture
     u_int8_t wait_for_packet = 1;
-    pfring_loop(ring, Capture::parsing_pfring_packet,(u_char *)NULL, wait_for_packet);
+    pfring_loop(ring, Capture::parsing_pfring_packet, (u_char *)NULL, wait_for_packet);
     return true;
 };
 

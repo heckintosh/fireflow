@@ -4,10 +4,10 @@
 #include "packet.h"
 using namespace std;
 
-int packet::internalPacketCounter = 0;
-
+int packet::packetCounter = 0;
 
 int main(int argc, char* argv[]){
+    
     CLI::App app{"FIREFLOW: USTH ANTI_DDOS"};
 
     string interface, logfile_path, packetfile_path;

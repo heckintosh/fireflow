@@ -24,11 +24,12 @@ class Capture
 public:
     static string logfile_path; // Path to log file
     static string interface;                        // The ethernet interface to capture packet
-    static string packet_file;    // The file contains packet's content
+    static string packetfile_path;    // The file contains packet's content
     
     static string *packet_file_ptr; // Just a pointer to the packet file... (maybe if set NULL to then file is shit?)
     static uint32_t pfring_sampling_rate;    // Sample rate (packets/second?)
     static uint64_t total_unparsed_packets;
+    static ofstream packetlog;
 
     /*
         init_logging():

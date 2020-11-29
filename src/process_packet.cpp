@@ -22,9 +22,9 @@ using namespace std;
     process_packet():
         Processing the packet we captured.
 */
-void process_packet(packet &current_packet, string packet_file)
+void process_packet(packet &current_packet, ofstream& packetlog)
 {
-    cout << log_packet(current_packet, packet_file);
+    cout << log_packet(current_packet, packetlog);
 }
 
 /*
@@ -136,15 +136,14 @@ uint8_t print_binary(uint8_t flags)
     log_packet():
         Getting the essentials of a packet & write it to logfile/stringstream buffer.
 */
-string log_packet(packet current_packet, string packet_file)
+string log_packet(packet current_packet, ofstream& packetlog)
 {
 
-    ofstream packetlog;
     string src_ip_as_string = ip_int_to_string(current_packet.src_ip);
     string dst_ip_as_string = ip_int_to_string(current_packet.dst_ip);
 
     // Defining the content to write to stdout/packet log file
-    #define writeContent    packet::internalPacketCounter << " "                                             \
+    #define writeContent    packet::packetCounter << " "                                             \
                          << src_ip_as_string << " " << current_packet.src_port << " "                               \
                          << dst_ip_as_string << " " << current_packet.dst_port << " "                               \
                          << get_protocol(current_packet.protocol) << " " << get_flags(current_packet.flags) << " "  \
@@ -156,17 +155,8 @@ string log_packet(packet current_packet, string packet_file)
     buffer << writeContent;
 
     // Save to a file
-    packetlog.open(packet_file, ios::app);
-    if (packetlog.is_open())
-    {
-        packetlog << writeContent;
-        packetlog.close();
-    }
-    else
-    {
-        cout << "[!] Cannot open file to log packet!";
-        exit(1);
-    }
+    packetlog << writeContent;
+   
 
     // Return the string
     return buffer.str();
