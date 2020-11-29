@@ -23,13 +23,14 @@ log4cpp::Category& logger = log4cpp::Category::getRoot(); // The ultimiate logge
 
 uint64_t      total_unparsed_packets;
 
-extern string logfile_path;                             // Path to log file
-extern string interface;                                // The ethernet interface to capture packet
-extern string packet_file;                              // The file contains packet's content
+string logfile_path = "/tmp/fireflow_log";                             // Path to log file
+string interface = "eth0";                                // The ethernet interface to capture packet
+string packet_file = "/tmp/packet_logger";                         // The file contains packet's content
 
 string        *packet_file_ptr        = &packet_file;   // Just a pointer to the packet file... (maybe if set NULL to then file is shit?)
 pfring        *ring                   = NULL;           // PF_RING socket to capture data
 uint32_t      pfring_sampling_rate    = 100;            // Sample rate (packets/second?)
+ofstream      packetlog;
 
 int           packet::internalPacketCounter;            // Why this is here ???
 
@@ -72,6 +73,7 @@ void start_pfring_capture() {
 
     // Initialize PF_RING
     const char* device_name         = interface.c_str();
+    packetlog.open(packet_file, ios::app);
     bool        pfring_init_result  = start_pfring_packet_preprocessing(device_name);
     if (!pfring_init_result) {
         // Internal error in PF_RING
@@ -219,4 +221,9 @@ void parsing_pfring_packet(const struct pfring_pkthdr* header, const u_char* buf
 */
 void stop_pfring_capture() {
     pfring_breakloop(ring);
+}
+
+int main(){
+    init_logging();
+    start_pfring_capture();
 }
