@@ -73,7 +73,7 @@ void Capture::start_pfring_capture()
     }
     else
     {
-        cout << "[!] Cannot open file to log packet!";
+        cout << "[!] Cannot open file to log packet!, check logger at /tmp/fireflow_log.txt for details";
         exit(1);
     }
 
