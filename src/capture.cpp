@@ -21,22 +21,39 @@
 using namespace std;
 log4cpp::Category &logger = log4cpp::Category::getRoot(); // The ultimiate logger!! Used to add settings etc...
 
+//Default config
+
 string Capture::logfile_path = "/tmp/fireflow_log.txt";     // Path to log file
 string Capture::interface = "eth0";                         // The ethernet interface to capture packet
 string Capture::packetfile_path = "/tmp/packet_logger.txt"; // The file contains packet's content
+int Capture::window = 1000;
+
+//File object of packet file
 ofstream Capture::packetlog;
 
-uint32_t Capture::pfring_sampling_rate = 100;
+//Counting ignored packets
 uint64_t Capture::total_unparsed_packets = 0;
 
-Capture::Capture(string user_iface, string user_ringlog, string user_packlog)
+
+/*Constructor for user specified parameter 
+
+- interface 
+- pfring init log path
+- packet info log path
+- window: amount of packets to perform analysis on each
+
+*/
+
+Capture::Capture(string user_iface, string user_pfringlog, string user_packetlog, int user_window)
 {
     if (user_iface != "")
         Capture::interface = user_iface;
-    if (user_ringlog != "")
-        Capture::logfile_path = user_ringlog;
-    if (user_packlog != "")
-        Capture::packetfile_path = user_packlog;
+    if (user_pfringlog != "")
+        Capture::logfile_path = user_pfringlog;
+    if (user_packetlog != "")
+        Capture::packetfile_path = user_packetlog;
+    if (user_window != NULL)
+        Capture::window = user_window;
 }
 
 void Capture::init_logging()
@@ -108,8 +125,6 @@ void Capture::parsing_pfring_packet(const struct pfring_pkthdr *header, const u_
     // A packet. Description of all fields: "packet.h"
     packet current_packet;
 
-    // Now we support only non sampled input from PF_RING
-    current_packet.sample_ratio = Capture::pfring_sampling_rate;
     memset((void *)&header->extended_hdr.parsed_pkt, 0, sizeof(header->extended_hdr.parsed_pkt));
 
     // Capture packet
@@ -158,7 +173,7 @@ void Capture::parsing_pfring_packet(const struct pfring_pkthdr *header, const u_
 
         current_packet.flags = 0;
     }
-    process_packet(current_packet, Capture::packetlog);
+    process_packet(current_packet, Capture::packetlog, Capture::window);
 }
 
 /*

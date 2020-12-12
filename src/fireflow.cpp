@@ -16,12 +16,14 @@ int main(int argc, char* argv[]){
     CLI::App app{"FIREFLOW: USTH ANTI_DDOS"};
 
     string interface, logfile_path, packetfile_path;
+    int window;
     app.add_option("-i,--interface", interface, "Capture interface")->required();
     app.add_option("-l", logfile_path, "Dump to log file");
     app.add_option("-p", packetfile_path,  "Where to dump packet log");
+    app.add_option("-w", window, "The amount of packet to read");
     CLI11_PARSE(app, argc, argv);
 
-    capture_inteface = new Capture(interface, logfile_path, packetfile_path);
+    capture_inteface = new Capture(interface, logfile_path, packetfile_path, window);
     (*capture_inteface).init_logging();
     (*capture_inteface).start_pfring_capture();
 }

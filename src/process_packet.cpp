@@ -4,8 +4,11 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <queue>
 #include <iterator>
+#include <map>
 #include <string>
+#include <set>
 #include "packet.h"
 #include "process_packet.h"
 
@@ -22,9 +25,13 @@ using namespace std;
     process_packet():
         Processing the packet we captured.
 */
-void process_packet(packet &current_packet, ofstream& packetlog)
+void process_packet(packet &current_packet, ofstream& packetlog, int &window)
 {
-    cout << log_packet(current_packet, packetlog);
+    queue<packet> packet_queue;
+    packet_queue.push(current_packet);
+    if (current_packet.packetCounter % window == 0){
+
+    };
 }
 
 /*
@@ -160,4 +167,21 @@ string log_packet(packet current_packet, ofstream& packetlog)
 
     // Return the string
     return buffer.str();
+}
+
+string log_packet_summary_per_windows(queue<packet> packet_queue){
+    
+}
+
+map<uint32_t,int> uniqueIPcount(queue<packet> packet_queue){
+    set<uint32_t> src_ip;
+    while (!packet_queue.empty()){
+        src_ip.insert(packet_queue.front().src_ip);
+        packet_queue.pop();
+    }
+}
+
+map<uint16_t, int> uniqueSrcPortCount(){
+    set<uint16_t> src_port;
+
 }

@@ -6,7 +6,7 @@
 
     using namespace std;
 
-    void   process_packet  (packet   &current_packet, ofstream& packet_file);
+    void   process_packet  (packet   &current_packet, ofstream& packet_file, int &window);
     string log_packet      (packet   packet,          ofstream& packet_file);
     string ip_int_to_string(uint32_t ip_as_integer);
 

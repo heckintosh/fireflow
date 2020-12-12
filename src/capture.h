@@ -25,7 +25,8 @@ public:
     static string logfile_path; // Path to log file
     static string interface;                        // The ethernet interface to capture packet
     static string packetfile_path;    // The file contains packet's content
-    
+    static int window;
+
     static string *packet_file_ptr; // Just a pointer to the packet file... (maybe if set NULL to then file is shit?)
     static uint32_t pfring_sampling_rate;    // Sample rate (packets/second?)
     static uint64_t total_unparsed_packets;
@@ -35,7 +36,7 @@ public:
         init_logging():
             Initialize the logging library.
     */
-    Capture(string u_iface, string u_ringlog, string u_packlog);
+    Capture(string u_iface, string u_ringlog, string u_packlog, int u_window);
     void init_logging();
 
     /*
