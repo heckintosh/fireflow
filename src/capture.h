@@ -10,6 +10,7 @@
 #include <log4cpp/Priority.hh>
 #include <log4cpp/PatternLayout.hh>
 #include <string>
+#include <queue>
 #include <pfring.h>
 
 #include "packet.h"
@@ -31,6 +32,7 @@ public:
     static uint32_t pfring_sampling_rate;    // Sample rate (packets/second?)
     static uint64_t total_unparsed_packets;
     static ofstream packetlog;
+    static queue<packet> packet_queue;
 
     /*
         init_logging():

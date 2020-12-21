@@ -1,5 +1,5 @@
 Compile: 
-g++ -o ../bin/fireflow -I/home/kali/Tools/fireflow/include fireflow.cpp capture.cpp process_packet.cpp -llog4cpp -lpfring -lpcap
+g++ -o ../bin/fireflow -I../include fireflow.cpp capture.cpp process_packet.cpp -llog4cpp -lpfring -lpcap
 
 START PF_RING:
 cd ~/Tools/kernel

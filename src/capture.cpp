@@ -33,6 +33,7 @@ ofstream Capture::packetlog;
 
 //Counting ignored packets
 uint64_t Capture::total_unparsed_packets = 0;
+queue<packet> Capture::packet_queue;
 
 
 /*Constructor for user specified parameter 
@@ -52,7 +53,7 @@ Capture::Capture(string user_iface, string user_pfringlog, string user_packetlog
         Capture::logfile_path = user_pfringlog;
     if (user_packetlog != "")
         Capture::packetfile_path = user_packetlog;
-    if (user_window != NULL)
+    if (user_window != 0)
         Capture::window = user_window;
 }
 
@@ -124,7 +125,6 @@ void Capture::parsing_pfring_packet(const struct pfring_pkthdr *header, const u_
 
     // A packet. Description of all fields: "packet.h"
     packet current_packet;
-
     memset((void *)&header->extended_hdr.parsed_pkt, 0, sizeof(header->extended_hdr.parsed_pkt));
 
     // Capture packet
@@ -170,10 +170,14 @@ void Capture::parsing_pfring_packet(const struct pfring_pkthdr *header, const u_
     }
     else
     {
-
         current_packet.flags = 0;
     }
-    process_packet(current_packet, Capture::packetlog, Capture::window);
+
+    //log_packet_summary flow
+    packet_queue.push(current_packet);
+    if (current_packet.packetCounter % window == 0){
+        process_packet(packet_queue, Capture::packetlog, (current_packet.packetCounter / window));
+    }
 }
 
 /*

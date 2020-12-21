@@ -5,6 +5,7 @@
 #include <sstream>
 #include <vector>
 #include <queue>
+#include <map>
 #include <iterator>
 #include <map>
 #include <string>
@@ -25,13 +26,119 @@ using namespace std;
     process_packet():
         Processing the packet we captured.
 */
-void process_packet(packet &current_packet, ofstream& packetlog, int &window)
-{
-    queue<packet> packet_queue;
-    packet_queue.push(current_packet);
-    if (current_packet.packetCounter % window == 0){
 
-    };
+void process_packet(queue<packet> &packet_queue, ofstream& packetlog, int window_counter)
+{
+    cout << preDetectionInfo(packet_queue, packetlog, window_counter);
+}
+
+
+string preDetectionInfo(queue <packet> &packet_queue, ofstream& packetlog, int window_counter){
+    stringstream buffer;
+    map<uint32_t, int> src_ip;
+    map<uint32_t, int> dst_ip;
+    map<uint16_t, int> src_port;
+    map<uint16_t, int> dst_port;
+    map<uint8_t, int> protocol;
+    map<uint8_t, int> flags; 
+    //map<uint32_t, int>::iterator itr; 
+    while (!packet_queue.empty()){
+        buffer << log_packet(packet_queue.front(), packetlog);
+        countSourceIP_map(src_ip, packet_queue.front().src_ip); 
+        countDestIP_map(dst_ip, packet_queue.front().dst_ip);
+        countSourcePort(src_port, packet_queue.front().src_port);
+        countDestPort(dst_port, packet_queue.front().dst_port);
+        countProtocol(protocol, packet_queue.front().protocol);
+        countFlags(flags, packet_queue.front().flags);
+        packet_queue.pop();
+    }
+
+    packetlog << buffer.str();
+    return buffer.str();
+}
+
+/*
+    log_packet():
+        Getting the essentials of a packet & write it to logfile/stringstream buffer.
+
+*/
+string log_packet(packet current_packet, ofstream& packetlog)
+{
+    string src_ip_as_string = ip_int_to_string(current_packet.src_ip);
+    string dst_ip_as_string = ip_int_to_string(current_packet.dst_ip);
+
+    // Defining the content to write to stdout/packet log file
+    #define writeContent    packet::packetCounter << " "                                             \
+                         << src_ip_as_string << " " << current_packet.src_port << " "                               \
+                         << dst_ip_as_string << " " << current_packet.dst_port << " "                               \
+                         << get_protocol(current_packet.protocol)  << " " << get_flags(current_packet.flags) << " "  \
+                         << current_packet.length                                                                   \
+                         << "\n"                                                                                    \
+
+    // Write to a stringstream buffer
+    stringstream buffer;
+    buffer << writeContent;
+
+    // Save to a file
+    packetlog << writeContent;
+   
+
+    // Return the string
+    return buffer.str();
+}
+
+void countProtocol(map<uint8_t, int> &protocols_map, uint8_t protocol){
+    if (protocols_map.count(protocol)){
+        protocols_map[protocol] += 1;
+    }
+    else if (!protocols_map.count(protocol)){
+        protocols_map.insert({protocol, 1});
+    }
+}
+
+void countFlags(map<uint8_t, int> &flags_map, uint8_t flag){
+    if (flags_map.count(flag)){
+        flags_map[flag] += 1;
+    }
+    else if (!flags_map.count(flag)){
+        flags_map.insert({flag, 1});
+    }
+}
+
+void countSourcePort(map<uint16_t, int> &src_port_map, uint32_t src_port){
+    if (src_port_map.count(src_port)){
+        src_port_map[src_port] += 1;
+    }
+    else if (!src_port_map.count(src_port)){
+        src_port_map.insert({src_port, 1});
+    }
+}
+
+void countDestPort(map<uint16_t, int> &dst_port_map, uint32_t dst_port){
+    if (dst_port_map.count(dst_port)){
+        dst_port_map[dst_port] += 1;
+    }
+    else if (!dst_port_map.count(dst_port)){
+        dst_port_map.insert({dst_port, 1});
+    }
+}
+
+void countDestIP_map(map<uint32_t, int> &dst_ip_map, uint32_t dst_ip){
+    if (dst_ip_map.count(dst_ip)){
+        dst_ip_map[dst_ip] += 1;
+    }
+    else if (!dst_ip_map.count(dst_ip)){
+        dst_ip_map.insert({dst_ip, 1});
+    }
+}
+
+void countSourceIP_map(map<uint32_t, int> &src_ip_map, uint32_t src_ip){
+    if (src_ip_map.count(src_ip)){
+        src_ip_map[src_ip] += 1;
+    }
+    else if (!src_ip_map.count(src_ip)){
+        src_ip_map.insert({src_ip, 1});
+    }
 }
 
 /*
@@ -107,11 +214,12 @@ string get_protocol(uint8_t protocol)
 {
     if (protocol == IPPROTO_ICMP)
         return "ICMP";
-    if (protocol == IPPROTO_TCP)
+    else if (protocol == IPPROTO_TCP)
         return "TCP";
-    if (protocol == IPPROTO_UDP)
+    else if (protocol == IPPROTO_UDP)
         return "UDP";
-    return "Unhandled, CODE: " + to_string(protocol);
+    else
+        return "-";
 }
 
 /*
@@ -139,49 +247,3 @@ uint8_t print_binary(uint8_t flags)
     return 1;
 }
 
-/*
-    log_packet():
-        Getting the essentials of a packet & write it to logfile/stringstream buffer.
-*/
-string log_packet(packet current_packet, ofstream& packetlog)
-{
-
-    string src_ip_as_string = ip_int_to_string(current_packet.src_ip);
-    string dst_ip_as_string = ip_int_to_string(current_packet.dst_ip);
-
-    // Defining the content to write to stdout/packet log file
-    #define writeContent    packet::packetCounter << " "                                             \
-                         << src_ip_as_string << " " << current_packet.src_port << " "                               \
-                         << dst_ip_as_string << " " << current_packet.dst_port << " "                               \
-                         << get_protocol(current_packet.protocol) << " " << get_flags(current_packet.flags) << " "  \
-                         << current_packet.length                                                                   \
-                         << "\n"                                                                                    \
-
-    // Write to a stringstream buffer
-    stringstream buffer;
-    buffer << writeContent;
-
-    // Save to a file
-    packetlog << writeContent;
-   
-
-    // Return the string
-    return buffer.str();
-}
-
-string log_packet_summary_per_windows(queue<packet> packet_queue){
-    
-}
-
-map<uint32_t,int> uniqueIPcount(queue<packet> packet_queue){
-    set<uint32_t> src_ip;
-    while (!packet_queue.empty()){
-        src_ip.insert(packet_queue.front().src_ip);
-        packet_queue.pop();
-    }
-}
-
-map<uint16_t, int> uniqueSrcPortCount(){
-    set<uint16_t> src_port;
-
-}

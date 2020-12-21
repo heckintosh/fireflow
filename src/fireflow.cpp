@@ -16,7 +16,7 @@ int main(int argc, char* argv[]){
     CLI::App app{"FIREFLOW: USTH ANTI_DDOS"};
 
     string interface, logfile_path, packetfile_path;
-    int window;
+    int window = 0;
     app.add_option("-i,--interface", interface, "Capture interface")->required();
     app.add_option("-l", logfile_path, "Dump to log file");
     app.add_option("-p", packetfile_path,  "Where to dump packet log");

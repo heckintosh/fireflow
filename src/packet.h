@@ -25,7 +25,7 @@ class packet {
     uint8_t ttl;
     uint16_t src_port;
     uint16_t dst_port;
-    unsigned int protocol;
+    uint8_t protocol;
     
     uint64_t length;
     uint8_t flags; /* tcp flags */
