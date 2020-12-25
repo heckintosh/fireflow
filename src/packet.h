@@ -7,12 +7,13 @@
 // simplified packet struct for lightweight save into memory
 class packet {
     public:
-    static int packetCounter;
+    static int totalPackets;
     packet()
     : sample_ratio(1), src_ip(0), dst_ip(0), src_port(0), dst_port(0), protocol(0),
       length(0), flags(0), ip_fragmented(false), ip_protocol_version(4),
-      ttl(0), packet_payload_pointer(NULL), packet_payload_length(0){packetCounter++;}
+      ttl(0), packet_payload_pointer(NULL), packet_payload_length(0){totalPackets++;}
 
+    int packetCounter = totalPackets;
     uint32_t sample_ratio;
     /* IPv4 */
     uint32_t src_ip;

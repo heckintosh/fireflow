@@ -1,4 +1,5 @@
 # Fireflow v1.0
+
 This proposal will be gradually updated at https://github.com/sanebinary/fireflow/blob/master/docs/projectproposal.md
 ### Github link: https://github.com/sanebinary/fireflow
 ### Members:

@@ -23,7 +23,7 @@ class Capture
     pfring *ring = NULL;                    // PF_RING socket to capture data
 
 public:
-    static string logfile_path; // Path to log file
+    static string debuglog; // Path to log file
     static string interface;                        // The ethernet interface to capture packet
     static string packetfile_path;    // The file contains packet's content
     static int window;

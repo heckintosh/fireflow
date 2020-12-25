@@ -27,13 +27,13 @@ using namespace std;
         Processing the packet we captured.
 */
 
-void process_packet(queue<packet> &packet_queue, ofstream& packetlog, int window_counter)
+void process_packet(queue<packet> &packet_queue, ofstream& packetlog)
 {
-    cout << preDetectionInfo(packet_queue, packetlog, window_counter);
+    cout << preDetectionInfo(packet_queue, packetlog);
 }
 
 
-string preDetectionInfo(queue <packet> &packet_queue, ofstream& packetlog, int window_counter){
+string preDetectionInfo(queue <packet> &packet_queue, ofstream& packetlog){
     stringstream buffer;
     map<uint32_t, int> src_ip;
     map<uint32_t, int> dst_ip;
@@ -41,17 +41,17 @@ string preDetectionInfo(queue <packet> &packet_queue, ofstream& packetlog, int w
     map<uint16_t, int> dst_port;
     map<uint8_t, int> protocol;
     map<uint8_t, int> flags; 
-    //map<uint32_t, int>::iterator itr; 
     while (!packet_queue.empty()){
         buffer << log_packet(packet_queue.front(), packetlog);
-        countSourceIP_map(src_ip, packet_queue.front().src_ip); 
-        countDestIP_map(dst_ip, packet_queue.front().dst_ip);
-        countSourcePort(src_port, packet_queue.front().src_port);
-        countDestPort(dst_port, packet_queue.front().dst_port);
-        countProtocol(protocol, packet_queue.front().protocol);
-        countFlags(flags, packet_queue.front().flags);
+        mapSrcIP(src_ip, packet_queue.front().src_ip); 
+        mapDstIP(dst_ip, packet_queue.front().dst_ip);
+        mapSrcPort(src_port, packet_queue.front().src_port);
+        mapDstPort(dst_port, packet_queue.front().dst_port);
+        mapProto(protocol, packet_queue.front().protocol);
+        mapFlags(flags, packet_queue.front().flags);
         packet_queue.pop();
     }
+    
 
     packetlog << buffer.str();
     return buffer.str();
@@ -68,7 +68,7 @@ string log_packet(packet current_packet, ofstream& packetlog)
     string dst_ip_as_string = ip_int_to_string(current_packet.dst_ip);
 
     // Defining the content to write to stdout/packet log file
-    #define writeContent    packet::packetCounter << " "                                             \
+    #define writeContent    current_packet.packetCounter << " "                                             \
                          << src_ip_as_string << " " << current_packet.src_port << " "                               \
                          << dst_ip_as_string << " " << current_packet.dst_port << " "                               \
                          << get_protocol(current_packet.protocol)  << " " << get_flags(current_packet.flags) << " "  \
@@ -77,17 +77,13 @@ string log_packet(packet current_packet, ofstream& packetlog)
 
     // Write to a stringstream buffer
     stringstream buffer;
-    buffer << writeContent;
-
-    // Save to a file
-    packetlog << writeContent;
-   
+    buffer << writeContent;   
 
     // Return the string
     return buffer.str();
 }
 
-void countProtocol(map<uint8_t, int> &protocols_map, uint8_t protocol){
+void mapProto(map<uint8_t, int> &protocols_map, uint8_t protocol){
     if (protocols_map.count(protocol)){
         protocols_map[protocol] += 1;
     }
@@ -96,7 +92,7 @@ void countProtocol(map<uint8_t, int> &protocols_map, uint8_t protocol){
     }
 }
 
-void countFlags(map<uint8_t, int> &flags_map, uint8_t flag){
+void mapFlags(map<uint8_t, int> &flags_map, uint8_t flag){
     if (flags_map.count(flag)){
         flags_map[flag] += 1;
     }
@@ -105,7 +101,7 @@ void countFlags(map<uint8_t, int> &flags_map, uint8_t flag){
     }
 }
 
-void countSourcePort(map<uint16_t, int> &src_port_map, uint32_t src_port){
+void mapSrcPort(map<uint16_t, int> &src_port_map, uint32_t src_port){
     if (src_port_map.count(src_port)){
         src_port_map[src_port] += 1;
     }
@@ -114,7 +110,7 @@ void countSourcePort(map<uint16_t, int> &src_port_map, uint32_t src_port){
     }
 }
 
-void countDestPort(map<uint16_t, int> &dst_port_map, uint32_t dst_port){
+void mapDstPort(map<uint16_t, int> &dst_port_map, uint32_t dst_port){
     if (dst_port_map.count(dst_port)){
         dst_port_map[dst_port] += 1;
     }
@@ -123,7 +119,7 @@ void countDestPort(map<uint16_t, int> &dst_port_map, uint32_t dst_port){
     }
 }
 
-void countDestIP_map(map<uint32_t, int> &dst_ip_map, uint32_t dst_ip){
+void mapDstIP(map<uint32_t, int> &dst_ip_map, uint32_t dst_ip){
     if (dst_ip_map.count(dst_ip)){
         dst_ip_map[dst_ip] += 1;
     }
@@ -132,7 +128,7 @@ void countDestIP_map(map<uint32_t, int> &dst_ip_map, uint32_t dst_ip){
     }
 }
 
-void countSourceIP_map(map<uint32_t, int> &src_ip_map, uint32_t src_ip){
+void mapSrcIP(map<uint32_t, int> &src_ip_map, uint32_t src_ip){
     if (src_ip_map.count(src_ip)){
         src_ip_map[src_ip] += 1;
     }

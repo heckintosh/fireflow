@@ -1,12 +1,3 @@
-#include <log4cpp/Appender.hh>
-#include <log4cpp/BasicLayout.hh>
-#include <log4cpp/Category.hh>
-#include <log4cpp/FileAppender.hh>
-#include <log4cpp/Layout.hh>
-#include <log4cpp/OstreamAppender.hh>
-#include <log4cpp/PatternLayout.hh>
-#include <log4cpp/Priority.hh>
-#include <log4cpp/PatternLayout.hh>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -23,7 +14,7 @@ log4cpp::Category &logger = log4cpp::Category::getRoot(); // The ultimiate logge
 
 //Default config
 
-string Capture::logfile_path = "/tmp/fireflow_log.txt";     // Path to log file
+string Capture::debuglog = "/tmp/fireflow_log.txt";     // Path to log file
 string Capture::interface = "eth0";                         // The ethernet interface to capture packet
 string Capture::packetfile_path = "/tmp/packet_logger.txt"; // The file contains packet's content
 int Capture::window = 1000;
@@ -45,12 +36,12 @@ queue<packet> Capture::packet_queue;
 
 */
 
-Capture::Capture(string user_iface, string user_pfringlog, string user_packetlog, int user_window)
+Capture::Capture(string user_iface, string user_debuglog, string user_packetlog, int user_window)
 {
     if (user_iface != "")
         Capture::interface = user_iface;
-    if (user_pfringlog != "")
-        Capture::logfile_path = user_pfringlog;
+    if (user_debuglog != "")
+        Capture::debuglog = user_debuglog;
     if (user_packetlog != "")
         Capture::packetfile_path = user_packetlog;
     if (user_window != 0)
@@ -65,7 +56,7 @@ void Capture::init_logging()
     layout->setConversionPattern("%d [%p] %m%n");
 
     // Set output of the log file, with the pattern variable set
-    log4cpp::Appender *appender = new log4cpp::FileAppender("default", logfile_path);
+    log4cpp::Appender *appender = new log4cpp::FileAppender("default", debuglog);
     appender->setLayout(layout);
 
     // Set priority to log the file and the appender to log into
@@ -176,7 +167,7 @@ void Capture::parsing_pfring_packet(const struct pfring_pkthdr *header, const u_
     //log_packet_summary flow
     packet_queue.push(current_packet);
     if (current_packet.packetCounter % window == 0){
-        process_packet(packet_queue, Capture::packetlog, (current_packet.packetCounter / window));
+        process_packet(packet_queue, Capture::packetlog);
     }
 }
 
