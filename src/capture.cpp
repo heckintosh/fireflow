@@ -4,67 +4,33 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <pfring.h>
 #include "packet.h"
 #include "process_packet.h"
 #include "capture.h"
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
+#include "spdlog/sinks/rotating_file_sink.h"
+#include "spdlog/sinks/basic_file_sink.h"
 
 using namespace std;
-log4cpp::Category &logger = log4cpp::Category::getRoot(); // The ultimiate logger!! Used to add settings etc...
 
-//Default config
-
-string Capture::debuglog = "/tmp/fireflow_log.txt";     // Path to log file
-string Capture::interface = "eth0";                         // The ethernet interface to capture packet
-string Capture::packetfile_path = "/tmp/packet_logger.txt"; // The file contains packet's content
-int Capture::window = 1000;
-
-//File object of packet file
-ofstream Capture::packetlog;
-
-//Counting ignored packets
 uint64_t Capture::total_unparsed_packets = 0;
 queue<packet> Capture::packet_queue;
 
-
-/*Constructor for user specified parameter 
-
-- interface 
-- pfring init log path
-- packet info log path
-- window: amount of packets to perform analysis on each
-
-*/
-
-Capture::Capture(string user_iface, string user_debuglog, string user_packetlog, int user_window)
+Capture::Capture(string _interface, string _debugpath, string _packetpath, int _window, int _max_sizelog, int _max_files)
 {
-    if (user_iface != "")
-        Capture::interface = user_iface;
-    if (user_debuglog != "")
-        Capture::debuglog = user_debuglog;
-    if (user_packetlog != "")
-        Capture::packetfile_path = user_packetlog;
-    if (user_window != 0)
-        Capture::window = user_window;
-}
-
-void Capture::init_logging()
-{
-
-    // Create pattern variable for logging: <date> [<priority>] <message>\n
-    log4cpp::PatternLayout *layout = new log4cpp::PatternLayout();
-    layout->setConversionPattern("%d [%p] %m%n");
-
-    // Set output of the log file, with the pattern variable set
-    log4cpp::Appender *appender = new log4cpp::FileAppender("default", debuglog);
-    appender->setLayout(layout);
-
-    // Set priority to log the file and the appender to log into
-    logger.setPriority(log4cpp::Priority::INFO);
-    logger.addAppender(appender);
-
-    // Log to the logger to indicate the logger is finished!
-    logger.info("Logger initialized!");
+    if (_interface != "")
+        Capture::interface = _interface;
+    if (_debugpath != "")
+        Capture::debugpath = _debugpath;
+    if (_packetpath != "")
+        Capture::packetpath = _packetpath;
+    if (_window != 0)
+        Capture::window = _window;
+    if (_max_sizelog != 0)
+        Capture::max_sizelog = _max_sizelog;
+    if (_max_files != 0)
+        Capture::window = _max_files;
 }
 
 /*
@@ -74,24 +40,12 @@ void Capture::init_logging()
 
 void Capture::start_pfring_capture()
 {
-    //Create an ofstream object associated with the given packet logger path
-    Capture::packetlog.open(packetfile_path, ios::trunc);
-    if (Capture::packetlog.is_open())
-    {
-        logger << log4cpp::Priority::INFO << "Packet logger is successfully opened";
-    }
-    else
-    {
-        cout << "[!] Cannot open file to log packet!, check logger at /tmp/fireflow_log.txt for details";
-        exit(1);
-    }
-
-    // Check if interface is selected
-    logger << log4cpp::Priority::INFO << "PF_RING plugin started";
-    logger << log4cpp::Priority::INFO << "We selected interface: " << interface;
+    spdlog::get("exec_logger")->info("------Fireflow v1.0 execution logger----");
+    spdlog::get("exec_logger")->info("PF_RING plugin started");
+    spdlog::get("exec_logger")->info("We selected interface: " + interface);
     if (interface == "")
     {
-        logger << log4cpp::Priority::ERROR << "Please specify interface";
+        spdlog::get("exec_logger")->warn("[!] Please specify interface");
         exit(1);
     }
 
@@ -101,7 +55,7 @@ void Capture::start_pfring_capture()
     if (!pfring_init_result)
     {
         // Internal error in PF_RING
-        logger << log4cpp::Priority::ERROR << "PF_RING initilization failed, exit from program";
+        spdlog::get("exec_logger")->error("PF_RING initilization failed, exit from program");
         exit(1);
     }
 }
@@ -111,7 +65,7 @@ void Capture::start_pfring_capture()
         Parsing PF_RING packet.
 */
 
-void Capture::parsing_pfring_packet(const struct pfring_pkthdr *header, const u_char *buffer, const u_char *user_bytes)
+void Capture::parsing_pfring_packet()
 {
 
     // A packet. Description of all fields: "packet.h"
@@ -167,7 +121,7 @@ void Capture::parsing_pfring_packet(const struct pfring_pkthdr *header, const u_
     //log_packet_summary flow
     packet_queue.push(current_packet);
     if (current_packet.packetCounter % window == 0){
-        process_packet(packet_queue, Capture::packetlog);
+        process_packet(packet_queue, packet_logger);
     }
 }
 
@@ -180,7 +134,7 @@ start_pfring_packet_preprocessing():
     [Args:] const char* dev: Name of the device we want to capture.
 */
 
-bool Capture::start_pfring_packet_preprocessing(const char *dev)
+bool Capture::start_pfring_packet_preprocessing(char *dev)
 {
     // Setting variables to set flags
     bool promisc = true;                 // Enable promiscuous mode
@@ -202,47 +156,49 @@ bool Capture::start_pfring_packet_preprocessing(const char *dev)
         flags |= PF_RING_DO_NOT_PARSE;
     flags |= PF_RING_DNA_SYMMETRIC_RSS; /* Note that symmetric RSS is ignored by non-DNA drivers */
     unsigned int snaplen = 128;
-    ring = pfring_open(dev, snaplen, flags);
+    ring = new PFring(dev, snaplen, flags);
     if (!ring)
     {
-        logger
-            << log4cpp::Priority::INFO << "pfring_open() error: " << strerror(errno)
-            << " (pf_ring not loaded or perhaps you use quick mode and have already a socket bound to: " << dev << ")";
+        spdlog::get("exec_logger")->error("pfring_open() error: {}",strerror(errno));
+        spdlog::get("exec_logger")->error("pf_ring not loaded or perhaps you use quick mode and have already a socket bound to: {}",dev);
         return false;
     }
     // Print successful message!!
-    logger << log4cpp::Priority::INFO << "Successully binded to: " << dev;
-    logger << log4cpp::Priority::INFO << "Device RX channels number: " << int(pfring_get_num_rx_channels(ring));
+    spdlog::get("exec_logger")->info("Successully binded to: {}",dev);
+    spdlog::get("exec_logger")->info("Device RX channels number: {}", int(ring->get_num_rx_channels()));
+
     // Set application name in /proc
-    int pfring_appname_result = pfring_set_application_name(ring, (char *)"fireflow");
+    int pfring_appname_result = ring->set_application_name((char *)"fireflow");
     if (pfring_appname_result != 0)
-        logger << log4cpp::Priority::ERROR << "Can't set program name for PF_RING: pfring_set_application_name";
+        spdlog::get("exec_logger")->error("Can't set program name for PF_RING: pfring_set_application_name");
     // Get PF_RING version
     u_int32_t version;
-    pfring_version(ring, &version);
-    logger.info("Using PF_RING v.%d.%d.%d",
-                (version & 0xFFFF0000) >> 16,
-                (version & 0x0000FF00) >> 8,
-                version & 0x000000FF);
+    ring->get_version(&version);
+    spdlog::get("exec_logger")->info("Using PF_RING v.{}.{}.{}",(version & 0xFFFF0000) >> 16, (version & 0x0000FF00) >> 8, (version & 0x000000FF));
     // Set socket mode to RECEIVE ONLY
-    int pfring_socketmode_result = pfring_set_socket_mode(ring, recv_only_mode);
+    int pfring_socketmode_result = ring->set_socket_mode(recv_only_mode);
     if (pfring_socketmode_result != 0)
-        logger.info("pfring_set_socket_mode returned [rc=%d]\n", pfring_socketmode_result);
+        spdlog::get("exec_logger")->info("pfring_set_socket_mode returned [rc={}]\n", pfring_socketmode_result);
     // Enable ring
-    if (pfring_enable_ring(ring) != 0)
+    if (ring->enable_ring() != 0)
     {
-        logger << log4cpp::Priority::INFO << "Unable to enable ring :-(";
-        pfring_close(ring);
+        spdlog::get("exec_logger")->info("Unable to enable ring :-(");
+        ring->close();
         return false;
     }
     // Set wait-for-packet mode & capture
     u_int8_t wait_for_packet = 1;
-    pfring_loop(ring, Capture::parsing_pfring_packet, (u_char *)NULL, wait_for_packet);
+    const struct pfring_pkthdr *header;
+    const u_char *buffer;
+    const u_char *user_bytes;
+    while (true){
+        
+    }
     return true;
 };
 
 /*
-    stop_pfring_capture():
+    stop_pfring_capture():  
         Shuts down PF_RING capture.
 */
 

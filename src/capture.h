@@ -1,46 +1,42 @@
 #ifndef CAPTURE_HEADER
 #define CAPTURE_HEADER
-#include <log4cpp/Appender.hh>
-#include <log4cpp/BasicLayout.hh>
-#include <log4cpp/Category.hh>
-#include <log4cpp/FileAppender.hh>
-#include <log4cpp/Layout.hh>
-#include <log4cpp/OstreamAppender.hh>
-#include <log4cpp/PatternLayout.hh>
-#include <log4cpp/Priority.hh>
-#include <log4cpp/PatternLayout.hh>
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
+#include "spdlog/sinks/rotating_file_sink.h"
+#include "spdlog/sinks/basic_file_sink.h"
 #include <string>
 #include <queue>
-#include <pfring.h>
-
+#include "PFring.h"
 #include "packet.h"
 using namespace std;
 
 class Capture
 {
-
-    log4cpp::Category &logger = log4cpp::Category::getRoot(); // The ultimiate logger!! Used to add settings etc...
-    pfring *ring = NULL;                    // PF_RING socket to capture data
+    PFring *ring = NULL; // PF_RING socket to capture data
 
 public:
-    static string debuglog; // Path to log file
-    static string interface;                        // The ethernet interface to capture packet
-    static string packetfile_path;    // The file contains packet's content
-    static int window;
-
-    static string *packet_file_ptr; // Just a pointer to the packet file... (maybe if set NULL to then file is shit?)
-    static uint32_t pfring_sampling_rate;    // Sample rate (packets/second?)
+    static string *packet_file_ptr;       // Just a pointer to the packet file... (maybe if set NULL to then file is shit?)
+    static uint32_t pfring_sampling_rate; // Sample rate (packets/second?)
     static uint64_t total_unparsed_packets;
-    static ofstream packetlog;
     static queue<packet> packet_queue;
+    int max_sizelog;
+    int max_files;
+    string debugpath;  // Fireflow execution logger
+    string interface;  // The ethernet interface to capture packet
+    string packetpath; // The file contains packet's content
+    int window;
+    static std::shared_ptr<spdlog::logger> exec_logger;
+    static std::shared_ptr<spdlog::logger> packet_logger;
 
-    /*
-        init_logging():
-            Initialize the logging library.
+    /* Constructor
+        - interface 
+        - pfring init log path
+        - packet info log path
+        - window: amount of packets to perform analysis on each
+        - max_size: 10mb
+        - max_files: 3
     */
-    Capture(string u_iface, string u_ringlog, string u_packlog, int u_window);
-    void init_logging();
-
+    Capture(string _interface = "eth0", string _debugpath = "/tmp/fireflow_log.txt", string _packetpath = "/tmp/packet_log.txt", int _window = 1000, int _max_sizelog = 1048576 * 10, int _max_files = 3);
     /*
         start_pfring_capture():
             Choose an ethernet interface to capture, set sampling rate(?).
@@ -52,9 +48,8 @@ public:
         parsing_pfring_packet():
             Parsing PF_RING packet.
     */
+    void parsing_pfring_packet(const struct pfring_pkthdr *header, const u_char *buffer, const u_char *user_bytes);
 
-    static void parsing_pfring_packet(const struct pfring_pkthdr *header, const u_char *buffer, const u_char *user_bytes);
-    
     /*
     start_pfring_packet_preprocessing():
         Intialize PF_RING variables and start capturing;
@@ -63,8 +58,8 @@ public:
         etc...
         [Args:] const char* dev: Name of the device we want to capture.
     */
-    bool start_pfring_packet_preprocessing(const char *dev);
-     /*
+    bool start_pfring_packet_preprocessing(char *dev);
+    /*
         stop_pfring_capture():
             Shuts down PF_RING capture.
     */

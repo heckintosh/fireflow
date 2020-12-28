@@ -2,11 +2,16 @@
 
 #define PROCESS_PACKET_HEADER
 #include <queue>
+#include <map>
 #include "packet.h"
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
+#include "spdlog/sinks/rotating_file_sink.h"
+#include "spdlog/sinks/basic_file_sink.h"
 
 using namespace std;
 
-void process_packet(queue<packet> &packet_queue, ofstream& packetlog);
+void process_packet(queue<packet> &packet_queue, shared_ptr<spdlog::logger> &packetlog);
 void mapSrcIP(map<uint32_t, int> &src_ip_map, uint32_t src_ip);
 void mapDstIP(map<uint32_t, int> &dst_ip_map, uint32_t dst_ip);
 void mapSrcPort(map<uint16_t, int> &src_port_map, uint32_t src_port);

@@ -16,15 +16,16 @@ int main(int argc, char* argv[]){
     CLI::App app{"FIREFLOW: USTH ANTI_DDOS"};
 
     string interface, debuglog, packetlog;
-    int window = 0;
+    int window, max_sizelog, max_files = 0;
     app.add_option("-i,--interface", interface, "Capture interface")->required();
     app.add_option("-l", debuglog, "Dump to log file");
     app.add_option("-p", packetlog,  "Where to dump packet log");
     app.add_option("-w", window, "The amount of packet to read");
+    app.add_option("--maxsize", max_sizelog, "Max size of a log file");
+    app.add_option("--maxfiles", max_files, "Max numbers of log files");
     CLI11_PARSE(app, argc, argv);
 
-    capture_interface = new Capture(interface, debuglog, packetlog, window);
-    (*capture_interface).init_logging();
+    capture_interface = new Capture(interface, debuglog, packetlog, window, max_sizelog, max_files);
     (*capture_interface).start_pfring_capture();
 }
 
