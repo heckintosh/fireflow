@@ -10,6 +10,8 @@
 #include <map>
 #include <string>
 #include <set>
+#include <pfring.h>
+#include "capture.h"
 #include "packet.h"
 #include "process_packet.h"
 
@@ -21,17 +23,19 @@
 #define TCP_URG_FLAG_SHIFT 6
 
 using namespace std;
+queue<packet> packet_queue;
 
 /*
     process_packet():
         Processing the packet we captured.
 */
 
-void process_packet(queue<packet> &packet_queue, ofstream& packetlog)
-{
-    cout << preDetectionInfo(packet_queue, packetlog);
+void process_packet(packet current_packet)
+{   
+    if (Capture::window % 1000 == 0){
+        cout << "test";
+    }
 }
-
 
 string preDetectionInfo(queue <packet> &packet_queue, ofstream& packetlog){
     stringstream buffer;
@@ -51,8 +55,6 @@ string preDetectionInfo(queue <packet> &packet_queue, ofstream& packetlog){
         mapFlags(flags, packet_queue.front().flags);
         packet_queue.pop();
     }
-    
-
     packetlog << buffer.str();
     return buffer.str();
 }

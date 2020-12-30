@@ -15,22 +15,15 @@
 using namespace std;
 
 uint64_t Capture::total_unparsed_packets = 0;
-queue<packet> Capture::packet_queue;
 
 Capture::Capture(string _interface, string _debugpath, string _packetpath, int _window, int _max_sizelog, int _max_files)
 {
-    if (_interface != "")
-        Capture::interface = _interface;
-    if (_debugpath != "")
-        Capture::debugpath = _debugpath;
-    if (_packetpath != "")
-        Capture::packetpath = _packetpath;
-    if (_window != 0)
-        Capture::window = _window;
-    if (_max_sizelog != 0)
-        Capture::max_sizelog = _max_sizelog;
-    if (_max_files != 0)
-        Capture::window = _max_files;
+    Capture::interface = _interface;
+    Capture::debugpath = _debugpath;
+    Capture::packetpath = _packetpath;
+    Capture::window = _window;
+    Capture::max_sizelog = _max_sizelog;
+    Capture::max_files = _max_files;
 }
 
 /*
@@ -60,12 +53,75 @@ void Capture::start_pfring_capture()
     }
 }
 
+
 /*
-    parsing_pfring_packet():
-        Parsing PF_RING packet.
+start_pfring_packet_preprocessing():
+    Intialize PF_RING variables and start capturing;
+    Get info about PF_RING version;
+    Set application name to 'fireflow';
+    etc...
+    [Args:] const char* dev: Name of the device we want to capture.
 */
 
-void Capture::parsing_pfring_packet()
+bool Capture::start_pfring_packet_preprocessing(const char *dev)
+{
+    // Setting variables to set flags
+    bool promisc = true;                 // Enable promiscuous mode
+    bool use_extended_pkt_header = true; // PF_RING fills the field extended_hdr of struct pfring_pkthdr to get extra information
+    bool enable_hw_timestamp = false;    // Get timestamp from hardware
+    bool dont_strip_timestamps = false;  // Don't strip HW timestamp from the packet
+    bool pfring_kernel_parser = true;    // Enable packet parsing
+    // Set Flag for capture
+    u_int32_t flags = 0;
+    if (use_extended_pkt_header)
+        flags |= PF_RING_LONG_HEADER;
+    if (promisc)
+        flags |= PF_RING_PROMISC;
+    if (enable_hw_timestamp)
+        flags |= PF_RING_HW_TIMESTAMP;
+    if (!dont_strip_timestamps)
+        flags |= PF_RING_STRIP_HW_TIMESTAMP;
+    if (!pfring_kernel_parser)
+        flags |= PF_RING_DO_NOT_PARSE;
+    flags |= PF_RING_DNA_SYMMETRIC_RSS; /* Note that symmetric RSS is ignored by non-DNA drivers */
+    unsigned int snaplen = 128;
+    ring = pfring_open(dev, snaplen, flags);
+    if (!ring)
+    {
+        spdlog::get("exec_logger")->error("pfring_open() error: {}",strerror(errno));
+        spdlog::get("exec_logger")->error("pf_ring not loaded or perhaps you use quick mode and have already a socket bound to: {}",dev);
+        return false;
+    }
+    // Print successful message!!
+    spdlog::get("exec_logger")->info("Successully binded to: {}",dev);
+    spdlog::get("exec_logger")->info("Device RX channels number: {}", int(pfring_get_num_rx_channels(ring)));
+
+    // Set application name in /proc
+    int pfring_appname_result = pfring_set_application_name(ring, (char *)"fireflow");
+    if (pfring_appname_result != 0)
+        spdlog::get("exec_logger")->error("Can't set program name for PF_RING: pfring_set_application_name");
+    // Get PF_RING version
+    u_int32_t version;
+    pfring_version(ring, &version);
+    spdlog::get("exec_logger")->info("Using PF_RING v.{}.{}.{}",(version & 0xFFFF0000) >> 16, (version & 0x0000FF00) >> 8, (version & 0x000000FF));
+    // Set socket mode to RECEIVE ONLY
+    int pfring_socketmode_result = pfring_set_socket_mode(ring, recv_only_mode);
+    if (pfring_socketmode_result != 0)
+        spdlog::get("exec_logger")->info("pfring_set_socket_mode returned [rc={}]\n", pfring_socketmode_result);
+    // Enable ring
+    if (pfring_enable_ring(ring) != 0)
+    {
+        spdlog::get("exec_logger")->info("Unable to enable ring :-(");
+        pfring_close(ring);
+        return false;
+    }
+    // Set wait-for-packet mode & capture
+    u_int8_t wait_for_packet = 1;
+    pfring_loop(ring, Capture::parsing_pfring_packet, (u_char *)NULL, wait_for_packet);
+    return true;
+};
+
+void parsing_pfring_packet(const struct pfring_pkthdr *header, const u_char *buffer, const u_char *user_bytes)
 {
 
     // A packet. Description of all fields: "packet.h"
@@ -118,84 +174,8 @@ void Capture::parsing_pfring_packet()
         current_packet.flags = 0;
     }
 
-    //log_packet_summary flow
-    packet_queue.push(current_packet);
-    if (current_packet.packetCounter % window == 0){
-        process_packet(packet_queue, packet_logger);
-    }
+    process_packet(current_packet);
 }
-
-/*
-start_pfring_packet_preprocessing():
-    Intialize PF_RING variables and start capturing;
-    Get info about PF_RING version;
-    Set application name to 'fireflow';
-    etc...
-    [Args:] const char* dev: Name of the device we want to capture.
-*/
-
-bool Capture::start_pfring_packet_preprocessing(char *dev)
-{
-    // Setting variables to set flags
-    bool promisc = true;                 // Enable promiscuous mode
-    bool use_extended_pkt_header = true; // PF_RING fills the field extended_hdr of struct pfring_pkthdr to get extra information
-    bool enable_hw_timestamp = false;    // Get timestamp from hardware
-    bool dont_strip_timestamps = false;  // Don't strip HW timestamp from the packet
-    bool pfring_kernel_parser = true;    // Enable packet parsing
-    // Set Flag for capture
-    u_int32_t flags = 0;
-    if (use_extended_pkt_header)
-        flags |= PF_RING_LONG_HEADER;
-    if (promisc)
-        flags |= PF_RING_PROMISC;
-    if (enable_hw_timestamp)
-        flags |= PF_RING_HW_TIMESTAMP;
-    if (!dont_strip_timestamps)
-        flags |= PF_RING_STRIP_HW_TIMESTAMP;
-    if (!pfring_kernel_parser)
-        flags |= PF_RING_DO_NOT_PARSE;
-    flags |= PF_RING_DNA_SYMMETRIC_RSS; /* Note that symmetric RSS is ignored by non-DNA drivers */
-    unsigned int snaplen = 128;
-    ring = new PFring(dev, snaplen, flags);
-    if (!ring)
-    {
-        spdlog::get("exec_logger")->error("pfring_open() error: {}",strerror(errno));
-        spdlog::get("exec_logger")->error("pf_ring not loaded or perhaps you use quick mode and have already a socket bound to: {}",dev);
-        return false;
-    }
-    // Print successful message!!
-    spdlog::get("exec_logger")->info("Successully binded to: {}",dev);
-    spdlog::get("exec_logger")->info("Device RX channels number: {}", int(ring->get_num_rx_channels()));
-
-    // Set application name in /proc
-    int pfring_appname_result = ring->set_application_name((char *)"fireflow");
-    if (pfring_appname_result != 0)
-        spdlog::get("exec_logger")->error("Can't set program name for PF_RING: pfring_set_application_name");
-    // Get PF_RING version
-    u_int32_t version;
-    ring->get_version(&version);
-    spdlog::get("exec_logger")->info("Using PF_RING v.{}.{}.{}",(version & 0xFFFF0000) >> 16, (version & 0x0000FF00) >> 8, (version & 0x000000FF));
-    // Set socket mode to RECEIVE ONLY
-    int pfring_socketmode_result = ring->set_socket_mode(recv_only_mode);
-    if (pfring_socketmode_result != 0)
-        spdlog::get("exec_logger")->info("pfring_set_socket_mode returned [rc={}]\n", pfring_socketmode_result);
-    // Enable ring
-    if (ring->enable_ring() != 0)
-    {
-        spdlog::get("exec_logger")->info("Unable to enable ring :-(");
-        ring->close();
-        return false;
-    }
-    // Set wait-for-packet mode & capture
-    u_int8_t wait_for_packet = 1;
-    const struct pfring_pkthdr *header;
-    const u_char *buffer;
-    const u_char *user_bytes;
-    while (true){
-        
-    }
-    return true;
-};
 
 /*
     stop_pfring_capture():  

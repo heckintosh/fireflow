@@ -6,27 +6,24 @@
 #include "spdlog/sinks/basic_file_sink.h"
 #include <string>
 #include <queue>
-#include "PFring.h"
+#include <pfring.h>
 #include "packet.h"
 using namespace std;
 
 class Capture
 {
-    PFring *ring = NULL; // PF_RING socket to capture data
+    pfring *ring = NULL; // PF_RING socket to capture data
 
 public:
-    static string *packet_file_ptr;       // Just a pointer to the packet file... (maybe if set NULL to then file is shit?)
-    static uint32_t pfring_sampling_rate; // Sample rate (packets/second?)
     static uint64_t total_unparsed_packets;
-    static queue<packet> packet_queue;
+    static int window;
+    string *packet_file_ptr;       // Just a pointer to the packet file... (maybe if set NULL to then file is shit?)
+    uint32_t pfring_sampling_rate; // Sample rate (packets/second?)
     int max_sizelog;
     int max_files;
     string debugpath;  // Fireflow execution logger
     string interface;  // The ethernet interface to capture packet
     string packetpath; // The file contains packet's content
-    int window;
-    static std::shared_ptr<spdlog::logger> exec_logger;
-    static std::shared_ptr<spdlog::logger> packet_logger;
 
     /* Constructor
         - interface 
@@ -36,19 +33,14 @@ public:
         - max_size: 10mb
         - max_files: 3
     */
-    Capture(string _interface = "eth0", string _debugpath = "/tmp/fireflow_log.txt", string _packetpath = "/tmp/packet_log.txt", int _window = 1000, int _max_sizelog = 1048576 * 10, int _max_files = 3);
+    Capture(string _interface, string _debugpath, string _packetpath, int _window, int _max_sizelog, int _max_files);
+
     /*
         start_pfring_capture():
             Choose an ethernet interface to capture, set sampling rate(?).
     */
-
+    static void parsing_pfring_packet(const struct pfring_pkthdr *header, const u_char *buffer, const u_char *user_bytes);
     void start_pfring_capture();
-
-    /*
-        parsing_pfring_packet():
-            Parsing PF_RING packet.
-    */
-    void parsing_pfring_packet(const struct pfring_pkthdr *header, const u_char *buffer, const u_char *user_bytes);
 
     /*
     start_pfring_packet_preprocessing():
@@ -58,12 +50,11 @@ public:
         etc...
         [Args:] const char* dev: Name of the device we want to capture.
     */
-    bool start_pfring_packet_preprocessing(char *dev);
+    bool start_pfring_packet_preprocessing(const char *dev);
     /*
         stop_pfring_capture():
             Shuts down PF_RING capture.
     */
-
     void stop_pfring_capture();
 };
 
