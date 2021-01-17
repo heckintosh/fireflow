@@ -1,0 +1,33 @@
+{
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "C/C++: g++ build active file",
+            "command": "/usr/bin/g++",
+            "args": [
+                "-g",
+                "fireflow.cpp",
+                "-I${cwd}/include/",
+                "-o",
+                "../bin/${fileBasenameNoExtension}.o",
+                "capture.cpp",
+                "process_packet.cpp",
+                "-llog4cpp",
+                "-lpfring",
+                "-lpcap",
+            ],
+            "options": {
+                "cwd": "/home/victorcharlie/fireflow/src"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Generated task by Debugger"
+        }
+    ],
+    "version": "2.0.0"
+}
