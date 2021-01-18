@@ -18,6 +18,7 @@ class Capture
 public:
     static unsigned int total_unparsed_packets;
     static double window;
+    static int estimator;
     static double subwindow;
     string *packet_file_ptr;       // Just a pointer to the packet file... (maybe if set NULL to then file is shit?)
     unsigned int pfring_sampling_rate; // Sample rate (packets/second?)
@@ -35,13 +36,14 @@ public:
         - max_size: 10mb
         - max_files: 3
     */
-    Capture(string _interface, string _debugpath, string _packetpath, double _window, double _subwindow, int _max_sizelog, int _max_files);
+    Capture(string _interface, string _debugpath, string _packetpath, double _window, double _subwindow, int _estimator, int _max_sizelog, int _max_files);
 
-    /*
-        start_pfring_capture():
-            Choose an ethernet interface to capture, set sampling rate(?).
-    */
-    static void parsing_pfring_packet(const struct pfring_pkthdr *header, const u_char *buffer, bool out_of_window, bool hasPkt);
+    //parsing_pfring_packet(): oosw = out of subwindow; oow = out of window
+    static packet parsing_pfring_packet(const struct pfring_pkthdr *header, const u_char *buffer);
+    static void parsing_pfring_packet_sw(const struct pfring_pkthdr *header, const u_char *buffer);
+    static void parsing_pfring_packet_oosw(const struct pfring_pkthdr *header, const u_char *buffer);
+
+   // start_pfring_capture(): Choose an ethernet interface to capture, set sampling rate(?).
     void start_pfring_capture();
 
     /*

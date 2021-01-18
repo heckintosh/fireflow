@@ -5,7 +5,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include "packet.h"
-#include "process_packet.h"
+#include "entropy.h"
 #include "capture.h"
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
@@ -14,18 +14,18 @@
 
 using namespace std;
 
-Capture::Capture(string _interface, string _debugpath, string _packetpath, double _window, double _subwindow, int _max_sizelog, int _max_files)
+Capture::Capture(string _interface, string _debugpath, string _packetpath, double _window, double _subwindow, int _estimator, int _max_sizelog, int _max_files)
 {
     Capture::interface = _interface;
     Capture::debugpath = _debugpath;
     Capture::packetpath = _packetpath;
     Capture::window = _window;
     Capture::subwindow = _subwindow;
+    Capture::estimator = _estimator;
     Capture::max_sizelog = _max_sizelog;
     Capture::max_files = _max_files;
 }
 
-// start_pfring_capture(): Choose an ethernet interface to capture, set sampling rate(?).
 void Capture::start_pfring_capture()
 {
     spdlog::get("exec_logger")->info("------Fireflow v1.0 execution logger----");
@@ -111,7 +111,8 @@ bool Capture::start_pfring_packet_preprocessing(const char *dev)
     }
     // Set wait-for-packet mode & capture
     u_int8_t wait_for_packet = 0;
-    auto start = chrono::steady_clock::now();
+    auto start1 = chrono::steady_clock::now();
+    auto start2 = chrono::steady_clock::now();
     u_char *buffer;
     uint unparsed_pkts = 0;
     struct pfring_pkthdr hdr;
@@ -119,91 +120,102 @@ bool Capture::start_pfring_packet_preprocessing(const char *dev)
     {
         auto end = chrono::steady_clock::now();
         {
-            double duration = (chrono::duration_cast<chrono::microseconds>(end - start).count()) / 1000000.0;
+            double duration = (chrono::duration_cast<chrono::microseconds>(end - start1).count()) / 1000000.0;
+            double window_duration = (chrono::duration_cast<chrono::microseconds>(end - start2).count()) / 1000000.0;
             int pfring_recv_int = pfring_recv(ring, &buffer, 0, &hdr, wait_for_packet);
             if (duration < Capture::subwindow)
             {
                 if (pfring_recv_int == 1)
                 {
                     unparsed_pkts += 1;
-                    parsing_pfring_packet(&hdr, buffer, false, true);
+                    parsing_pfring_packet_sw(&hdr, buffer);
                 };
             }
             else if (duration >= Capture::subwindow)
             {
-                start = chrono::steady_clock::now();
+                start1 = chrono::steady_clock::now();
                 if (unparsed_pkts > 0)
                 {
-                    parsing_pfring_packet(&hdr, buffer, true, true);
+                    parsing_pfring_packet_oosw(&hdr, buffer);
                 }
                 else
                 {
-                    parsing_pfring_packet(&hdr, buffer, true, false);
+                    zero_entropy();
                 }
                 unparsed_pkts = 0;
+            }
+            if (window_duration >= Capture::window * estimator)
+            {
+                start2 = chrono::steady_clock::now();
+                sample_estimator(Capture::window / Capture::subwindow * estimator);
             }
         };
     }
     return true;
 };
 
-void Capture::parsing_pfring_packet(const struct pfring_pkthdr *header, const u_char *buffer, bool out_of_window, bool hasPkt)
+void Capture::parsing_pfring_packet_sw(const struct pfring_pkthdr *header, const u_char *buffer)
 {
-    if (hasPkt == true)
+    packet current_packet = parsing_pfring_packet(header, buffer);
+    accumulate_packets(current_packet);
+};
+
+void Capture::parsing_pfring_packet_oosw(const struct pfring_pkthdr *header, const u_char *buffer)
+{
+    packet current_packet = parsing_pfring_packet(header, buffer);
+    accumulate_subwindow_entropies(current_packet);
+}
+
+packet Capture::parsing_pfring_packet(const struct pfring_pkthdr *header, const u_char *buffer)
+{
+    // A packet. Description of all fields: "packet.h"
+    packet current_packet;
+    memset((void *)&header->extended_hdr.parsed_pkt, 0, sizeof(header->extended_hdr.parsed_pkt));
+
+    // Capture packet
+    u_int8_t timestamp = 0;
+    u_int8_t add_hash = 0; // https://github.com/ntop/PF_RING/issues/9
+    pfring_parse_pkt((u_char *)buffer, (struct pfring_pkthdr *)header, 4, timestamp, add_hash);
+
+    // Ignores non IPv4 and IPv6 packet
+    if (header->extended_hdr.parsed_pkt.ip_version != 4 && header->extended_hdr.parsed_pkt.ip_version != 6)
     {
-        // A packet. Description of all fields: "packet.h"
-        packet current_packet;
-        memset((void *)&header->extended_hdr.parsed_pkt, 0, sizeof(header->extended_hdr.parsed_pkt));
-
-        // Capture packet
-        u_int8_t timestamp = 0;
-        u_int8_t add_hash = 0; // https://github.com/ntop/PF_RING/issues/9
-        pfring_parse_pkt((u_char *)buffer, (struct pfring_pkthdr *)header, 4, timestamp, add_hash);
-
-        // Ignores non IPv4 and IPv6 packet
-        if (header->extended_hdr.parsed_pkt.ip_version != 4 && header->extended_hdr.parsed_pkt.ip_version != 6)
-        {
-            Capture::total_unparsed_packets++;
-            return;
-        }
-
-        // Get packet IP version to our psuedo header
-        current_packet.ip_protocol_version = header->extended_hdr.parsed_pkt.ip_version;
-        //current_packet.ts.tv_nsec = header->extended_hdr.timestamp_ns;
-        // Get IPv4 source/dest to our psuedo header
-        if (current_packet.ip_protocol_version == 4)
-        {
-            // PF_RING stores data in host byte order but we use network byte order
-            current_packet.src_ip = htonl(header->extended_hdr.parsed_pkt.ip_src.v4);
-            current_packet.dst_ip = htonl(header->extended_hdr.parsed_pkt.ip_dst.v4);
-        }
-
-        // Get port to our psuedo header
-        current_packet.src_port = header->extended_hdr.parsed_pkt.l4_src_port;
-        current_packet.dst_port = header->extended_hdr.parsed_pkt.l4_dst_port;
-        current_packet.ts = header->ts;
-        // We need this for deep packet inspection
-        current_packet.packet_payload_length = header->len;
-        current_packet.packet_payload_pointer = (void *)buffer;
-
-        // Get other data to our psuedo header
-        current_packet.length = header->len;
-        current_packet.protocol = header->extended_hdr.parsed_pkt.l3_proto;
-
-        // Copy flags from PF_RING header to our pseudo header
-        if (current_packet.protocol == IPPROTO_TCP)
-        {
-            current_packet.flags = header->extended_hdr.parsed_pkt.tcp.flags;
-        }
-        else
-        {
-            current_packet.flags = 0;
-        }
-        process_packet(current_packet, out_of_window);
+        Capture::total_unparsed_packets++;
     }
-    else{
-        process_no_packet();
+
+    // Get packet IP version to our psuedo header
+    current_packet.ip_protocol_version = header->extended_hdr.parsed_pkt.ip_version;
+    //current_packet.ts.tv_nsec = header->extended_hdr.timestamp_ns;
+    // Get IPv4 source/dest to our psuedo header
+    if (current_packet.ip_protocol_version == 4)
+    {
+        // PF_RING stores data in host byte order but we use network byte order
+        current_packet.src_ip = htonl(header->extended_hdr.parsed_pkt.ip_src.v4);
+        current_packet.dst_ip = htonl(header->extended_hdr.parsed_pkt.ip_dst.v4);
     }
+
+    // Get port to our psuedo header
+    current_packet.src_port = header->extended_hdr.parsed_pkt.l4_src_port;
+    current_packet.dst_port = header->extended_hdr.parsed_pkt.l4_dst_port;
+    current_packet.ts = header->ts;
+    // We need this for deep packet inspection
+    current_packet.packet_payload_length = header->len;
+    current_packet.packet_payload_pointer = (void *)buffer;
+
+    // Get other data to our psuedo header
+    current_packet.length = header->len;
+    current_packet.protocol = header->extended_hdr.parsed_pkt.l3_proto;
+
+    // Copy flags from PF_RING header to our pseudo header
+    if (current_packet.protocol == IPPROTO_TCP)
+    {
+        current_packet.flags = header->extended_hdr.parsed_pkt.tcp.flags;
+    }
+    else
+    {
+        current_packet.flags = 0;
+    }
+    return current_packet;
 }
 
 // stop_pfring_capture(): Shuts down PF_RING capture.
