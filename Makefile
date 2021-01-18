@@ -19,7 +19,7 @@ SRC := $(filter-out $(SRC_DIR)/detection.cpp, $(wildcard $(SRC_DIR)/*.cpp))
 OBJ := $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
 LIBS= -lpfring -lpcap -llog4cpp
-
+INCLUDES = -I./include/
 .PHONY: all clean
 
 all: $(OBJ_DIR) $(BIN_DIR) $(EXE)
@@ -37,7 +37,7 @@ $(EXE): $(OBJ)
 
 # Compile object files need for fireflow
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp 
-	$(CXX) $(CXXFLAGS) -c $< -o $@	
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@	
 
 $(OBJ_DIR)/cusum.o: $(SRC_DIR)/cusum.cpp
 	$(CXX) $(CXXFLAGS) $(EXTRA_FLAGS) -c $< -o $@ 
