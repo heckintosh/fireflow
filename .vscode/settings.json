@@ -58,6 +58,14 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "cinttypes": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "csignal": "cpp",
+        "filesystem": "cpp",
+        "condition_variable": "cpp",
+        "regex": "cpp",
+        "mutex": "cpp",
+        "thread": "cpp",
+        "variant": "cpp",
+        "queue": "cpp"
     }
 }
