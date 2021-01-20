@@ -6,5 +6,8 @@
 using namespace std;
 double calcMean(vector<double> tmp_data);
 map<string, double> targetValue(map<string, vector<double>> samples);
-void printTargetValue(map<string, double> targetvalues);
+double calcSampleStdev(vector<double> subgroup);
+double correctionFactor(int n);
+void estimateSigma(map<string, vector<double>> samples);
+void printMapStringDouble(map<string, double> targetvalues);
 #endif

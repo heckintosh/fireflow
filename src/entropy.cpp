@@ -7,6 +7,7 @@
 #include "capture.h"
 #include "packet.h"
 #include "entropy.h"
+#include "cusum.h"
 
 using namespace std;
 vector<packet> p_vector;
@@ -15,15 +16,24 @@ vector<string> headers = {"src_ip", "src_port", "dst_port", "flags"};
 
 void sample_estimator(int sampling_amount)
 {
-    vector<double> tmp;
     map<string, vector<double>> samples = {};
+    cout << "SAMPLING AMOUNT: " << sampling_amount << endl;
     for (const auto &map_pair : entropies_of_headers)
     {
         for (int i = 0; i < sampling_amount; ++i)
         {
-            samples[map_pair.first].push_back(tmp[i]);
+            samples[map_pair.first].push_back(map_pair.second[i]);
         }
     }
+    cout << "SAMPLE ESTIMATOR :: " << endl;
+    for (const auto &map_pair : samples){
+        cout << map_pair.first << ": " << endl;
+        for (const auto &member : map_pair.second){
+            cout << member << " ";
+        }
+        cout << endl;
+    }
+    //estimateSigma(samples);
 }
 
 void accumulate_subwindow_entropies(packet &current_packet)
@@ -133,7 +143,12 @@ double calcEntropy(vector<double> probability)
     double total = 0;
     for (const auto &p : probability)
     {
-        total += -(p * log(p) / log(size));
+        if (p == 1){
+            return 0;
+        }
+        else{
+            total += -(p * log(p) / log(size));
+        }
     }
     return total;
 };

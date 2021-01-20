@@ -113,44 +113,48 @@ bool Capture::start_pfring_packet_preprocessing(const char *dev)
     u_int8_t wait_for_packet = 0;
     auto start1 = chrono::steady_clock::now();
     auto start2 = chrono::steady_clock::now();
+    auto end = chrono::steady_clock::now();
+    bool isEstimated = false;
+    double duration;
+    double estimate_threshold;
     u_char *buffer;
     uint unparsed_pkts = 0;
     struct pfring_pkthdr hdr;
     while (true)
     {
         auto end = chrono::steady_clock::now();
+        duration = (chrono::duration_cast<chrono::microseconds>(end - start1).count()) / 1000000.0;
+        estimate_threshold = (chrono::duration_cast<chrono::microseconds>(end - start2).count()) / 1000000.0;
+        int pfring_recv_int = pfring_recv(ring, &buffer, 0, &hdr, wait_for_packet);
+        if (duration < Capture::subwindow)
         {
-            double duration = (chrono::duration_cast<chrono::microseconds>(end - start1).count()) / 1000000.0;
-            double window_duration = (chrono::duration_cast<chrono::microseconds>(end - start2).count()) / 1000000.0;
-            int pfring_recv_int = pfring_recv(ring, &buffer, 0, &hdr, wait_for_packet);
-            if (duration < Capture::subwindow)
+            if (pfring_recv_int == 1)
             {
-                if (pfring_recv_int == 1)
-                {
-                    unparsed_pkts += 1;
-                    parsing_pfring_packet_sw(&hdr, buffer);
-                };
-            }
-            else if (duration >= Capture::subwindow)
+                unparsed_pkts += 1;
+                parsing_pfring_packet_sw(&hdr, buffer);
+            };
+        }
+        else if (duration >= Capture::subwindow)
+        {
+            start1 = chrono::steady_clock::now();
+            if (unparsed_pkts > 0)
             {
-                start1 = chrono::steady_clock::now();
-                if (unparsed_pkts > 0)
-                {
-                    parsing_pfring_packet_oosw(&hdr, buffer);
-                }
-                else
-                {
-                    zero_entropy();
-                }
-                unparsed_pkts = 0;
+                parsing_pfring_packet_oosw(&hdr, buffer);
             }
-            if (window_duration >= Capture::window * estimator)
+            else
             {
-                start2 = chrono::steady_clock::now();
-                sample_estimator(Capture::window / Capture::subwindow * estimator);
+                zero_entropy();
             }
-        };
-    }
+            unparsed_pkts = 0;
+        }
+        if (isEstimated == false){
+            if (estimate_threshold >= Capture::window * estimator)
+            {
+                sample_estimator((Capture::window / Capture::subwindow) * estimator);
+                isEstimated = true;
+            }
+        }
+    };
     return true;
 };
 
