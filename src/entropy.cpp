@@ -17,7 +17,6 @@ vector<string> headers = {"src_ip", "src_port", "dst_port", "flags"};
 void sample_estimator(int sampling_amount)
 {
     map<string, vector<double>> samples = {};
-    cout << "SAMPLING AMOUNT: " << sampling_amount << endl;
     for (const auto &map_pair : entropies_of_headers)
     {
         for (int i = 0; i < sampling_amount; ++i)

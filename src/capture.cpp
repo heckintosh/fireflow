@@ -110,33 +110,42 @@ bool Capture::start_pfring_packet_preprocessing(const char *dev)
         return false;
     }
     // Set wait-for-packet mode & capture
+    int pfring_recv_int = 0;
     u_int8_t wait_for_packet = 0;
     auto start1 = chrono::steady_clock::now();
     auto start2 = chrono::steady_clock::now();
     auto end = chrono::steady_clock::now();
     bool isEstimated = false;
-    double duration;
+    bool _entropyIsCalced = false;
+    double duration = 0;
     double estimate_threshold;
+    double _threshold = Capture::window * estimator;
     u_char *buffer;
     uint unparsed_pkts = 0;
     struct pfring_pkthdr hdr;
+
+    int calledTimes = 0;
+
     while (true)
     {
-        auto end = chrono::steady_clock::now();
+        end = chrono::steady_clock::now();
+        if (isEstimated == false)
+        {
+            estimate_threshold = (chrono::duration_cast<chrono::microseconds>(end - start2).count()) / 1000000.0;
+        }
         duration = (chrono::duration_cast<chrono::microseconds>(end - start1).count()) / 1000000.0;
-        estimate_threshold = (chrono::duration_cast<chrono::microseconds>(end - start2).count()) / 1000000.0;
-        int pfring_recv_int = pfring_recv(ring, &buffer, 0, &hdr, wait_for_packet);
+        pfring_recv_int = pfring_recv(ring, &buffer, 0, &hdr, wait_for_packet);
         if (duration < Capture::subwindow)
         {
+            _entropyIsCalced = false;
             if (pfring_recv_int == 1)
-            {
+            {   
                 unparsed_pkts += 1;
                 parsing_pfring_packet_sw(&hdr, buffer);
             };
         }
-        else if (duration >= Capture::subwindow)
+        if (duration >= Capture::subwindow)
         {
-            start1 = chrono::steady_clock::now();
             if (unparsed_pkts > 0)
             {
                 parsing_pfring_packet_oosw(&hdr, buffer);
@@ -146,14 +155,18 @@ bool Capture::start_pfring_packet_preprocessing(const char *dev)
                 zero_entropy();
             }
             unparsed_pkts = 0;
+            _entropyIsCalced = true;
+            start1 = chrono::steady_clock::now();
         }
-        if (isEstimated == false){
-            if (estimate_threshold >= Capture::window * estimator)
+        if (isEstimated == false && _entropyIsCalced == true)
+        {
+            if (estimate_threshold > _threshold)
             {
                 sample_estimator((Capture::window / Capture::subwindow) * estimator);
                 isEstimated = true;
             }
         }
+
     };
     return true;
 };
