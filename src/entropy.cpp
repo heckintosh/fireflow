@@ -24,15 +24,7 @@ void sample_estimator(int sampling_amount)
             samples[map_pair.first].push_back(map_pair.second[i]);
         }
     }
-    cout << "SAMPLE ESTIMATOR :: " << endl;
-    for (const auto &map_pair : samples){
-        cout << map_pair.first << ": " << endl;
-        for (const auto &member : map_pair.second){
-            cout << member << " ";
-        }
-        cout << endl;
-    }
-    //estimateSigma(samples);
+    estimateSigma(samples);
 }
 
 void accumulate_subwindow_entropies(packet &current_packet)

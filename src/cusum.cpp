@@ -10,14 +10,17 @@
 
 using namespace std;
 
-double calcSampleStdev(vector<double> subgroup)
+double calcDeviationofGroup(vector<double> subgroup)
 {
     double mean = calcMean(subgroup);
-    vector<double> diff(subgroup.size());
-    transform(subgroup.begin(), subgroup.end(), diff.begin(), [mean](double x) { return x - mean; });
-    double sq_sum = inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);
-    double stdev = sqrt(sq_sum / (subgroup.size() - 1));
-    return stdev;
+    double stdDev = 0;
+    for (const auto &member : subgroup ){
+        cout << "MEMBER OF SUBGROUP " << member << endl; 
+        stdDev += pow((member - mean), 2);
+    }    
+    stdDev = sqrt(stdDev / (subgroup.size() - 1));
+    cout << "STANDARD DEV: " << stdDev << endl;
+    return stdDev;
 }
 
 double correctionFactor(int n)
@@ -29,36 +32,34 @@ void estimateSigma(map<string, vector<double>> samples)
 {
     int subgroup_size = Capture::window / Capture::subwindow;
     double correction_factor = correctionFactor(subgroup_size);
-    map<string, vector<double>> stdevmeans;
-    map<string, double> grandstddevmean;
+    map<string, vector<double>> standardDeviationOfGroup;
+    map<string, double> grand_standard_deviation_mean;
     map<string, double> estimation;
     vector<double> tmp;
     for (const auto &map_pair : samples)
     {
-        cout << "MAP_PAIR_FIRST: " << map_pair.first << endl;
-        for (int index = 0; index < map_pair.second.size(); ++index)
+        for (int index = 0; index < map_pair.second.size(); index += subgroup_size)
         {
-            if (index % subgroup_size != 0 || index == 0)
+            for (int j = 0; j < subgroup_size; j++)
             {
-                cout << "MAP_PAIR: " << map_pair.second[index] << endl;
-                tmp.push_back(map_pair.second[index]);
+                if (index + j < map_pair.second.size())
+                {
+                    tmp.push_back(map_pair.second[index]);
+                }
             }
-            else
-            {
-                stdevmeans[map_pair.first].push_back(calcSampleStdev(tmp));
-                tmp.clear();
-            }
+            standardDeviationOfGroup[map_pair.first].push_back(calcDeviationofGroup(tmp));
+            tmp.clear();
         }
+        cout << endl;
     }
-    for (const auto &map_pair : stdevmeans)
+    for (const auto &map_pair : standardDeviationOfGroup)
     {
-        grandstddevmean[map_pair.first] = calcMean(map_pair.second);
+        grand_standard_deviation_mean[map_pair.first] = calcMean(map_pair.second);
     }
-    for (const auto &map_pair : grandstddevmean)
+    for (const auto &map_pair : grand_standard_deviation_mean)
     {
         estimation[map_pair.first] = map_pair.second / correction_factor;
     }
-    printMapStringDouble(estimation);
 }
 
 double calcMean(vector<double> tmp_data)
