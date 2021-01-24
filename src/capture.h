@@ -13,6 +13,7 @@ using namespace std;
 
 class Capture
 {
+private:
     pfring *ring = NULL; // PF_RING socket to capture data
 
 public:
@@ -20,7 +21,7 @@ public:
     static double window;
     static int estimator;
     static double subwindow;
-    string *packet_file_ptr;       // Just a pointer to the packet file... (maybe if set NULL to then file is shit?)
+
     unsigned int pfring_sampling_rate; // Sample rate (packets/second?)
     int max_sizelog;
     int max_files;
@@ -42,6 +43,7 @@ public:
     static packet parsing_pfring_packet(const struct pfring_pkthdr *header, const u_char *buffer);
     static void parsing_pfring_packet_sw(const struct pfring_pkthdr *header, const u_char *buffer);
     static void parsing_pfring_packet_oosw(const struct pfring_pkthdr *header, const u_char *buffer);
+    static void execution_flow(const struct pfring_pkthdr &header, const u_char *buffer, int hasPkt);
 
    // start_pfring_capture(): Choose an ethernet interface to capture, set sampling rate(?).
     void start_pfring_capture();

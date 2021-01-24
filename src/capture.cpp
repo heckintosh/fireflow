@@ -7,6 +7,7 @@
 #include "packet.h"
 #include "entropy.h"
 #include "capture.h"
+#include "cusum.h"
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/sinks/rotating_file_sink.h"
@@ -37,34 +38,25 @@ void Capture::start_pfring_capture()
         exit(1);
     }
 
-    // Initialize PF_RING
     const char *device_name = interface.c_str();
-    bool pfring_init_result = start_pfring_packet_preprocessing(device_name);
+    bool pfring_init_result = start_pfring_packet_preprocessing(device_name); // Initialize PF_RING
     if (!pfring_init_result)
     {
-        // Internal error in PF_RING
-        spdlog::get("exec_logger")->error("PF_RING initilization failed, exit from program");
+        spdlog::get("exec_logger")->error("PF_RING initilization failed, exit from program"); // Internal error in PF_RING
         exit(1);
     }
 }
 
-/*
-start_pfring_packet_preprocessing():
-    Intialize PF_RING variables and start capturing;
-    Get info about PF_RING version;
-    Set application name to 'fireflow';
-    etc...
-    [Args:] const char* dev: Name of the device we want to capture.
-*/
-
 bool Capture::start_pfring_packet_preprocessing(const char *dev)
 {
     // Setting variables to set flags
+
     bool promisc = true;                 // Enable promiscuous mode
     bool use_extended_pkt_header = true; // PF_RING fills the field extended_hdr of struct pfring_pkthdr to get extra information
     bool enable_hw_timestamp = false;    // Get timestamp from hardware
     bool dont_strip_timestamps = false;  // Don't strip HW timestamp from the packet
     bool pfring_kernel_parser = true;    // Enable packet parsing
+
     // Set Flag for capture
     u_int32_t flags = 0;
     if (use_extended_pkt_header)
@@ -86,6 +78,7 @@ bool Capture::start_pfring_packet_preprocessing(const char *dev)
         spdlog::get("exec_logger")->error("pf_ring not loaded or perhaps you use quick mode and have already a socket bound to: {}", dev);
         return false;
     }
+
     // Print successful message!!
     spdlog::get("exec_logger")->info("Successully binded to: {}", dev);
     spdlog::get("exec_logger")->info("Device RX channels number: {}", int(pfring_get_num_rx_channels(ring)));
@@ -94,14 +87,19 @@ bool Capture::start_pfring_packet_preprocessing(const char *dev)
     int pfring_appname_result = pfring_set_application_name(ring, (char *)"fireflow");
     if (pfring_appname_result != 0)
         spdlog::get("exec_logger")->error("Can't set program name for PF_RING: pfring_set_application_name");
+
     // Get PF_RING version
+
     u_int32_t version;
     pfring_version(ring, &version);
     spdlog::get("exec_logger")->info("Using PF_RING v.{}.{}.{}", (version & 0xFFFF0000) >> 16, (version & 0x0000FF00) >> 8, (version & 0x000000FF));
+
     // Set socket mode to RECEIVE ONLY
+
     int pfring_socketmode_result = pfring_set_socket_mode(ring, recv_only_mode);
     if (pfring_socketmode_result != 0)
         spdlog::get("exec_logger")->info("pfring_set_socket_mode returned [rc={}]\n", pfring_socketmode_result);
+
     // Enable ring
     if (pfring_enable_ring(ring) != 0)
     {
@@ -109,78 +107,75 @@ bool Capture::start_pfring_packet_preprocessing(const char *dev)
         pfring_close(ring);
         return false;
     }
-    // Set wait-for-packet mode & capture
-    int pfring_recv_int = 0;
-    u_int8_t wait_for_packet = 0;
-    auto start1 = chrono::steady_clock::now();
-    auto start2 = chrono::steady_clock::now();
-    auto end = chrono::steady_clock::now();
-    bool isEstimated = false;
-    bool _entropyIsCalced = false;
-    double duration = 0;
-    double estimate_threshold;
-    double _threshold = Capture::window * estimator;
-    u_char *buffer;
-    uint unparsed_pkts = 0;
-    struct pfring_pkthdr hdr;
-
-    int calledTimes = 0;
 
     while (true)
     {
-        end = chrono::steady_clock::now();
-        if (isEstimated == false)
-        {
-            estimate_threshold = (chrono::duration_cast<chrono::microseconds>(end - start2).count()) / 1000000.0;
-        }
-        duration = (chrono::duration_cast<chrono::microseconds>(end - start1).count()) / 1000000.0;
+        int pfring_recv_int = 0;
+        struct pfring_pkthdr hdr;
+        u_char *buffer;
+        u_int8_t wait_for_packet = 0;
         pfring_recv_int = pfring_recv(ring, &buffer, 0, &hdr, wait_for_packet);
-        if (duration < Capture::subwindow)
-        {
-            _entropyIsCalced = false;
-            if (pfring_recv_int == 1)
-            {   
-                unparsed_pkts += 1;
-                parsing_pfring_packet_sw(&hdr, buffer);
-            };
-        }
-        if (duration >= Capture::subwindow)
-        {
-            if (unparsed_pkts > 0)
-            {
-                parsing_pfring_packet_oosw(&hdr, buffer);
-            }
-            else
-            {
-                zero_entropy();
-            }
-            unparsed_pkts = 0;
-            _entropyIsCalced = true;
-            start1 = chrono::steady_clock::now();
-        }
-        if (isEstimated == false && _entropyIsCalced == true)
-        {
-            if (estimate_threshold > _threshold)
-            {
-                sample_estimator((Capture::window / Capture::subwindow) * estimator);
-                isEstimated = true;
-            }
-        }
-
-    };
+        execution_flow(hdr, buffer, pfring_recv_int);
+    }
     return true;
 };
 
-void Capture::parsing_pfring_packet_sw(const struct pfring_pkthdr *header, const u_char *buffer)
+void Capture::execution_flow(const struct pfring_pkthdr &hdr, const u_char *buffer, int hasPkt)
 {
-    packet current_packet = parsing_pfring_packet(header, buffer);
-    accumulate_packets(current_packet);
-};
+    auto current_t = chrono::steady_clock::now();
+    bool entropyIsCalced = false;
+    double duration;
+    double threshold_tracking;
+    packet current_packet;
+    static auto runtime = chrono::steady_clock::now();
+    static auto subwindow_t = chrono::steady_clock::now();
+    static uint packet_queue = 0;
+    static EntropyCalc EntropyTask;
+    static Cusum CusumTask;
 
-void Capture::parsing_pfring_packet_oosw(const struct pfring_pkthdr *header, const u_char *buffer)
-{
-    packet current_packet = parsing_pfring_packet(header, buffer);
-    accumulate_subwindow_entropies(current_packet);
+    //track if the time for setting threshold has been reached yet
+    if (CusumTask.getThresholdStatus() == false)
+    {
+        threshold_tracking = (chrono::duration_cast<chrono::microseconds>(current_t - runtime).count()) / 1000000.0;
+    }
+
+    // track if the duration for collecting packets in a subwindow has ended yet
+    duration = (chrono::duration_cast<chrono::microseconds>(current_t - subwindow_t).count()) / 1000000.0;
+    if (duration < Capture::subwindow)
+    {
+        entropyIsCalced = false;
+        if (hasPkt == 1)
+        {
+            packet_queue += 1;
+            current_packet = parsing_pfring_packet(&hdr, buffer);
+            EntropyTask.accumulate_packets(current_packet);
+        };
+    }
+
+    // if the duration for collecting for collecting packets has ended, start calculating entropies of that duration
+    if (duration >= Capture::subwindow)
+    {
+        if (packet_queue > 0)
+        {
+            current_packet = parsing_pfring_packet(&hdr, buffer);
+            EntropyTask.accumulate_subwindow_entropies(current_packet);
+        }
+        else
+        {
+            // if no packets were received then 0 entropy
+            EntropyTask.zero_entropy();
+        }
+        packet_queue = 0;
+        entropyIsCalced = true;
+        subwindow_t = chrono::steady_clock::now();
+    }
+    if (CusumTask.getThresholdStatus() == false && entropyIsCalced == true)
+    {
+        if (threshold_tracking > window * estimator)
+        {
+            CusumTask.setThreshold(EntropyTask.GetFullEntropies());
+        }
+    }
 }
 
 packet Capture::parsing_pfring_packet(const struct pfring_pkthdr *header, const u_char *buffer)
