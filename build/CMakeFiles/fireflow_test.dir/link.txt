@@ -1,0 +1,1 @@
+/usr/bin/g++-7  -g   CMakeFiles/fireflow_test.dir/src/capture.cpp.o CMakeFiles/fireflow_test.dir/src/cusum.cpp.o CMakeFiles/fireflow_test.dir/src/entropy.cpp.o CMakeFiles/fireflow_test.dir/src/mapping.cpp.o CMakeFiles/fireflow_test.dir/test/fireflow-test.cpp.o  -o fireflow_test /usr/local/lib/libgtest.a -lpthread -lpfring -lpcap 

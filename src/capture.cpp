@@ -14,9 +14,9 @@
 #include "spdlog/sinks/basic_file_sink.h"
 
 using namespace std;
-unsigned int Capture::total_unparsed_packets = 0;
-double Capture::window = 0;
+uint Capture::total_unparsed_packets = 0;
 int Capture::estimator = 0;
+double Capture::window = 0;
 double Capture::subwindow = 0;
 ulong packet::totalPackets = 0;
 
@@ -178,6 +178,8 @@ void Capture::execution_flow(const struct pfring_pkthdr &hdr, const u_char *buff
     {
         if (threshold_tracking > window * estimator)
         {
+            CusumTask.setSampleSize(Capture::window * Capture::estimator);
+            CusumTask.setSubGroupSize(Capture::window / Capture::subwindow);
             CusumTask.setThreshold(EntropyTask.GetFullEntropies());
         }
     }

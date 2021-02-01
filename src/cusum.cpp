@@ -7,6 +7,31 @@
 
 using namespace std;
 
+void Cusum::setThreshold(map<string, vector<double>> samples)
+{
+    if (Cusum::thresholdStatus == false)
+    {
+        Cusum::thresholdStatus = true;
+        _setCorrectionFactor(subgroup_size);
+        _setTargetValues(samples);
+        _setSigma(samples);
+        _setAllowedSlacks();
+        _setUCL(Cusum::sigmas);
+        _setLCL(Cusum::sigmas);
+        for (const auto &map_pair : samples)
+        {
+            S_Li_prev[map_pair.first] = 0.0;
+            S_Hi_prev[map_pair.first] = 0.0;
+        }
+        Cusum::_calcPrevCusum(samples);
+    }
+    else if (Cusum::thresholdStatus == true)
+    {
+        cout << "The Cusum Threshold has already been set. Check for errors in code." << endl;
+        exit(1);
+    }
+}
+
 // Calculate and return Cusum values for detection and plotting
 // data: either samples of multiple subgroups for  setting threshold or data of a subgroup for performing detection
 void Cusum::calc(map<string, vector<double>> data)
@@ -41,43 +66,6 @@ void Cusum::_calcPrevCusum(map<string, vector<double>> data)
     }
 }
 
-// calculate means of data collected in one window
-map<string, double> Cusum::_calcMultipleMeans(map<string, vector<double>> data)
-{
-    map<string, double> means;
-    for (const auto &map_pair : data)
-    {
-        means[map_pair.first] = _calcMean(map_pair.second);
-    }
-    return means;
-}
-
-void Cusum::setThreshold(map<string, vector<double>> samples)
-{
-    if (Cusum::thresholdStatus == false)
-    {
-        _collectSamples(samples);
-        Cusum::thresholdStatus = true;
-        _setCorrectionFactor(subgroup_size);
-        _setTargetValues(samples);
-        _setSigma(samples);
-        _setAllowedSlacks();
-        _setUCL(Cusum::sigmas);
-        _setLCL(Cusum::sigmas);
-        for (const auto &map_pair : samples)
-        {
-            S_Li_prev[map_pair.first] = 0.0;
-            S_Hi_prev[map_pair.first] = 0.0;
-        }
-        Cusum::_calcPrevCusum(samples);
-    }
-    else if (Cusum::thresholdStatus == true)
-    {
-        cout << "The Cusum Threshold has already been set. Check for errors in code." << endl;
-        exit(1);
-    }
-}
-
 // calculate lower cummulative sum
 // z is the normalized observations, k is allowable slack: typically set to 0.5 sigma
 map<string, double> Cusum::_calcLowerSum(map<string, double> z)
@@ -90,7 +78,6 @@ map<string, double> Cusum::_calcLowerSum(map<string, double> z)
     return tmp;
 }
 
-//After setting threshold, we get target_values as grand means and sigmas
 map<string, double> Cusum::_calcNormalizedObservations(map<string, double> subgroup_mean)
 {
     map<string, double> z;
@@ -137,7 +124,12 @@ double Cusum::_calcDeviationOfSubGroup(vector<double> subgroup)
 
 void Cusum::_setCorrectionFactor(int n)
 {
-    Cusum::correction_factor = sqrt(2 / (n - 1)) * (tgamma((double)n / 2) / tgamma((double)(n - 1) / 2));
+    if (n != 0 && n != 1){
+        Cusum::correction_factor = sqrt(2 / (n - 1)) * (tgamma((double)n / 2) / tgamma((double)(n - 1) / 2));
+    }
+    else{
+        Cusum::correction_factor = 1;
+    }
 }
 
 double Cusum::_calcMean(vector<double> tmp_data)
@@ -158,11 +150,11 @@ void Cusum::_setSigma(map<string, vector<double>> data)
     //fill and calculate standard deviations all windows in data
     for (const auto &map_pair : data)
     {
-        for (int index = 0; index < map_pair.second.size(); index += subgroup_size)
+        for (int index = 0; index < sample_size; index += subgroup_size)
         {
             for (int j = 0; j < subgroup_size; j++)
             {
-                if (index + j < map_pair.second.size())
+                if (index + j < sample_size)
                 {
                     tmp.push_back(map_pair.second[index + j]);
                 }
@@ -251,6 +243,17 @@ void Cusum::_setLCL(map<string, double> data){
     }
 }
 
+// calculate means of data collected in one window
+map<string, double> Cusum::_calcMultipleMeans(map<string, vector<double>> data)
+{
+    map<string, double> means;
+    for (const auto &map_pair : data)
+    {
+        means[map_pair.first] = _calcMean(map_pair.second);
+    }
+    return means;
+}
+
 map<string, double> Cusum::getUCL(){
     return Cusum::UCL;
 }
@@ -265,4 +268,20 @@ map<string, double> Cusum::getUpperCusum(){
 
 map<string, double> Cusum::getLowerCusum(){
     return Cusum::S_Li;
+}
+
+map<string, double> Cusum::getSigmas(){
+    return Cusum::getSigmas();
+}
+
+map<string, double> Cusum::getTargetValues(){
+    return Cusum::target_values;
+}
+
+int Cusum::setSubGroupSize(int data){
+    Cusum::subgroup_size = data;
+}
+
+int Cusum::setSampleSize(int data){
+    Cusum::sample_size = data;
 }

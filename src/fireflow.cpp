@@ -22,7 +22,7 @@ int main(int argc, char* argv[]){
     string packetlog = "/tmp/packet-log.txt";
     double window = 10.0;                   //seconds
     double subwindow = 5.0;
-    int estimator = 5;
+    int estimator = 2;
     int max_sizelog = 1048576 * 10;
     int max_files = 3;
     app.add_option("-i,--interface", interface, "Capture interface")->required();

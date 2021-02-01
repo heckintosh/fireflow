@@ -12,11 +12,12 @@
 
 using namespace std;
 
-
-
-void EntropyCalc::_saveLatestEntropies(){
-    for (const auto &map_pair : entropies_of_headers){
-        for (int i = subgroup_size; i > 0; i--){
+void EntropyCalc::_saveLatestEntropies()
+{
+    for (const auto &map_pair : entropies_of_headers)
+    {
+        for (int i = subgroup_size; i > 0; i--)
+        {
             latest_entropies[map_pair.first].push_back(map_pair.second.back() - i);
         }
     }
@@ -59,21 +60,25 @@ map<string, double> EntropyCalc::calcMultiEntropy(map<string, map<uint, uint>> h
     return entropy;
 }
 
-map<string, vector<double>> EntropyCalc::GetFullEntropies(){
+map<string, vector<double>> EntropyCalc::GetFullEntropies()
+{
     return entropies_of_headers;
 }
 
-//given a vector of the probabilities of all values of a
+//given a vector of the probabilities of all values of a header
+//return entropy
 double EntropyCalc::calcEntropy(vector<double> probability)
 {
     double size = probability.size();
     double total = 0;
     for (const auto &p : probability)
     {
-        if (p == 1){
+        if (p == 1)
+        {
             return 0;
         }
-        else{
+        else
+        {
             total += -(p * log(p) / log(size));
         }
     }
