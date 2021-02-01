@@ -12,17 +12,6 @@
 
 using namespace std;
 
-void EntropyCalc::_saveLatestEntropies()
-{
-    for (const auto &map_pair : entropies_of_headers)
-    {
-        for (int i = subgroup_size; i > 0; i--)
-        {
-            latest_entropies[map_pair.first].push_back(map_pair.second.back() - i);
-        }
-    }
-}
-
 void EntropyCalc::accumulate_packets(packet &current_packet)
 {
     p_vector.push_back(current_packet);
@@ -36,7 +25,6 @@ void EntropyCalc::accumulate_subwindow_entropies(packet &current_packet)
     {
         entropies_of_headers[map_pair.first].push_back(map_pair.second);
     }
-    _saveLatestEntropies();
     p_vector.clear();
 }
 
@@ -102,7 +90,7 @@ vector<double> EntropyCalc::calcProb(map<uint, uint> header_value_counter)
     return probs;
 };
 
-void EntropyCalc::printEntropiesOfSubwindows()
+void EntropyCalc::PrintFullEntropies()
 {
     for (const auto &map_pair : entropies_of_headers)
     {

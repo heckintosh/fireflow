@@ -706,7 +706,7 @@ spdlog-inl.h
 
 ../include/spdlog/version.h
 
-/home/dan09/Tools/fireflow/src/capture.cpp
+/home/ubuntu/Tools/fireflow/src/capture.cpp
 fstream
 -
 iostream
@@ -720,23 +720,23 @@ sys/socket.h
 sys/types.h
 -
 packet.h
-/home/dan09/Tools/fireflow/src/packet.h
+/home/ubuntu/Tools/fireflow/src/packet.h
 entropy.h
-/home/dan09/Tools/fireflow/src/entropy.h
+/home/ubuntu/Tools/fireflow/src/entropy.h
 capture.h
-/home/dan09/Tools/fireflow/src/capture.h
+/home/ubuntu/Tools/fireflow/src/capture.h
 cusum.h
-/home/dan09/Tools/fireflow/src/cusum.h
+/home/ubuntu/Tools/fireflow/src/cusum.h
 spdlog/spdlog.h
-/home/dan09/Tools/fireflow/src/spdlog/spdlog.h
+/home/ubuntu/Tools/fireflow/src/spdlog/spdlog.h
 spdlog/sinks/stdout_color_sinks.h
-/home/dan09/Tools/fireflow/src/spdlog/sinks/stdout_color_sinks.h
+/home/ubuntu/Tools/fireflow/src/spdlog/sinks/stdout_color_sinks.h
 spdlog/sinks/rotating_file_sink.h
-/home/dan09/Tools/fireflow/src/spdlog/sinks/rotating_file_sink.h
+/home/ubuntu/Tools/fireflow/src/spdlog/sinks/rotating_file_sink.h
 spdlog/sinks/basic_file_sink.h
-/home/dan09/Tools/fireflow/src/spdlog/sinks/basic_file_sink.h
+/home/ubuntu/Tools/fireflow/src/spdlog/sinks/basic_file_sink.h
 
-/home/dan09/Tools/fireflow/src/cusum.cpp
+/home/ubuntu/Tools/fireflow/src/cusum.cpp
 iostream
 -
 algorithm
@@ -746,11 +746,13 @@ numeric
 math.h
 -
 capture.h
-/home/dan09/Tools/fireflow/src/capture.h
+/home/ubuntu/Tools/fireflow/src/capture.h
 cusum.h
-/home/dan09/Tools/fireflow/src/cusum.h
+/home/ubuntu/Tools/fireflow/src/cusum.h
 
-/home/dan09/Tools/fireflow/src/entropy.cpp
+/home/ubuntu/Tools/fireflow/src/detector.cpp
+
+/home/ubuntu/Tools/fireflow/src/entropy.cpp
 iostream
 -
 sstream
@@ -764,25 +766,27 @@ string
 vector
 -
 capture.h
-/home/dan09/Tools/fireflow/src/capture.h
+/home/ubuntu/Tools/fireflow/src/capture.h
 packet.h
-/home/dan09/Tools/fireflow/src/packet.h
+/home/ubuntu/Tools/fireflow/src/packet.h
 entropy.h
-/home/dan09/Tools/fireflow/src/entropy.h
+/home/ubuntu/Tools/fireflow/src/entropy.h
 cusum.h
-/home/dan09/Tools/fireflow/src/cusum.h
+/home/ubuntu/Tools/fireflow/src/cusum.h
 mapping.h
-/home/dan09/Tools/fireflow/src/mapping.h
+/home/ubuntu/Tools/fireflow/src/mapping.h
 
-/home/dan09/Tools/fireflow/src/mapping.cpp
+/home/ubuntu/Tools/fireflow/src/mapping.cpp
 mapping.h
-/home/dan09/Tools/fireflow/src/mapping.h
+/home/ubuntu/Tools/fireflow/src/mapping.h
 
-/home/dan09/Tools/fireflow/test/fireflow-test.cpp
+/home/ubuntu/Tools/fireflow/test/fireflow_test.cpp
 gtest/gtest.h
 -
 entropy.h
-/home/dan09/Tools/fireflow/test/entropy.h
+/home/ubuntu/Tools/fireflow/test/entropy.h
+cusum.h
+/home/ubuntu/Tools/fireflow/test/cusum.h
 
 /usr/local/include/gtest/gtest-death-test.h
 gtest/internal/gtest-death-test-internal.h

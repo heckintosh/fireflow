@@ -22,20 +22,6 @@ private:
     map<string, double> UCL;
     map<string, double> LCL;
     map<string, double> norms;
-    map<string, double> _calcNormalizedObservations(map<string, double> subgroup_mean);
-    map<string, double> _calcMultipleMeans(map<string, vector<double>> subgroups);
-    map<string, double> _calcLowerSum(map<string, double> z);
-    map<string, double> _calcHigherSum(map<string, double> z);
-    void _collectSamples(map<string, vector<double>> data);
-    void _calcPrevCusum(map<string, vector<double>> data);
-    void _setCorrectionFactor(int n);
-    void _setAllowedSlacks();
-    void _setUCL(map<string, double> data);
-    void _setLCL(map<string, double> data);
-    void _setTargetValues(map<string, vector<double>> data);
-    void _setSigma(map<string, vector<double>> data);
-    double _calcMean(vector<double> tmp_data);
-    double _calcDeviationOfSubGroup(vector<double> subgroup);
 
 public:
     void setThreshold(map<string, vector<double>> entropies);
@@ -44,14 +30,33 @@ public:
     void PrintCollectSamples();
     void PrintTargetValues();
     void PrintSigmas();
-    void PrintCuSum();
-    int setSubGroupSize(int size);
-    int setSampleSize(int size);
+    void PrintCusum();
+    void PrintUCL();
+    void PrintLCL();
+    void setSubGroupSize(int size);
+    void setSampleSize(int size);
+    void _collectSamples(map<string, vector<double>> data);
+    void calcPrevCusum(map<string, vector<double>> data);
+    void setCorrectionFactor(int n);
+    void setAllowedSlacks();
+    void setUCL(map<string, double> data);
+    void setLCL(map<string, double> data);
+    void setTargetValues(map<string, vector<double>> data);
+    void setSigma(map<string, vector<double>> data);
+    int getSubGroupSize();
+    int getSampleSize();
+    double getCorrectionFactor();
     map<string, double> getTargetValues();
     map<string, double> getSigmas();
     map<string, double> getUpperCusum();
     map<string, double> getLowerCusum();
     map<string, double> getUCL();
     map<string, double> getLCL();
+    double calcMean(vector<double> tmp_data);
+    double calcDeviationOfSubGroup(vector<double> subgroup);
+    map<string, double> calcNormalizedObservations(map<string, double> subgroup_mean);
+    map<string, double> calcMultipleMeans(map<string, vector<double>> subgroups);
+    map<string, double> calcLowerSum(map<string, double> z);
+    map<string, double> calcHigherSum(map<string, double> z);
 };
 #endif

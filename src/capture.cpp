@@ -178,9 +178,13 @@ void Capture::execution_flow(const struct pfring_pkthdr &hdr, const u_char *buff
     {
         if (threshold_tracking > window * estimator)
         {
+            EntropyTask.PrintFullEntropies();
             CusumTask.setSampleSize(Capture::window * Capture::estimator);
             CusumTask.setSubGroupSize(Capture::window / Capture::subwindow);
             CusumTask.setThreshold(EntropyTask.GetFullEntropies());
+            CusumTask.PrintLCL();
+            CusumTask.PrintUCL();
+            CusumTask.PrintCusum();
         }
     }
 }

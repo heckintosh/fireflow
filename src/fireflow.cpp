@@ -17,12 +17,12 @@ int main(int argc, char* argv[]){
     signal(SIGINT, sigIntHandler);
     CLI::App app{"FIREFLOW: USTH ANTI_DDOS"};
 
-    string interface = "enp0s3";
+    string interface = "ens33";
     string debuglog = "/tmp/fireflow-log.txt";
     string packetlog = "/tmp/packet-log.txt";
     double window = 10.0;                   //seconds
     double subwindow = 5.0;
-    int estimator = 2;
+    int estimator = 5;
     int max_sizelog = 1048576 * 10;
     int max_files = 3;
     app.add_option("-i,--interface", interface, "Capture interface")->required();

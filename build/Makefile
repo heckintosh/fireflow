@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/dan09/Tools/fireflow
+CMAKE_SOURCE_DIR = /home/ubuntu/Tools/fireflow
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/dan09/Tools/fireflow/build
+CMAKE_BINARY_DIR = /home/ubuntu/Tools/fireflow/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/dan09/Tools/fireflow/build/CMakeFiles /home/dan09/Tools/fireflow/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/Tools/fireflow/build/CMakeFiles /home/ubuntu/Tools/fireflow/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/dan09/Tools/fireflow/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/Tools/fireflow/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named fireflow_test
+# Target rules for targets named fireflow
 
 # Build rule for target.
-fireflow_test: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 fireflow_test
-.PHONY : fireflow_test
+fireflow: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 fireflow
+.PHONY : fireflow
 
 # fast build rule for target.
-fireflow_test/fast:
-	$(MAKE) -f CMakeFiles/fireflow_test.dir/build.make CMakeFiles/fireflow_test.dir/build
-.PHONY : fireflow_test/fast
+fireflow/fast:
+	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/build
+.PHONY : fireflow/fast
 
 src/capture.o: src/capture.cpp.o
 
@@ -129,7 +129,7 @@ src/capture.o: src/capture.cpp.o
 
 # target to build an object file
 src/capture.cpp.o:
-	$(MAKE) -f CMakeFiles/fireflow_test.dir/build.make CMakeFiles/fireflow_test.dir/src/capture.cpp.o
+	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/capture.cpp.o
 .PHONY : src/capture.cpp.o
 
 src/capture.i: src/capture.cpp.i
@@ -138,7 +138,7 @@ src/capture.i: src/capture.cpp.i
 
 # target to preprocess a source file
 src/capture.cpp.i:
-	$(MAKE) -f CMakeFiles/fireflow_test.dir/build.make CMakeFiles/fireflow_test.dir/src/capture.cpp.i
+	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/capture.cpp.i
 .PHONY : src/capture.cpp.i
 
 src/capture.s: src/capture.cpp.s
@@ -147,7 +147,7 @@ src/capture.s: src/capture.cpp.s
 
 # target to generate assembly for a file
 src/capture.cpp.s:
-	$(MAKE) -f CMakeFiles/fireflow_test.dir/build.make CMakeFiles/fireflow_test.dir/src/capture.cpp.s
+	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/capture.cpp.s
 .PHONY : src/capture.cpp.s
 
 src/cusum.o: src/cusum.cpp.o
@@ -156,7 +156,7 @@ src/cusum.o: src/cusum.cpp.o
 
 # target to build an object file
 src/cusum.cpp.o:
-	$(MAKE) -f CMakeFiles/fireflow_test.dir/build.make CMakeFiles/fireflow_test.dir/src/cusum.cpp.o
+	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/cusum.cpp.o
 .PHONY : src/cusum.cpp.o
 
 src/cusum.i: src/cusum.cpp.i
@@ -165,7 +165,7 @@ src/cusum.i: src/cusum.cpp.i
 
 # target to preprocess a source file
 src/cusum.cpp.i:
-	$(MAKE) -f CMakeFiles/fireflow_test.dir/build.make CMakeFiles/fireflow_test.dir/src/cusum.cpp.i
+	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/cusum.cpp.i
 .PHONY : src/cusum.cpp.i
 
 src/cusum.s: src/cusum.cpp.s
@@ -174,8 +174,35 @@ src/cusum.s: src/cusum.cpp.s
 
 # target to generate assembly for a file
 src/cusum.cpp.s:
-	$(MAKE) -f CMakeFiles/fireflow_test.dir/build.make CMakeFiles/fireflow_test.dir/src/cusum.cpp.s
+	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/cusum.cpp.s
 .PHONY : src/cusum.cpp.s
+
+src/detector.o: src/detector.cpp.o
+
+.PHONY : src/detector.o
+
+# target to build an object file
+src/detector.cpp.o:
+	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/detector.cpp.o
+.PHONY : src/detector.cpp.o
+
+src/detector.i: src/detector.cpp.i
+
+.PHONY : src/detector.i
+
+# target to preprocess a source file
+src/detector.cpp.i:
+	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/detector.cpp.i
+.PHONY : src/detector.cpp.i
+
+src/detector.s: src/detector.cpp.s
+
+.PHONY : src/detector.s
+
+# target to generate assembly for a file
+src/detector.cpp.s:
+	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/detector.cpp.s
+.PHONY : src/detector.cpp.s
 
 src/entropy.o: src/entropy.cpp.o
 
@@ -183,7 +210,7 @@ src/entropy.o: src/entropy.cpp.o
 
 # target to build an object file
 src/entropy.cpp.o:
-	$(MAKE) -f CMakeFiles/fireflow_test.dir/build.make CMakeFiles/fireflow_test.dir/src/entropy.cpp.o
+	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/entropy.cpp.o
 .PHONY : src/entropy.cpp.o
 
 src/entropy.i: src/entropy.cpp.i
@@ -192,7 +219,7 @@ src/entropy.i: src/entropy.cpp.i
 
 # target to preprocess a source file
 src/entropy.cpp.i:
-	$(MAKE) -f CMakeFiles/fireflow_test.dir/build.make CMakeFiles/fireflow_test.dir/src/entropy.cpp.i
+	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/entropy.cpp.i
 .PHONY : src/entropy.cpp.i
 
 src/entropy.s: src/entropy.cpp.s
@@ -201,8 +228,35 @@ src/entropy.s: src/entropy.cpp.s
 
 # target to generate assembly for a file
 src/entropy.cpp.s:
-	$(MAKE) -f CMakeFiles/fireflow_test.dir/build.make CMakeFiles/fireflow_test.dir/src/entropy.cpp.s
+	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/entropy.cpp.s
 .PHONY : src/entropy.cpp.s
+
+src/fireflow.o: src/fireflow.cpp.o
+
+.PHONY : src/fireflow.o
+
+# target to build an object file
+src/fireflow.cpp.o:
+	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/fireflow.cpp.o
+.PHONY : src/fireflow.cpp.o
+
+src/fireflow.i: src/fireflow.cpp.i
+
+.PHONY : src/fireflow.i
+
+# target to preprocess a source file
+src/fireflow.cpp.i:
+	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/fireflow.cpp.i
+.PHONY : src/fireflow.cpp.i
+
+src/fireflow.s: src/fireflow.cpp.s
+
+.PHONY : src/fireflow.s
+
+# target to generate assembly for a file
+src/fireflow.cpp.s:
+	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/fireflow.cpp.s
+.PHONY : src/fireflow.cpp.s
 
 src/mapping.o: src/mapping.cpp.o
 
@@ -210,7 +264,7 @@ src/mapping.o: src/mapping.cpp.o
 
 # target to build an object file
 src/mapping.cpp.o:
-	$(MAKE) -f CMakeFiles/fireflow_test.dir/build.make CMakeFiles/fireflow_test.dir/src/mapping.cpp.o
+	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/mapping.cpp.o
 .PHONY : src/mapping.cpp.o
 
 src/mapping.i: src/mapping.cpp.i
@@ -219,7 +273,7 @@ src/mapping.i: src/mapping.cpp.i
 
 # target to preprocess a source file
 src/mapping.cpp.i:
-	$(MAKE) -f CMakeFiles/fireflow_test.dir/build.make CMakeFiles/fireflow_test.dir/src/mapping.cpp.i
+	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/mapping.cpp.i
 .PHONY : src/mapping.cpp.i
 
 src/mapping.s: src/mapping.cpp.s
@@ -228,35 +282,8 @@ src/mapping.s: src/mapping.cpp.s
 
 # target to generate assembly for a file
 src/mapping.cpp.s:
-	$(MAKE) -f CMakeFiles/fireflow_test.dir/build.make CMakeFiles/fireflow_test.dir/src/mapping.cpp.s
+	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/mapping.cpp.s
 .PHONY : src/mapping.cpp.s
-
-test/fireflow-test.o: test/fireflow-test.cpp.o
-
-.PHONY : test/fireflow-test.o
-
-# target to build an object file
-test/fireflow-test.cpp.o:
-	$(MAKE) -f CMakeFiles/fireflow_test.dir/build.make CMakeFiles/fireflow_test.dir/test/fireflow-test.cpp.o
-.PHONY : test/fireflow-test.cpp.o
-
-test/fireflow-test.i: test/fireflow-test.cpp.i
-
-.PHONY : test/fireflow-test.i
-
-# target to preprocess a source file
-test/fireflow-test.cpp.i:
-	$(MAKE) -f CMakeFiles/fireflow_test.dir/build.make CMakeFiles/fireflow_test.dir/test/fireflow-test.cpp.i
-.PHONY : test/fireflow-test.cpp.i
-
-test/fireflow-test.s: test/fireflow-test.cpp.s
-
-.PHONY : test/fireflow-test.s
-
-# target to generate assembly for a file
-test/fireflow-test.cpp.s:
-	$(MAKE) -f CMakeFiles/fireflow_test.dir/build.make CMakeFiles/fireflow_test.dir/test/fireflow-test.cpp.s
-.PHONY : test/fireflow-test.cpp.s
 
 # Help Target
 help:
@@ -265,7 +292,7 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... fireflow_test"
+	@echo "... fireflow"
 	@echo "... edit_cache"
 	@echo "... src/capture.o"
 	@echo "... src/capture.i"
@@ -273,15 +300,18 @@ help:
 	@echo "... src/cusum.o"
 	@echo "... src/cusum.i"
 	@echo "... src/cusum.s"
+	@echo "... src/detector.o"
+	@echo "... src/detector.i"
+	@echo "... src/detector.s"
 	@echo "... src/entropy.o"
 	@echo "... src/entropy.i"
 	@echo "... src/entropy.s"
+	@echo "... src/fireflow.o"
+	@echo "... src/fireflow.i"
+	@echo "... src/fireflow.s"
 	@echo "... src/mapping.o"
 	@echo "... src/mapping.i"
 	@echo "... src/mapping.s"
-	@echo "... test/fireflow-test.o"
-	@echo "... test/fireflow-test.i"
-	@echo "... test/fireflow-test.s"
 .PHONY : help
 
 

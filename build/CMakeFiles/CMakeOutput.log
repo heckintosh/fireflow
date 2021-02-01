@@ -1,4 +1,4 @@
-The system is: Linux - 5.4.0-62-generic - x86_64
+The system is: Linux - 5.4.0-65-generic - x86_64
 Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
 Compiler: /usr/bin/gcc-7 
 Build flags: 
@@ -10,7 +10,7 @@ The output was:
 
 Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
 
-The C compiler identification is GNU, found in "/home/dan09/Tools/fireflow/build/CMakeFiles/3.10.2/CompilerIdC/a.out"
+The C compiler identification is GNU, found in "/home/ubuntu/Tools/fireflow/build/CMakeFiles/3.10.2/CompilerIdC/a.out"
 
 Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
 Compiler: /usr/bin/g++-7 
@@ -23,33 +23,33 @@ The output was:
 
 Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
 
-The CXX compiler identification is GNU, found in "/home/dan09/Tools/fireflow/build/CMakeFiles/3.10.2/CompilerIdCXX/a.out"
+The CXX compiler identification is GNU, found in "/home/ubuntu/Tools/fireflow/build/CMakeFiles/3.10.2/CompilerIdCXX/a.out"
 
 Determining if the C compiler works passed with the following output:
-Change Dir: /home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp
+Change Dir: /home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_2ee17/fast"
-/usr/bin/make -f CMakeFiles/cmTC_2ee17.dir/build.make CMakeFiles/cmTC_2ee17.dir/build
-make[1]: Entering directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_2ee17.dir/testCCompiler.c.o
-/usr/bin/gcc-7    -o CMakeFiles/cmTC_2ee17.dir/testCCompiler.c.o   -c /home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp/testCCompiler.c
-Linking C executable cmTC_2ee17
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2ee17.dir/link.txt --verbose=1
-/usr/bin/gcc-7      CMakeFiles/cmTC_2ee17.dir/testCCompiler.c.o  -o cmTC_2ee17 
-make[1]: Leaving directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+Run Build Command:"/usr/bin/make" "cmTC_11825/fast"
+/usr/bin/make -f CMakeFiles/cmTC_11825.dir/build.make CMakeFiles/cmTC_11825.dir/build
+make[1]: Entering directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_11825.dir/testCCompiler.c.o
+/usr/bin/gcc-7    -o CMakeFiles/cmTC_11825.dir/testCCompiler.c.o   -c /home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_11825
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_11825.dir/link.txt --verbose=1
+/usr/bin/gcc-7      CMakeFiles/cmTC_11825.dir/testCCompiler.c.o  -o cmTC_11825 
+make[1]: Leaving directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
 
 
 Detecting C compiler ABI info compiled with the following output:
-Change Dir: /home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp
+Change Dir: /home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_c216b/fast"
-/usr/bin/make -f CMakeFiles/cmTC_c216b.dir/build.make CMakeFiles/cmTC_c216b.dir/build
-make[1]: Entering directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_c216b.dir/CMakeCCompilerABI.c.o
-/usr/bin/gcc-7    -o CMakeFiles/cmTC_c216b.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.10/Modules/CMakeCCompilerABI.c
-Linking C executable cmTC_c216b
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c216b.dir/link.txt --verbose=1
-/usr/bin/gcc-7     -v CMakeFiles/cmTC_c216b.dir/CMakeCCompilerABI.c.o  -o cmTC_c216b 
+Run Build Command:"/usr/bin/make" "cmTC_9e2c1/fast"
+/usr/bin/make -f CMakeFiles/cmTC_9e2c1.dir/build.make CMakeFiles/cmTC_9e2c1.dir/build
+make[1]: Entering directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_9e2c1.dir/CMakeCCompilerABI.c.o
+/usr/bin/gcc-7    -o CMakeFiles/cmTC_9e2c1.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.10/Modules/CMakeCCompilerABI.c
+Linking C executable cmTC_9e2c1
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9e2c1.dir/link.txt --verbose=1
+/usr/bin/gcc-7     -v CMakeFiles/cmTC_9e2c1.dir/CMakeCCompilerABI.c.o  -o cmTC_9e2c1 
 Using built-in specs.
 COLLECT_GCC=/usr/bin/gcc-7
 COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper
@@ -61,24 +61,24 @@ Thread model: posix
 gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04) 
 COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/
 LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_c216b' '-mtune=generic' '-march=x86-64'
- /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/cc1GhZxW.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_c216b /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_c216b.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o
-COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_c216b' '-mtune=generic' '-march=x86-64'
-make[1]: Leaving directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_9e2c1' '-mtune=generic' '-march=x86-64'
+ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccoxugO9.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_9e2c1 /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_9e2c1.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_9e2c1' '-mtune=generic' '-march=x86-64'
+make[1]: Leaving directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
 
 
 Parsed C implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
-  ignore line: [Change Dir: /home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp]
+  ignore line: [Change Dir: /home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_c216b/fast"]
-  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_c216b.dir/build.make CMakeFiles/cmTC_c216b.dir/build]
-  ignore line: [make[1]: Entering directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp']
-  ignore line: [Building C object CMakeFiles/cmTC_c216b.dir/CMakeCCompilerABI.c.o]
-  ignore line: [/usr/bin/gcc-7    -o CMakeFiles/cmTC_c216b.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.10/Modules/CMakeCCompilerABI.c]
-  ignore line: [Linking C executable cmTC_c216b]
-  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c216b.dir/link.txt --verbose=1]
-  ignore line: [/usr/bin/gcc-7     -v CMakeFiles/cmTC_c216b.dir/CMakeCCompilerABI.c.o  -o cmTC_c216b ]
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_9e2c1/fast"]
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_9e2c1.dir/build.make CMakeFiles/cmTC_9e2c1.dir/build]
+  ignore line: [make[1]: Entering directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp']
+  ignore line: [Building C object CMakeFiles/cmTC_9e2c1.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/usr/bin/gcc-7    -o CMakeFiles/cmTC_9e2c1.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.10/Modules/CMakeCCompilerABI.c]
+  ignore line: [Linking C executable cmTC_9e2c1]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9e2c1.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/gcc-7     -v CMakeFiles/cmTC_9e2c1.dir/CMakeCCompilerABI.c.o  -o cmTC_9e2c1 ]
   ignore line: [Using built-in specs.]
   ignore line: [COLLECT_GCC=/usr/bin/gcc-7]
   ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper]
@@ -90,13 +90,13 @@ Parsed C implicit link information from above output:
   ignore line: [gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04) ]
   ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/]
   ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../:/lib/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_c216b' '-mtune=generic' '-march=x86-64']
-  link line: [ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/cc1GhZxW.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_c216b /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_c216b.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_9e2c1' '-mtune=generic' '-march=x86-64']
+  link line: [ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccoxugO9.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_9e2c1 /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_9e2c1.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o]
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/collect2] ==> ignore
     arg [-plugin] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so] ==> ignore
     arg [-plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper] ==> ignore
-    arg [-plugin-opt=-fresolution=/tmp/cc1GhZxW.res] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/ccoxugO9.res] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
     arg [-plugin-opt=-pass-through=-lc] ==> ignore
@@ -114,7 +114,7 @@ Parsed C implicit link information from above output:
     arg [-znow] ==> ignore
     arg [-zrelro] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_c216b] ==> ignore
+    arg [cmTC_9e2c1] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o] ==> ignore
@@ -126,7 +126,7 @@ Parsed C implicit link information from above output:
     arg [-L/usr/lib/x86_64-linux-gnu] ==> dir [/usr/lib/x86_64-linux-gnu]
     arg [-L/usr/lib/../lib] ==> dir [/usr/lib/../lib]
     arg [-L/usr/lib/gcc/x86_64-linux-gnu/7/../../..] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/7/../../..]
-    arg [CMakeFiles/cmTC_c216b.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [CMakeFiles/cmTC_9e2c1.dir/CMakeCCompilerABI.c.o] ==> ignore
     arg [-lgcc] ==> lib [gcc]
     arg [--push-state] ==> ignore
     arg [--as-needed] ==> ignore
@@ -156,17 +156,17 @@ Parsed C implicit link information from above output:
 
 
 Detecting C [-std=c11] compiler features compiled with the following output:
-Change Dir: /home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp
+Change Dir: /home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_bca83/fast"
-/usr/bin/make -f CMakeFiles/cmTC_bca83.dir/build.make CMakeFiles/cmTC_bca83.dir/build
-make[1]: Entering directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_bca83.dir/feature_tests.c.o
-/usr/bin/gcc-7   -std=c11 -o CMakeFiles/cmTC_bca83.dir/feature_tests.c.o   -c /home/dan09/Tools/fireflow/build/CMakeFiles/feature_tests.c
-Linking C executable cmTC_bca83
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bca83.dir/link.txt --verbose=1
-/usr/bin/gcc-7      CMakeFiles/cmTC_bca83.dir/feature_tests.c.o  -o cmTC_bca83 
-make[1]: Leaving directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+Run Build Command:"/usr/bin/make" "cmTC_16deb/fast"
+/usr/bin/make -f CMakeFiles/cmTC_16deb.dir/build.make CMakeFiles/cmTC_16deb.dir/build
+make[1]: Entering directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_16deb.dir/feature_tests.c.o
+/usr/bin/gcc-7   -std=c11 -o CMakeFiles/cmTC_16deb.dir/feature_tests.c.o   -c /home/ubuntu/Tools/fireflow/build/CMakeFiles/feature_tests.c
+Linking C executable cmTC_16deb
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_16deb.dir/link.txt --verbose=1
+/usr/bin/gcc-7      CMakeFiles/cmTC_16deb.dir/feature_tests.c.o  -o cmTC_16deb 
+make[1]: Leaving directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
 
 
     Feature record: C_FEATURE:1c_function_prototypes
@@ -176,17 +176,17 @@ make[1]: Leaving directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp
 
 
 Detecting C [-std=c99] compiler features compiled with the following output:
-Change Dir: /home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp
+Change Dir: /home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_41b37/fast"
-/usr/bin/make -f CMakeFiles/cmTC_41b37.dir/build.make CMakeFiles/cmTC_41b37.dir/build
-make[1]: Entering directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_41b37.dir/feature_tests.c.o
-/usr/bin/gcc-7   -std=c99 -o CMakeFiles/cmTC_41b37.dir/feature_tests.c.o   -c /home/dan09/Tools/fireflow/build/CMakeFiles/feature_tests.c
-Linking C executable cmTC_41b37
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_41b37.dir/link.txt --verbose=1
-/usr/bin/gcc-7      CMakeFiles/cmTC_41b37.dir/feature_tests.c.o  -o cmTC_41b37 
-make[1]: Leaving directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+Run Build Command:"/usr/bin/make" "cmTC_91e5f/fast"
+/usr/bin/make -f CMakeFiles/cmTC_91e5f.dir/build.make CMakeFiles/cmTC_91e5f.dir/build
+make[1]: Entering directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_91e5f.dir/feature_tests.c.o
+/usr/bin/gcc-7   -std=c99 -o CMakeFiles/cmTC_91e5f.dir/feature_tests.c.o   -c /home/ubuntu/Tools/fireflow/build/CMakeFiles/feature_tests.c
+Linking C executable cmTC_91e5f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_91e5f.dir/link.txt --verbose=1
+/usr/bin/gcc-7      CMakeFiles/cmTC_91e5f.dir/feature_tests.c.o  -o cmTC_91e5f 
+make[1]: Leaving directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
 
 
     Feature record: C_FEATURE:1c_function_prototypes
@@ -196,17 +196,17 @@ make[1]: Leaving directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp
 
 
 Detecting C [-std=c90] compiler features compiled with the following output:
-Change Dir: /home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp
+Change Dir: /home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_e6294/fast"
-/usr/bin/make -f CMakeFiles/cmTC_e6294.dir/build.make CMakeFiles/cmTC_e6294.dir/build
-make[1]: Entering directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_e6294.dir/feature_tests.c.o
-/usr/bin/gcc-7   -std=c90 -o CMakeFiles/cmTC_e6294.dir/feature_tests.c.o   -c /home/dan09/Tools/fireflow/build/CMakeFiles/feature_tests.c
-Linking C executable cmTC_e6294
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e6294.dir/link.txt --verbose=1
-/usr/bin/gcc-7      CMakeFiles/cmTC_e6294.dir/feature_tests.c.o  -o cmTC_e6294 
-make[1]: Leaving directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+Run Build Command:"/usr/bin/make" "cmTC_05dc9/fast"
+/usr/bin/make -f CMakeFiles/cmTC_05dc9.dir/build.make CMakeFiles/cmTC_05dc9.dir/build
+make[1]: Entering directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_05dc9.dir/feature_tests.c.o
+/usr/bin/gcc-7   -std=c90 -o CMakeFiles/cmTC_05dc9.dir/feature_tests.c.o   -c /home/ubuntu/Tools/fireflow/build/CMakeFiles/feature_tests.c
+Linking C executable cmTC_05dc9
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_05dc9.dir/link.txt --verbose=1
+/usr/bin/gcc-7      CMakeFiles/cmTC_05dc9.dir/feature_tests.c.o  -o cmTC_05dc9 
+make[1]: Leaving directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
 
 
     Feature record: C_FEATURE:1c_function_prototypes
@@ -214,30 +214,30 @@ make[1]: Leaving directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp
     Feature record: C_FEATURE:0c_static_assert
     Feature record: C_FEATURE:0c_variadic_macros
 Determining if the CXX compiler works passed with the following output:
-Change Dir: /home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp
+Change Dir: /home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_a7d18/fast"
-/usr/bin/make -f CMakeFiles/cmTC_a7d18.dir/build.make CMakeFiles/cmTC_a7d18.dir/build
-make[1]: Entering directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_a7d18.dir/testCXXCompiler.cxx.o
-/usr/bin/g++-7     -o CMakeFiles/cmTC_a7d18.dir/testCXXCompiler.cxx.o -c /home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
-Linking CXX executable cmTC_a7d18
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a7d18.dir/link.txt --verbose=1
-/usr/bin/g++-7       CMakeFiles/cmTC_a7d18.dir/testCXXCompiler.cxx.o  -o cmTC_a7d18 
-make[1]: Leaving directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+Run Build Command:"/usr/bin/make" "cmTC_680a9/fast"
+/usr/bin/make -f CMakeFiles/cmTC_680a9.dir/build.make CMakeFiles/cmTC_680a9.dir/build
+make[1]: Entering directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_680a9.dir/testCXXCompiler.cxx.o
+/usr/bin/g++-7     -o CMakeFiles/cmTC_680a9.dir/testCXXCompiler.cxx.o -c /home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+Linking CXX executable cmTC_680a9
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_680a9.dir/link.txt --verbose=1
+/usr/bin/g++-7       CMakeFiles/cmTC_680a9.dir/testCXXCompiler.cxx.o  -o cmTC_680a9 
+make[1]: Leaving directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
 
 
 Detecting CXX compiler ABI info compiled with the following output:
-Change Dir: /home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp
+Change Dir: /home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_90bfe/fast"
-/usr/bin/make -f CMakeFiles/cmTC_90bfe.dir/build.make CMakeFiles/cmTC_90bfe.dir/build
-make[1]: Entering directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_90bfe.dir/CMakeCXXCompilerABI.cpp.o
-/usr/bin/g++-7     -o CMakeFiles/cmTC_90bfe.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.10/Modules/CMakeCXXCompilerABI.cpp
-Linking CXX executable cmTC_90bfe
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_90bfe.dir/link.txt --verbose=1
-/usr/bin/g++-7      -v CMakeFiles/cmTC_90bfe.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_90bfe 
+Run Build Command:"/usr/bin/make" "cmTC_3c905/fast"
+/usr/bin/make -f CMakeFiles/cmTC_3c905.dir/build.make CMakeFiles/cmTC_3c905.dir/build
+make[1]: Entering directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_3c905.dir/CMakeCXXCompilerABI.cpp.o
+/usr/bin/g++-7     -o CMakeFiles/cmTC_3c905.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.10/Modules/CMakeCXXCompilerABI.cpp
+Linking CXX executable cmTC_3c905
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3c905.dir/link.txt --verbose=1
+/usr/bin/g++-7      -v CMakeFiles/cmTC_3c905.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_3c905 
 Using built-in specs.
 COLLECT_GCC=/usr/bin/g++-7
 COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper
@@ -249,24 +249,24 @@ Thread model: posix
 gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04) 
 COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/
 LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_90bfe' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
- /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/cc8JjyNr.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_90bfe /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_90bfe.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o
-COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_90bfe' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
-make[1]: Leaving directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_3c905' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccVFcWGq.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_3c905 /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_3c905.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_3c905' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+make[1]: Leaving directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
 
 
 Parsed CXX implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
-  ignore line: [Change Dir: /home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp]
+  ignore line: [Change Dir: /home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_90bfe/fast"]
-  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_90bfe.dir/build.make CMakeFiles/cmTC_90bfe.dir/build]
-  ignore line: [make[1]: Entering directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp']
-  ignore line: [Building CXX object CMakeFiles/cmTC_90bfe.dir/CMakeCXXCompilerABI.cpp.o]
-  ignore line: [/usr/bin/g++-7     -o CMakeFiles/cmTC_90bfe.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.10/Modules/CMakeCXXCompilerABI.cpp]
-  ignore line: [Linking CXX executable cmTC_90bfe]
-  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_90bfe.dir/link.txt --verbose=1]
-  ignore line: [/usr/bin/g++-7      -v CMakeFiles/cmTC_90bfe.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_90bfe ]
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_3c905/fast"]
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_3c905.dir/build.make CMakeFiles/cmTC_3c905.dir/build]
+  ignore line: [make[1]: Entering directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp']
+  ignore line: [Building CXX object CMakeFiles/cmTC_3c905.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/usr/bin/g++-7     -o CMakeFiles/cmTC_3c905.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.10/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [Linking CXX executable cmTC_3c905]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3c905.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/g++-7      -v CMakeFiles/cmTC_3c905.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_3c905 ]
   ignore line: [Using built-in specs.]
   ignore line: [COLLECT_GCC=/usr/bin/g++-7]
   ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper]
@@ -278,13 +278,13 @@ Parsed CXX implicit link information from above output:
   ignore line: [gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04) ]
   ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/]
   ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../:/lib/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_90bfe' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
-  link line: [ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/cc8JjyNr.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_90bfe /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_90bfe.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_3c905' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
+  link line: [ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccVFcWGq.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_3c905 /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_3c905.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o]
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/collect2] ==> ignore
     arg [-plugin] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so] ==> ignore
     arg [-plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper] ==> ignore
-    arg [-plugin-opt=-fresolution=/tmp/cc8JjyNr.res] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/ccVFcWGq.res] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
     arg [-plugin-opt=-pass-through=-lc] ==> ignore
@@ -302,7 +302,7 @@ Parsed CXX implicit link information from above output:
     arg [-znow] ==> ignore
     arg [-zrelro] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_90bfe] ==> ignore
+    arg [cmTC_3c905] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o] ==> ignore
@@ -314,7 +314,7 @@ Parsed CXX implicit link information from above output:
     arg [-L/usr/lib/x86_64-linux-gnu] ==> dir [/usr/lib/x86_64-linux-gnu]
     arg [-L/usr/lib/../lib] ==> dir [/usr/lib/../lib]
     arg [-L/usr/lib/gcc/x86_64-linux-gnu/7/../../..] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/7/../../..]
-    arg [CMakeFiles/cmTC_90bfe.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [CMakeFiles/cmTC_3c905.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
     arg [-lstdc++] ==> lib [stdc++]
     arg [-lm] ==> lib [m]
     arg [-lgcc_s] ==> lib [gcc_s]
@@ -340,17 +340,17 @@ Parsed CXX implicit link information from above output:
 
 
 Detecting CXX [-std=c++1z] compiler features compiled with the following output:
-Change Dir: /home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp
+Change Dir: /home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_fd7fe/fast"
-/usr/bin/make -f CMakeFiles/cmTC_fd7fe.dir/build.make CMakeFiles/cmTC_fd7fe.dir/build
-make[1]: Entering directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_fd7fe.dir/feature_tests.cxx.o
-/usr/bin/g++-7    -std=c++1z -o CMakeFiles/cmTC_fd7fe.dir/feature_tests.cxx.o -c /home/dan09/Tools/fireflow/build/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_fd7fe
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fd7fe.dir/link.txt --verbose=1
-/usr/bin/g++-7       CMakeFiles/cmTC_fd7fe.dir/feature_tests.cxx.o  -o cmTC_fd7fe 
-make[1]: Leaving directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+Run Build Command:"/usr/bin/make" "cmTC_0b5bd/fast"
+/usr/bin/make -f CMakeFiles/cmTC_0b5bd.dir/build.make CMakeFiles/cmTC_0b5bd.dir/build
+make[1]: Entering directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_0b5bd.dir/feature_tests.cxx.o
+/usr/bin/g++-7    -std=c++1z -o CMakeFiles/cmTC_0b5bd.dir/feature_tests.cxx.o -c /home/ubuntu/Tools/fireflow/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_0b5bd
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0b5bd.dir/link.txt --verbose=1
+/usr/bin/g++-7       CMakeFiles/cmTC_0b5bd.dir/feature_tests.cxx.o  -o cmTC_0b5bd 
+make[1]: Leaving directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
 
 
     Feature record: CXX_FEATURE:1cxx_aggregate_default_initializers
@@ -413,17 +413,17 @@ make[1]: Leaving directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp
 
 
 Detecting CXX [-std=c++14] compiler features compiled with the following output:
-Change Dir: /home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp
+Change Dir: /home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_a2a27/fast"
-/usr/bin/make -f CMakeFiles/cmTC_a2a27.dir/build.make CMakeFiles/cmTC_a2a27.dir/build
-make[1]: Entering directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_a2a27.dir/feature_tests.cxx.o
-/usr/bin/g++-7    -std=c++14 -o CMakeFiles/cmTC_a2a27.dir/feature_tests.cxx.o -c /home/dan09/Tools/fireflow/build/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_a2a27
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a2a27.dir/link.txt --verbose=1
-/usr/bin/g++-7       CMakeFiles/cmTC_a2a27.dir/feature_tests.cxx.o  -o cmTC_a2a27 
-make[1]: Leaving directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+Run Build Command:"/usr/bin/make" "cmTC_a66d0/fast"
+/usr/bin/make -f CMakeFiles/cmTC_a66d0.dir/build.make CMakeFiles/cmTC_a66d0.dir/build
+make[1]: Entering directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_a66d0.dir/feature_tests.cxx.o
+/usr/bin/g++-7    -std=c++14 -o CMakeFiles/cmTC_a66d0.dir/feature_tests.cxx.o -c /home/ubuntu/Tools/fireflow/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_a66d0
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a66d0.dir/link.txt --verbose=1
+/usr/bin/g++-7       CMakeFiles/cmTC_a66d0.dir/feature_tests.cxx.o  -o cmTC_a66d0 
+make[1]: Leaving directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
 
 
     Feature record: CXX_FEATURE:1cxx_aggregate_default_initializers
@@ -486,17 +486,17 @@ make[1]: Leaving directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp
 
 
 Detecting CXX [-std=c++11] compiler features compiled with the following output:
-Change Dir: /home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp
+Change Dir: /home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_49125/fast"
-/usr/bin/make -f CMakeFiles/cmTC_49125.dir/build.make CMakeFiles/cmTC_49125.dir/build
-make[1]: Entering directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_49125.dir/feature_tests.cxx.o
-/usr/bin/g++-7    -std=c++11 -o CMakeFiles/cmTC_49125.dir/feature_tests.cxx.o -c /home/dan09/Tools/fireflow/build/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_49125
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_49125.dir/link.txt --verbose=1
-/usr/bin/g++-7       CMakeFiles/cmTC_49125.dir/feature_tests.cxx.o  -o cmTC_49125 
-make[1]: Leaving directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+Run Build Command:"/usr/bin/make" "cmTC_daddc/fast"
+/usr/bin/make -f CMakeFiles/cmTC_daddc.dir/build.make CMakeFiles/cmTC_daddc.dir/build
+make[1]: Entering directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_daddc.dir/feature_tests.cxx.o
+/usr/bin/g++-7    -std=c++11 -o CMakeFiles/cmTC_daddc.dir/feature_tests.cxx.o -c /home/ubuntu/Tools/fireflow/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_daddc
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_daddc.dir/link.txt --verbose=1
+/usr/bin/g++-7       CMakeFiles/cmTC_daddc.dir/feature_tests.cxx.o  -o cmTC_daddc 
+make[1]: Leaving directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
 
 
     Feature record: CXX_FEATURE:0cxx_aggregate_default_initializers
@@ -559,17 +559,17 @@ make[1]: Leaving directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp
 
 
 Detecting CXX [-std=c++98] compiler features compiled with the following output:
-Change Dir: /home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp
+Change Dir: /home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_5f75b/fast"
-/usr/bin/make -f CMakeFiles/cmTC_5f75b.dir/build.make CMakeFiles/cmTC_5f75b.dir/build
-make[1]: Entering directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_5f75b.dir/feature_tests.cxx.o
-/usr/bin/g++-7    -std=c++98 -o CMakeFiles/cmTC_5f75b.dir/feature_tests.cxx.o -c /home/dan09/Tools/fireflow/build/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_5f75b
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5f75b.dir/link.txt --verbose=1
-/usr/bin/g++-7       CMakeFiles/cmTC_5f75b.dir/feature_tests.cxx.o  -o cmTC_5f75b 
-make[1]: Leaving directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+Run Build Command:"/usr/bin/make" "cmTC_178d6/fast"
+/usr/bin/make -f CMakeFiles/cmTC_178d6.dir/build.make CMakeFiles/cmTC_178d6.dir/build
+make[1]: Entering directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_178d6.dir/feature_tests.cxx.o
+/usr/bin/g++-7    -std=c++98 -o CMakeFiles/cmTC_178d6.dir/feature_tests.cxx.o -c /home/ubuntu/Tools/fireflow/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_178d6
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_178d6.dir/link.txt --verbose=1
+/usr/bin/g++-7       CMakeFiles/cmTC_178d6.dir/feature_tests.cxx.o  -o cmTC_178d6 
+make[1]: Leaving directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
 
 
     Feature record: CXX_FEATURE:0cxx_aggregate_default_initializers
@@ -630,30 +630,30 @@ make[1]: Leaving directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp
     Feature record: CXX_FEATURE:0cxx_variadic_macros
     Feature record: CXX_FEATURE:0cxx_variadic_templates
 Determining if the include file pthread.h exists passed with the following output:
-Change Dir: /home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp
+Change Dir: /home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_8e8a3/fast"
-/usr/bin/make -f CMakeFiles/cmTC_8e8a3.dir/build.make CMakeFiles/cmTC_8e8a3.dir/build
-make[1]: Entering directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_8e8a3.dir/CheckIncludeFile.c.o
-/usr/bin/gcc-7    -o CMakeFiles/cmTC_8e8a3.dir/CheckIncludeFile.c.o   -c /home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
-Linking C executable cmTC_8e8a3
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8e8a3.dir/link.txt --verbose=1
-/usr/bin/gcc-7      CMakeFiles/cmTC_8e8a3.dir/CheckIncludeFile.c.o  -o cmTC_8e8a3 
-make[1]: Leaving directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+Run Build Command:"/usr/bin/make" "cmTC_c565f/fast"
+/usr/bin/make -f CMakeFiles/cmTC_c565f.dir/build.make CMakeFiles/cmTC_c565f.dir/build
+make[1]: Entering directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c565f.dir/CheckIncludeFile.c.o
+/usr/bin/gcc-7    -o CMakeFiles/cmTC_c565f.dir/CheckIncludeFile.c.o   -c /home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTC_c565f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c565f.dir/link.txt --verbose=1
+/usr/bin/gcc-7      CMakeFiles/cmTC_c565f.dir/CheckIncludeFile.c.o  -o cmTC_c565f 
+make[1]: Leaving directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
 
 
 Determining if the function pthread_create exists in the pthread passed with the following output:
-Change Dir: /home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp
+Change Dir: /home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_af194/fast"
-/usr/bin/make -f CMakeFiles/cmTC_af194.dir/build.make CMakeFiles/cmTC_af194.dir/build
-make[1]: Entering directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_af194.dir/CheckFunctionExists.c.o
-/usr/bin/gcc-7   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_af194.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
-Linking C executable cmTC_af194
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_af194.dir/link.txt --verbose=1
-/usr/bin/gcc-7  -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_af194.dir/CheckFunctionExists.c.o  -o cmTC_af194 -lpthread 
-make[1]: Leaving directory '/home/dan09/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+Run Build Command:"/usr/bin/make" "cmTC_c0608/fast"
+/usr/bin/make -f CMakeFiles/cmTC_c0608.dir/build.make CMakeFiles/cmTC_c0608.dir/build
+make[1]: Entering directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c0608.dir/CheckFunctionExists.c.o
+/usr/bin/gcc-7   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_c0608.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_c0608
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c0608.dir/link.txt --verbose=1
+/usr/bin/gcc-7  -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_c0608.dir/CheckFunctionExists.c.o  -o cmTC_c0608 -lpthread 
+make[1]: Leaving directory '/home/ubuntu/Tools/fireflow/build/CMakeFiles/CMakeTmp'
 
 

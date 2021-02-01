@@ -6,5 +6,5 @@ CXX_FLAGS = -g   -std=gnu++11
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/usr/local/include -I/home/dan09/Tools/fireflow/include 
+CXX_INCLUDES = -I/usr/local/include -I/home/ubuntu/Tools/fireflow/include 
 

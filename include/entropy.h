@@ -15,7 +15,6 @@ private:
     vector<packet> p_vector;
     vector<string> headers = {"src_ip", "src_port", "dst_port", "flags"};
     map<string, vector<double>> entropies_of_headers;
-    map<string, vector<double>> latest_entropies;
     void _saveLatestEntropies();
 
 public:
@@ -28,6 +27,6 @@ public:
     vector<double> calcProb(map<uint, uint> header_value_counter);
     map<string, double> calcMultiEntropy(map<string, map<uint, uint>> header_maps);
     map<string, vector<double>> GetFullEntropies();
-    map<string, vector<double>> GetLatestEntropies();
+    void PrintFullEntropies();
 };
 #endif
