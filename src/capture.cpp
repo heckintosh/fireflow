@@ -14,6 +14,11 @@
 #include "spdlog/sinks/basic_file_sink.h"
 
 using namespace std;
+unsigned int Capture::total_unparsed_packets = 0;
+double Capture::window = 0;
+int Capture::estimator = 0;
+double Capture::subwindow = 0;
+ulong packet::totalPackets = 0;
 
 Capture::Capture(string _interface, string _debugpath, string _packetpath, double _window, double _subwindow, int _estimator, int _max_sizelog, int _max_files)
 {

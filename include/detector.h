@@ -4,10 +4,7 @@
 using namespace std;
 class Detector
 {
-private:
-    Cusum cusum_stats;
-    bool isHigh = true;
 public:
-    Detector(Cusum cusum_stats);
+    void judgeCusum(Cusum cusum_object);
 };
 #endif

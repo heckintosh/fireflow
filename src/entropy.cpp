@@ -12,9 +12,7 @@
 
 using namespace std;
 
-bool Cusum::getThresholdStatus(){
-    return thresholdStatus;
-}
+
 
 void EntropyCalc::_saveLatestEntropies(){
     for (const auto &map_pair : entropies_of_headers){
@@ -111,16 +109,3 @@ void EntropyCalc::printEntropiesOfSubwindows()
         cout << endl;
     }
 }
-
-//void threshold_estimator(int sampling_amount)
-//{
-//    map<string, vector<double>> samples = {};
-//    for (const auto &map_pair : entropies_of_headers)
-//    {
-//        for (int i = 0; i < sampling_amount; ++i)
-//        {
-//            samples[map_pair.first].push_back(map_pair.second[i]);
-//        }
-//    }
-//    estimateSigma(samples);
-//}
