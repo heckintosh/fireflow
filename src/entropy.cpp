@@ -74,7 +74,7 @@ double EntropyCalc::calcEntropy(vector<double> probability)
         }
         else
         {
-            total += -(p * log(p) / log(size));
+            total += -(p * log(p));
         }
     }
     return total;
