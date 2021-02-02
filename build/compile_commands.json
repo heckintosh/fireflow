@@ -1,32 +1,32 @@
 [
 {
-  "directory": "/home/ubuntu/Tools/fireflow/build",
-  "command": "/usr/bin/g++-7   -I/home/ubuntu/Tools/fireflow/include  -g   -std=gnu++11 -o CMakeFiles/fireflow.dir/src/capture.cpp.o -c /home/ubuntu/Tools/fireflow/src/capture.cpp",
-  "file": "/home/ubuntu/Tools/fireflow/src/capture.cpp"
+  "directory": "/home/dan09/Tools/fireflow/build",
+  "command": "/usr/bin/g++-7   -I/home/dan09/Tools/fireflow/include  -g   -std=gnu++11 -o CMakeFiles/fireflow.dir/src/capture.cpp.o -c /home/dan09/Tools/fireflow/src/capture.cpp",
+  "file": "/home/dan09/Tools/fireflow/src/capture.cpp"
 },
 {
-  "directory": "/home/ubuntu/Tools/fireflow/build",
-  "command": "/usr/bin/g++-7   -I/home/ubuntu/Tools/fireflow/include  -g   -std=gnu++11 -o CMakeFiles/fireflow.dir/src/cusum.cpp.o -c /home/ubuntu/Tools/fireflow/src/cusum.cpp",
-  "file": "/home/ubuntu/Tools/fireflow/src/cusum.cpp"
+  "directory": "/home/dan09/Tools/fireflow/build",
+  "command": "/usr/bin/g++-7   -I/home/dan09/Tools/fireflow/include  -g   -std=gnu++11 -o CMakeFiles/fireflow.dir/src/cusum.cpp.o -c /home/dan09/Tools/fireflow/src/cusum.cpp",
+  "file": "/home/dan09/Tools/fireflow/src/cusum.cpp"
 },
 {
-  "directory": "/home/ubuntu/Tools/fireflow/build",
-  "command": "/usr/bin/g++-7   -I/home/ubuntu/Tools/fireflow/include  -g   -std=gnu++11 -o CMakeFiles/fireflow.dir/src/detector.cpp.o -c /home/ubuntu/Tools/fireflow/src/detector.cpp",
-  "file": "/home/ubuntu/Tools/fireflow/src/detector.cpp"
+  "directory": "/home/dan09/Tools/fireflow/build",
+  "command": "/usr/bin/g++-7   -I/home/dan09/Tools/fireflow/include  -g   -std=gnu++11 -o CMakeFiles/fireflow.dir/src/detector.cpp.o -c /home/dan09/Tools/fireflow/src/detector.cpp",
+  "file": "/home/dan09/Tools/fireflow/src/detector.cpp"
 },
 {
-  "directory": "/home/ubuntu/Tools/fireflow/build",
-  "command": "/usr/bin/g++-7   -I/home/ubuntu/Tools/fireflow/include  -g   -std=gnu++11 -o CMakeFiles/fireflow.dir/src/entropy.cpp.o -c /home/ubuntu/Tools/fireflow/src/entropy.cpp",
-  "file": "/home/ubuntu/Tools/fireflow/src/entropy.cpp"
+  "directory": "/home/dan09/Tools/fireflow/build",
+  "command": "/usr/bin/g++-7   -I/home/dan09/Tools/fireflow/include  -g   -std=gnu++11 -o CMakeFiles/fireflow.dir/src/entropy.cpp.o -c /home/dan09/Tools/fireflow/src/entropy.cpp",
+  "file": "/home/dan09/Tools/fireflow/src/entropy.cpp"
 },
 {
-  "directory": "/home/ubuntu/Tools/fireflow/build",
-  "command": "/usr/bin/g++-7   -I/home/ubuntu/Tools/fireflow/include  -g   -std=gnu++11 -o CMakeFiles/fireflow.dir/src/fireflow.cpp.o -c /home/ubuntu/Tools/fireflow/src/fireflow.cpp",
-  "file": "/home/ubuntu/Tools/fireflow/src/fireflow.cpp"
+  "directory": "/home/dan09/Tools/fireflow/build",
+  "command": "/usr/bin/g++-7   -I/home/dan09/Tools/fireflow/include  -g   -std=gnu++11 -o CMakeFiles/fireflow.dir/src/fireflow.cpp.o -c /home/dan09/Tools/fireflow/src/fireflow.cpp",
+  "file": "/home/dan09/Tools/fireflow/src/fireflow.cpp"
 },
 {
-  "directory": "/home/ubuntu/Tools/fireflow/build",
-  "command": "/usr/bin/g++-7   -I/home/ubuntu/Tools/fireflow/include  -g   -std=gnu++11 -o CMakeFiles/fireflow.dir/src/mapping.cpp.o -c /home/ubuntu/Tools/fireflow/src/mapping.cpp",
-  "file": "/home/ubuntu/Tools/fireflow/src/mapping.cpp"
+  "directory": "/home/dan09/Tools/fireflow/build",
+  "command": "/usr/bin/g++-7   -I/home/dan09/Tools/fireflow/include  -g   -std=gnu++11 -o CMakeFiles/fireflow.dir/src/mapping.cpp.o -c /home/dan09/Tools/fireflow/src/mapping.cpp",
+  "file": "/home/dan09/Tools/fireflow/src/mapping.cpp"
 }
 ]

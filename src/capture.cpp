@@ -1,6 +1,5 @@
 #include <fstream>
 #include <iostream>
-#include <string>
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -8,6 +7,7 @@
 #include "entropy.h"
 #include "capture.h"
 #include "cusum.h"
+#include "detector.h"
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/sinks/rotating_file_sink.h"
@@ -137,6 +137,7 @@ void Capture::execution_flow(const struct pfring_pkthdr &hdr, const u_char *buff
     static uint packet_queue = 0;
     static EntropyCalc EntropyTask;
     static Cusum CusumTask;
+    static Detector DetectorTask;
 
     //track if the time for setting threshold has been reached yet
     if (CusumTask.getThresholdStatus() == false)
@@ -173,6 +174,10 @@ void Capture::execution_flow(const struct pfring_pkthdr &hdr, const u_char *buff
         packet_queue = 0;
         entropyIsCalced = true;
         subwindow_t = chrono::steady_clock::now();
+    }
+    if (CusumTask.getThresholdStatus() == true && entropyIsCalced == true){
+        CusumTask.calc(EntropyTask.getLatestEntropies());
+        DetectorTask.judgeCusum(CusumTask);
     }
     if (CusumTask.getThresholdStatus() == false && entropyIsCalced == true)
     {

@@ -1,10 +1,10 @@
 #ifndef ENTROPY_HEADER
 #define ENTROPY_HEADER
+#include "capture.h"
+#include "packet.h"
 #include <vector>
 #include <map>
 #include <string>
-#include "packet.h"
-#include "capture.h"
 
 using namespace std;
 class EntropyCalc
@@ -15,6 +15,7 @@ private:
     vector<packet> p_vector;
     vector<string> headers = {"src_ip", "src_port", "dst_port", "flags"};
     map<string, vector<double>> entropies_of_headers;
+    map<string, vector<double>> latest_entropies;
     void _saveLatestEntropies();
 
 public:
@@ -28,5 +29,6 @@ public:
     map<string, double> calcMultiEntropy(map<string, map<uint, uint>> header_maps);
     map<string, vector<double>> GetFullEntropies();
     void PrintFullEntropies();
+    map<string, vector<double>> getLatestEntropies();
 };
 #endif

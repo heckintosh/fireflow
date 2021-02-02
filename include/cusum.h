@@ -37,6 +37,7 @@ public:
     void PrintGrandMeans(map<string, double> data);
     void PrintSubGroupSize();
     void PrintCorrectionFactor();
+    void PrintNormalObs(map<string, double> data);
     void setSubGroupSize(int size);
     void setSampleSize(int size);
     void _collectSamples(map<string, vector<double>> data);

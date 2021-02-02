@@ -1,16 +1,22 @@
-#include <iostream>
-#include <sstream>
-#include <queue>
+#include "entropy.h"
+#include "mapping.h"
+#include <vector>
 #include <map>
 #include <string>
-#include <vector>
-#include "capture.h"
-#include "packet.h"
-#include "entropy.h"
-#include "cusum.h"
-#include "mapping.h"
-
+#include <math.h>
 using namespace std;
+
+void EntropyCalc::_saveLatestEntropies(){
+    for (const auto &map_pair : entropies_of_headers){	    
+        for (int i = subgroup_size; i > 0; i--){	        
+            latest_entropies[map_pair.first].push_back(map_pair.second.back() - i);	        
+        }
+    }	   
+}
+
+map<string, vector<double>> EntropyCalc::getLatestEntropies(){
+    return EntropyCalc::latest_entropies;
+}
 
 void EntropyCalc::accumulate_packets(packet &current_packet)
 {
@@ -25,6 +31,7 @@ void EntropyCalc::accumulate_subwindow_entropies(packet &current_packet)
     {
         entropies_of_headers[map_pair.first].push_back(map_pair.second);
     }
+    _saveLatestEntropies();
     p_vector.clear();
 }
 

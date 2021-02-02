@@ -1,12 +1,6 @@
 #ifndef CAPTURE_HEADER
 #define CAPTURE_HEADER
-#include "spdlog/spdlog.h"
-#include "spdlog/sinks/stdout_color_sinks.h"
-#include "spdlog/sinks/rotating_file_sink.h"
-#include "spdlog/sinks/basic_file_sink.h"
-#include "capture.h"
 #include <string>
-#include <queue>
 #include <pfring.h>
 #include "packet.h"
 using namespace std;

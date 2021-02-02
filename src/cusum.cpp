@@ -1,12 +1,12 @@
+#include <vector>
+#include <map>
+#include <string>
 #include <iostream>
 #include <algorithm>
 #include <numeric>
 #include <math.h>
-#include "capture.h"
 #include "cusum.h"
-
-using namespace std;
-
+#include "capture.h"
 void Cusum::setThreshold(map<string, vector<double>> samples)
 {
     if (Cusum::thresholdStatus == false)
@@ -74,9 +74,9 @@ void Cusum::calc(map<string, vector<double>> data)
     map<string, double> norms = calcNormalizedObservations(means);
     Cusum::S_Li = calcLowerSum(norms);
     Cusum::S_Hi = calcHigherSum(norms);
+    PrintCusum();
     Cusum::S_Li_prev = Cusum::S_Li;
     Cusum::S_Hi_prev = Cusum::S_Hi;
-    PrintCusum();
 }
 
 void Cusum::calcPrevCusum(map<string, vector<double>> data)
@@ -103,17 +103,7 @@ void Cusum::calcPrevCusum(map<string, vector<double>> data)
     }
 }
 
-// calculate lower cummulative sum
-// z is the normalized observations, k is allowable slack: typically set to 0.5 sigma
-map<string, double> Cusum::calcLowerSum(map<string, double> z)
-{
-    map<string, double> tmp;
-    for (const auto &map_pair : z)
-    {
-        tmp[map_pair.first] = -max(0.0, (-map_pair.second - Cusum::allowed_slacks[map_pair.first] + S_Li_prev[map_pair.first]));
-    }
-    return tmp;
-}
+
 
 map<string, double> Cusum::calcNormalizedObservations(map<string, double> subgroup_mean)
 {
@@ -122,6 +112,7 @@ map<string, double> Cusum::calcNormalizedObservations(map<string, double> subgro
     {
         z[map_pair.first] = (map_pair.second - target_values[map_pair.first]) / sigmas[map_pair.first];
     }
+    PrintNormalObs(z);
     return z;
 }
 
@@ -193,6 +184,18 @@ map<string, double> Cusum::calcHigherSum(map<string, double> z)
     return tmp;
 }
 
+// calculate lower cummulative sum
+// z is the normalized observations, k is allowable slack: typically set to 0.5 sigma
+map<string, double> Cusum::calcLowerSum(map<string, double> z)
+{
+    map<string, double> tmp;
+    for (const auto &map_pair : z)
+    {
+        tmp[map_pair.first] = -max(0.0, (-map_pair.second - Cusum::allowed_slacks[map_pair.first] + S_Li_prev[map_pair.first]));
+    }
+    return tmp;
+}
+
 void Cusum::PrintCusum()
 {
     cout << "------------------------------------------------" << endl;
@@ -203,24 +206,34 @@ void Cusum::PrintCusum()
         cout << map_pair.first << ": " << map_pair.second << " ";
     }
     cout << endl;
-    cout << endl
-         << "HIGHER SUM: " << endl;
+    
+    cout << "LOWER SUM PREV: " << endl;
+    for (const auto &map_pair : S_Li_prev)
+    {
+        cout << map_pair.first << ": " << map_pair.second << " ";
+    }
+    cout << endl;
+    
+    cout << "HIGHER SUM: " << endl;
     for (const auto &map_pair : S_Hi)
     {
         cout << map_pair.first << ": " << map_pair.second << " ";
     }
     cout << endl;
-        cout << "HIGHER SUM PREV: " << endl;
-    for (const auto &map_pair : S_Li_prev)
+    
+    cout << "HIGHER SUM PREV: " << endl;
+    for (const auto &map_pair : S_Hi_prev)
     {
         cout << map_pair.first << ": " << map_pair.second << " ";
     }
+    cout << endl;
     cout << endl; 
     cout << "------------------------------------------------" << endl;
 }
 
 void Cusum::PrintUCL()
 {
+    cout << "-----------UCL-------------" << endl;
     for (const auto &map_pair : Cusum::getUCL())
     {
         cout << map_pair.first << ": " << map_pair.second << endl;
@@ -265,6 +278,7 @@ void Cusum::PrintSubGroupSize()
 
 void Cusum::PrintLCL()
 {
+    cout << "-----------LCL-------------" << endl;
     for (const auto &map_pair : Cusum::getLCL())
     {
         cout << map_pair.first << ": " << map_pair.second << endl;
@@ -274,6 +288,15 @@ void Cusum::PrintLCL()
 void Cusum::PrintGrandMeans(map<string, double> data)
 {
     cout << "-------GRAND MEANS---------" << endl;
+    for (const auto &map_pair : data)
+    {
+        cout << map_pair.first << ": " << map_pair.second << endl;
+    }
+}
+
+void Cusum::PrintNormalObs(map<string, double> data)
+{
+    cout << "-------NORMAL OBSERVATIONS---------" << endl;
     for (const auto &map_pair : data)
     {
         cout << map_pair.first << ": " << map_pair.second << endl;
@@ -303,16 +326,18 @@ void Cusum::setUCL(map<string, double> data)
 {
     for (const auto &map_pair : data)
     {
-        Cusum::UCL[map_pair.first] = 5 * map_pair.second;
+        Cusum::UCL[map_pair.first] = 5 + target_values[map_pair.first];
     }
+    PrintUCL();
 }
 
 void Cusum::setLCL(map<string, double> data)
 {
     for (const auto &map_pair : data)
     {
-        Cusum::LCL[map_pair.first] = -5 * map_pair.second;
+        Cusum::LCL[map_pair.first] = -5 + target_values[map_pair.first];
     }
+    PrintLCL();
 }
 
 // calculate means of data collected in one window
