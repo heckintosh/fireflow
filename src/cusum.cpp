@@ -32,6 +32,40 @@ void Cusum::setThreshold(map<string, vector<double>> samples)
     }
 }
 
+//estimating sigma from a dict with headers as keys and multi entropies of subgroups as values
+// subgroup is the amount of entropies values being calculated in one window
+void Cusum::setSigma(map<string, vector<double>> data)
+{
+    map<string, vector<double>> standardDeviationOfGroup;
+    map<string, double> grand_standard_deviation_mean;
+    vector<double> tmp;
+
+    //fill and calculate standard deviations all windows in data
+    for (const auto &map_pair : data)
+    {
+        for (int index = 0; index < sample_size; index += subgroup_size)
+        {
+            for (int j = 0; j < subgroup_size; j++)
+            {
+                if (index + j < sample_size)
+                {
+                    tmp.push_back(map_pair.second[index + j]);
+                }
+            }
+            standardDeviationOfGroup[map_pair.first].push_back(calcDeviationOfSubGroup(tmp));
+            tmp.clear();
+        }
+    }
+
+    grand_standard_deviation_mean = calcMultipleMeans(standardDeviationOfGroup);
+    PrintGrandMeans(grand_standard_deviation_mean);
+    for (const auto &map_pair : grand_standard_deviation_mean)
+    {
+        Cusum::sigmas[map_pair.first] = map_pair.second / correction_factor;
+    }
+    PrintSigmas();
+}
+
 // Calculate and return Cusum values for detection and plotting
 // data: either samples of multiple subgroups for  setting threshold or data of a subgroup for performing detection
 void Cusum::calc(map<string, vector<double>> data)
@@ -42,6 +76,7 @@ void Cusum::calc(map<string, vector<double>> data)
     Cusum::S_Hi = calcHigherSum(norms);
     Cusum::S_Li_prev = Cusum::S_Li;
     Cusum::S_Hi_prev = Cusum::S_Hi;
+    PrintCusum();
 }
 
 void Cusum::calcPrevCusum(map<string, vector<double>> data)
@@ -109,6 +144,7 @@ void Cusum::setTargetValues(map<string, vector<double>> data)
     {
         target_values[map_pair.first] = calcMean(map_pair.second);
     }
+    PrintTargetValues();
 }
 
 //calculate entropies deviation of each windows
@@ -135,6 +171,7 @@ void Cusum::setCorrectionFactor(int n)
     {
         Cusum::correction_factor = 1;
     }
+    Cusum::PrintCorrectionFactor();
 }
 
 double Cusum::calcMean(vector<double> tmp_data)
@@ -142,38 +179,6 @@ double Cusum::calcMean(vector<double> tmp_data)
     double sum = accumulate(tmp_data.begin(), tmp_data.end(), 0.0);
     double mean = sum / tmp_data.size();
     return mean;
-}
-
-//estimating sigma from a dict with headers as keys and multi entropies of subgroups as values
-// subgroup is the amount of entropies values being calculated in one window
-void Cusum::setSigma(map<string, vector<double>> data)
-{
-    map<string, vector<double>> standardDeviationOfGroup;
-    map<string, double> grand_standard_deviation_mean;
-    vector<double> tmp;
-
-    //fill and calculate standard deviations all windows in data
-    for (const auto &map_pair : data)
-    {
-        for (int index = 0; index < sample_size; index += subgroup_size)
-        {
-            for (int j = 0; j < subgroup_size; j++)
-            {
-                if (index + j < sample_size)
-                {
-                    tmp.push_back(map_pair.second[index + j]);
-                }
-            }
-            standardDeviationOfGroup[map_pair.first].push_back(calcDeviationOfSubGroup(tmp));
-            tmp.clear();
-        }
-    }
-
-    grand_standard_deviation_mean = calcMultipleMeans(standardDeviationOfGroup);
-    for (const auto &map_pair : grand_standard_deviation_mean)
-    {
-        Cusum::sigmas[map_pair.first] = map_pair.second / correction_factor;
-    }
 }
 
 // calculate upper cummulative sum
@@ -190,16 +195,28 @@ map<string, double> Cusum::calcHigherSum(map<string, double> z)
 
 void Cusum::PrintCusum()
 {
+    cout << "------------------------------------------------" << endl;
+    
     cout << "LOWER SUM: " << endl;
     for (const auto &map_pair : S_Li)
     {
-        cout << map_pair.first << ": " << map_pair.second;
+        cout << map_pair.first << ": " << map_pair.second << " ";
     }
-    cout << endl << "HIGHER SUM: " << endl;
+    cout << endl;
+    cout << endl
+         << "HIGHER SUM: " << endl;
     for (const auto &map_pair : S_Hi)
     {
-        cout << map_pair.first << ": " << map_pair.second;
+        cout << map_pair.first << ": " << map_pair.second << " ";
     }
+    cout << endl;
+        cout << "HIGHER SUM PREV: " << endl;
+    for (const auto &map_pair : S_Li_prev)
+    {
+        cout << map_pair.first << ": " << map_pair.second << " ";
+    }
+    cout << endl; 
+    cout << "------------------------------------------------" << endl;
 }
 
 void Cusum::PrintUCL()
@@ -210,9 +227,54 @@ void Cusum::PrintUCL()
     }
 }
 
+void Cusum::PrintCorrectionFactor()
+{
+    cout << "-------CORRECTION FACTOR--------: " << endl;
+    cout << Cusum::correction_factor << endl;
+}
+
+void Cusum::PrintSigmas()
+{
+    cout << "---------SIGMAS----------: " << endl;
+    for (const auto &map_pair : Cusum::getSigmas())
+    {
+        cout << map_pair.first << ": " << map_pair.second << endl;
+    }
+}
+
+void Cusum::PrintTargetValues()
+{
+    cout << "-------TARGET VALUES--------: " << endl;
+    for (const auto &map_pair : Cusum::getTargetValues())
+    {
+        cout << map_pair.first << ": " << map_pair.second << endl;
+    }
+}
+
+void Cusum::PrintSampleSize()
+{
+    cout << "-------SAMPLE SIZE----------: " << endl;
+    cout << Cusum::sample_size << endl;
+}
+
+void Cusum::PrintSubGroupSize()
+{
+    cout << "-------SUBGROUP SIZE---------" << endl;
+    cout << Cusum::subgroup_size << endl;
+}
+
 void Cusum::PrintLCL()
 {
     for (const auto &map_pair : Cusum::getLCL())
+    {
+        cout << map_pair.first << ": " << map_pair.second << endl;
+    }
+}
+
+void Cusum::PrintGrandMeans(map<string, double> data)
+{
+    cout << "-------GRAND MEANS---------" << endl;
+    for (const auto &map_pair : data)
     {
         cout << map_pair.first << ": " << map_pair.second << endl;
     }
@@ -297,11 +359,13 @@ map<string, double> Cusum::getTargetValues()
 void Cusum::setSubGroupSize(int data)
 {
     Cusum::subgroup_size = data;
+    Cusum::PrintSubGroupSize();
 }
 
 void Cusum::setSampleSize(int data)
 {
     Cusum::sample_size = data;
+    Cusum::PrintSampleSize();
 }
 
 int Cusum::getSubGroupSize()
@@ -314,6 +378,7 @@ int Cusum::getSampleSize()
     return Cusum::sample_size;
 }
 
-double Cusum::getCorrectionFactor(){
+double Cusum::getCorrectionFactor()
+{
     return Cusum::correction_factor;
 }

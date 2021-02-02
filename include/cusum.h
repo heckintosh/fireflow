@@ -33,6 +33,10 @@ public:
     void PrintCusum();
     void PrintUCL();
     void PrintLCL();
+    void PrintSampleSize();
+    void PrintGrandMeans(map<string, double> data);
+    void PrintSubGroupSize();
+    void PrintCorrectionFactor();
     void setSubGroupSize(int size);
     void setSampleSize(int size);
     void _collectSamples(map<string, vector<double>> data);
