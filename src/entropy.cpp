@@ -23,7 +23,6 @@ map<string, vector<double>> EntropyCalc::getLatestEntropies()
 {
     _saveLatestEntropies();
     PrintLatestEntropies();
-    PrintFullEntropies();
     return EntropyCalc::latest_entropies;
 }
 

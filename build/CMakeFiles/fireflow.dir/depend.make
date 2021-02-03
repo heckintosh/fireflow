@@ -6,6 +6,7 @@ CMakeFiles/fireflow.dir/src/capture.cpp.o: ../include/cusum.h
 CMakeFiles/fireflow.dir/src/capture.cpp.o: ../include/detector.h
 CMakeFiles/fireflow.dir/src/capture.cpp.o: ../include/entropy.h
 CMakeFiles/fireflow.dir/src/capture.cpp.o: ../include/packet.h
+CMakeFiles/fireflow.dir/src/capture.cpp.o: ../include/parser.h
 CMakeFiles/fireflow.dir/src/capture.cpp.o: ../include/spdlog/common-inl.h
 CMakeFiles/fireflow.dir/src/capture.cpp.o: ../include/spdlog/common.h
 CMakeFiles/fireflow.dir/src/capture.cpp.o: ../include/spdlog/details/backtracer-inl.h
@@ -178,4 +179,8 @@ CMakeFiles/fireflow.dir/src/fireflow.cpp.o: ../src/fireflow.cpp
 CMakeFiles/fireflow.dir/src/mapping.cpp.o: ../include/mapping.h
 CMakeFiles/fireflow.dir/src/mapping.cpp.o: ../include/packet.h
 CMakeFiles/fireflow.dir/src/mapping.cpp.o: ../src/mapping.cpp
+
+CMakeFiles/fireflow.dir/src/parser.cpp.o: ../include/packet.h
+CMakeFiles/fireflow.dir/src/parser.cpp.o: ../include/parser.h
+CMakeFiles/fireflow.dir/src/parser.cpp.o: ../src/parser.cpp
 

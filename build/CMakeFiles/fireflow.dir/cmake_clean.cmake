@@ -5,6 +5,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/fireflow.dir/src/entropy.cpp.o"
   "CMakeFiles/fireflow.dir/src/fireflow.cpp.o"
   "CMakeFiles/fireflow.dir/src/mapping.cpp.o"
+  "CMakeFiles/fireflow.dir/src/parser.cpp.o"
   "fireflow.pdb"
   "fireflow"
 )

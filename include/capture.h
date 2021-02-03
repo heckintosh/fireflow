@@ -38,7 +38,7 @@ public:
     static void parsing_pfring_packet_sw(const struct pfring_pkthdr *header, const u_char *buffer);
     static void parsing_pfring_packet_oosw(const struct pfring_pkthdr *header, const u_char *buffer);
     static void execution_flow(const struct pfring_pkthdr &header, const u_char *buffer, int hasPkt);
-
+    static void log_packet(packet current_packet);
    // start_pfring_capture(): Choose an ethernet interface to capture, set sampling rate(?).
     void start_pfring_capture();
 

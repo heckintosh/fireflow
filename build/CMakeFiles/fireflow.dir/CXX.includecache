@@ -108,6 +108,12 @@ netinet/in.h
 sys/socket.h
 -
 
+../include/parser.h
+string
+-
+packet.h
+../include/packet.h
+
 ../include/spdlog/common-inl.h
 spdlog/common.h
 -
@@ -763,6 +769,10 @@ sys/socket.h
 -
 sys/types.h
 -
+sstream
+-
+parser.h
+/home/ubuntu/Tools/fireflow/src/parser.h
 packet.h
 /home/ubuntu/Tools/fireflow/src/packet.h
 entropy.h
@@ -853,4 +863,22 @@ spdlog/sinks/basic_file_sink.h
 /home/ubuntu/Tools/fireflow/src/mapping.cpp
 mapping.h
 /home/ubuntu/Tools/fireflow/src/mapping.h
+
+/home/ubuntu/Tools/fireflow/src/parser.cpp
+arpa/inet.h
+-
+netinet/in.h
+-
+iostream
+-
+sstream
+-
+vector
+-
+string
+-
+iterator
+-
+parser.h
+/home/ubuntu/Tools/fireflow/src/parser.h
 

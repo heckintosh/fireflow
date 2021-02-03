@@ -3,6 +3,8 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <sstream>
+#include "parser.h"
 #include "packet.h"
 #include "entropy.h"
 #include "capture.h"
@@ -247,6 +249,7 @@ packet Capture::parsing_pfring_packet(const struct pfring_pkthdr *header, const 
     {
         current_packet.flags = 0;
     }
+    log_packet(current_packet);
     return current_packet;
 }
 
@@ -255,3 +258,25 @@ void Capture::stop_pfring_capture()
 {
     pfring_breakloop(ring);
 }
+
+void Capture::log_packet(packet current_packet)
+{
+    string src_ip_as_string = ip_int_to_string(current_packet.src_ip);
+    string dst_ip_as_string = ip_int_to_string(current_packet.dst_ip);
+
+    // Defining the content to write to stdout/packet log file
+    #define writeContent    current_packet.packetCounter << " "                                             \
+                         << src_ip_as_string << " " << current_packet.src_port << " "                               \
+                         << dst_ip_as_string << " " << current_packet.dst_port << " "                               \
+                         << get_protocol(current_packet.protocol)  << " " << get_flags(current_packet.flags) << " "  \
+                         << current_packet.length                                                                   \
+                         << "\n"                                                                                    \
+
+    stringstream buffer;
+    buffer << writeContent;   
+
+    // Return the string
+    // Write to a stringstream buffer
+    spdlog::get("packet_logger")->info(buffer.str());   
+}
+

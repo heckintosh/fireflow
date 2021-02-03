@@ -285,6 +285,33 @@ src/mapping.cpp.s:
 	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/mapping.cpp.s
 .PHONY : src/mapping.cpp.s
 
+src/parser.o: src/parser.cpp.o
+
+.PHONY : src/parser.o
+
+# target to build an object file
+src/parser.cpp.o:
+	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/parser.cpp.o
+.PHONY : src/parser.cpp.o
+
+src/parser.i: src/parser.cpp.i
+
+.PHONY : src/parser.i
+
+# target to preprocess a source file
+src/parser.cpp.i:
+	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/parser.cpp.i
+.PHONY : src/parser.cpp.i
+
+src/parser.s: src/parser.cpp.s
+
+.PHONY : src/parser.s
+
+# target to generate assembly for a file
+src/parser.cpp.s:
+	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/parser.cpp.s
+.PHONY : src/parser.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -312,6 +339,9 @@ help:
 	@echo "... src/mapping.o"
 	@echo "... src/mapping.i"
 	@echo "... src/mapping.s"
+	@echo "... src/parser.o"
+	@echo "... src/parser.i"
+	@echo "... src/parser.s"
 .PHONY : help
 
 

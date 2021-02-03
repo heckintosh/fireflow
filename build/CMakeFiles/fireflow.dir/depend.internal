@@ -7,6 +7,7 @@ CMakeFiles/fireflow.dir/src/capture.cpp.o
  ../include/detector.h
  ../include/entropy.h
  ../include/packet.h
+ ../include/parser.h
  ../include/spdlog/common-inl.h
  ../include/spdlog/common.h
  ../include/spdlog/details/backtracer-inl.h
@@ -179,3 +180,7 @@ CMakeFiles/fireflow.dir/src/mapping.cpp.o
  ../include/mapping.h
  ../include/packet.h
  /home/ubuntu/Tools/fireflow/src/mapping.cpp
+CMakeFiles/fireflow.dir/src/parser.cpp.o
+ ../include/packet.h
+ ../include/parser.h
+ /home/ubuntu/Tools/fireflow/src/parser.cpp
