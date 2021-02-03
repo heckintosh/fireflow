@@ -29,6 +29,7 @@ public:
     map<string, double> calcMultiEntropy(map<string, map<uint, uint>> header_maps);
     map<string, vector<double>> GetFullEntropies();
     void PrintFullEntropies();
+    void PrintLatestEntropies();
     map<string, vector<double>> getLatestEntropies();
 };
 #endif

@@ -6,15 +6,24 @@
 #include <math.h>
 using namespace std;
 
-void EntropyCalc::_saveLatestEntropies(){
-    for (const auto &map_pair : entropies_of_headers){	    
-        for (int i = subgroup_size; i > 0; i--){	        
-            latest_entropies[map_pair.first].push_back(map_pair.second.back() - i);	        
+void EntropyCalc::_saveLatestEntropies()
+{
+    map<string, vector<double>> tmp;
+    for (const auto &map_pair : entropies_of_headers)
+    {
+        for (int i = subgroup_size; i > 0; i--)
+        {
+            tmp[map_pair.first].push_back(map_pair.second[map_pair.second.size() - i]);
         }
-    }	   
+    }
+    EntropyCalc::latest_entropies = tmp;
 }
 
-map<string, vector<double>> EntropyCalc::getLatestEntropies(){
+map<string, vector<double>> EntropyCalc::getLatestEntropies()
+{
+    _saveLatestEntropies();
+    PrintLatestEntropies();
+    PrintFullEntropies();
     return EntropyCalc::latest_entropies;
 }
 
@@ -31,7 +40,6 @@ void EntropyCalc::accumulate_subwindow_entropies(packet &current_packet)
     {
         entropies_of_headers[map_pair.first].push_back(map_pair.second);
     }
-    _saveLatestEntropies();
     p_vector.clear();
 }
 
@@ -99,7 +107,22 @@ vector<double> EntropyCalc::calcProb(map<uint, uint> header_value_counter)
 
 void EntropyCalc::PrintFullEntropies()
 {
+    cout << "-----------FULL ENTROPIES-----------------" << endl;
     for (const auto &map_pair : entropies_of_headers)
+    {
+        cout << map_pair.first << ": ";
+        for (const auto &entropy : map_pair.second)
+        {
+            cout << entropy << " ";
+        }
+        cout << endl;
+    }
+}
+
+void EntropyCalc::PrintLatestEntropies()
+{
+    cout << "-----------LATEST ENTROPIES-----------------" << endl;
+    for (const auto &map_pair : EntropyCalc::latest_entropies)
     {
         cout << map_pair.first << ": ";
         for (const auto &entropy : map_pair.second)

@@ -130,10 +130,12 @@ void Capture::execution_flow(const struct pfring_pkthdr &hdr, const u_char *buff
     auto current_t = chrono::steady_clock::now();
     bool entropyIsCalced = false;
     double duration;
+    double duration_window;
     double threshold_tracking;
     packet current_packet;
     static auto runtime = chrono::steady_clock::now();
     static auto subwindow_t = chrono::steady_clock::now();
+    static auto window_t = chrono::steady_clock::now();
     static uint packet_queue = 0;
     static EntropyCalc EntropyTask;
     static Cusum CusumTask;
@@ -147,9 +149,10 @@ void Capture::execution_flow(const struct pfring_pkthdr &hdr, const u_char *buff
 
     // track if the duration for collecting packets in a subwindow has ended yet
     duration = (chrono::duration_cast<chrono::microseconds>(current_t - subwindow_t).count()) / 1000000.0;
+    duration_window = (chrono::duration_cast<chrono::microseconds>(current_t - window_t).count()) / 1000000.0;
+        entropyIsCalced = false;
     if (duration < Capture::subwindow)
     {
-        entropyIsCalced = false;
         if (hasPkt == 1)
         {
             packet_queue += 1;
@@ -158,7 +161,7 @@ void Capture::execution_flow(const struct pfring_pkthdr &hdr, const u_char *buff
         };
     }
 
-    // if the duration for collecting for collecting packets has ended, start calculating entropies of that duration
+    // if the durat ion for collecting packets has ended, start calculating entropies of that duration
     if (duration >= Capture::subwindow)
     {
         if (packet_queue > 0)
@@ -175,9 +178,14 @@ void Capture::execution_flow(const struct pfring_pkthdr &hdr, const u_char *buff
         entropyIsCalced = true;
         subwindow_t = chrono::steady_clock::now();
     }
-    if (CusumTask.getThresholdStatus() == true && entropyIsCalced == true){
-        CusumTask.calc(EntropyTask.getLatestEntropies());
-        DetectorTask.judgeCusum(CusumTask);
+    if (CusumTask.getThresholdStatus() == true && entropyIsCalced == true)
+    {
+        if (duration_window >= Capture::window)
+        {
+            CusumTask.calc(EntropyTask.getLatestEntropies());
+            DetectorTask.judgeCusum(CusumTask);
+            window_t = chrono::steady_clock::now();
+        }
     }
     if (CusumTask.getThresholdStatus() == false && entropyIsCalced == true)
     {
