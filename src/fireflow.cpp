@@ -21,9 +21,9 @@ int main(int argc, char* argv[]){
     string debuglog = "/tmp/fireflow-log.txt";
     string packetlog = "/tmp/packet-log.txt";
     string cusumlog = "/tmp/cusum-log.txt";
-    double window = 10.0;                   //seconds
-    double subwindow = 5.0;
-    int estimator = 5;
+    double window = 100.0;                   //seconds
+    double subwindow = 10.0;
+    int estimator = 50;
     int max_sizelog = 1048576 * 10;
     int max_files = 3;
     app.add_option("-i,--interface", interface, "Capture interface")->required();
