@@ -41,7 +41,7 @@ int main(int argc, char* argv[]){
     auto packet_logger = spdlog::rotating_logger_mt("packet_logger", (*capture_interface).packetpath, (*capture_interface).max_sizelog, (*capture_interface).max_files);
     auto cusum_logger = spdlog::rotating_logger_mt("cusum_logger", cusumlog, (*capture_interface).max_sizelog, (*capture_interface).max_files);
     exec_logger->set_pattern("[%d/%m/%Y %T.%e] [%^%l%$] %v");
-    cusum_logger->set_pattern("%v");
+    cusum_logger->set_pattern("[%d/%m/%Y %T.%e] %v");
     packet_logger->set_pattern("[%d/%m/%Y %T.%e] %v");
     capture_interface->start_pfring_capture();
 }

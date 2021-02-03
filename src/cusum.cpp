@@ -245,7 +245,7 @@ void Cusum::_PrintLogCusum()
     for (const auto &map_pair : S_Li)
     {
         cout << map_pair.first << ": " << map_pair.second << " ";
-        spdlog::get("cusum_logger")->info("{} {} {} {}", Cusum::cusum_counter, map_pair.second, Cusum::S_Hi[map_pair.first], Cusum::total[map_pair.first]);
+        spdlog::get("cusum_logger")->info("{} {} {} {} {}", map_pair.first, Cusum::cusum_counter, map_pair.second, Cusum::S_Hi[map_pair.first], Cusum::total[map_pair.first]);
     }
     cout << endl;
 
