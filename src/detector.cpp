@@ -13,11 +13,11 @@ void Detector::judgeCusum(Cusum CusumTask)
     {
         if (Upper[map_pair.first] > map_pair.second)
         {
-            spdlog::get("exec_logger")->warn("UPPER IS LARGER THAN THRESHOLD: {}", map_pair.first);
+            spdlog::get("exec_logger")->warn("UPPER CUSUM IS LARGER THAN THRESHOLD: {} {}", map_pair.first, Upper[map_pair.first]);
         }
         if (Lower[map_pair.first] > map_pair.second)
         {
-            spdlog::get("exec_logger")->warn("LOWER IS LARGER THAN THRESHOLD: {}", map_pair.first);
+            spdlog::get("exec_logger")->warn("LOWER IS LARGER THAN THRESHOLD: {} {}", map_pair.first, Lower[map_pair.first]);
         }
     }
 }

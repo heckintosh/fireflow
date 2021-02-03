@@ -20,9 +20,10 @@ int main(int argc, char* argv[]){
     string interface = "ens33";
     string debuglog = "/tmp/fireflow-log.txt";
     string packetlog = "/tmp/packet-log.txt";
+    string cusumlog = "/tmp/cusum-log.txt";
     double window = 10.0;                   //seconds
     double subwindow = 5.0;
-    int estimator = 20;
+    int estimator = 5;
     int max_sizelog = 1048576 * 10;
     int max_files = 3;
     app.add_option("-i,--interface", interface, "Capture interface")->required();
@@ -38,8 +39,10 @@ int main(int argc, char* argv[]){
     capture_interface = new Capture(interface, debuglog, packetlog, window, subwindow, estimator, max_sizelog, max_files);
     auto exec_logger = spdlog::basic_logger_mt("exec_logger", (*capture_interface).debugpath);
     auto packet_logger = spdlog::rotating_logger_mt("packet_logger", (*capture_interface).packetpath, (*capture_interface).max_sizelog, (*capture_interface).max_files);
+    auto cusum_logger = spdlog::rotating_logger_mt("cusum_logger", cusumlog, (*capture_interface).max_sizelog, (*capture_interface).max_files);
     exec_logger->set_pattern("[%d/%m/%Y %T.%e] [%^%l%$] %v");
-    packet_logger->set_pattern("%v");
+    cusum_logger->set_pattern("%v");
+    packet_logger->set_pattern("[%d/%m/%Y %T.%e] %v");
     capture_interface->start_pfring_capture();
 }
 

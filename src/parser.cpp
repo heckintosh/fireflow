@@ -6,6 +6,7 @@
 #define TCP_URG_FLAG_SHIFT 6
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#include <sys/time.h>
 #include <iostream>
 #include <sstream>
 #include <vector>

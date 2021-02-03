@@ -7,6 +7,10 @@
 #include <math.h>
 #include "cusum.h"
 #include "capture.h"
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
+#include "spdlog/sinks/rotating_file_sink.h"
+#include "spdlog/sinks/basic_file_sink.h"
 void Cusum::setThreshold(map<string, vector<double>> samples)
 {
     if (Cusum::thresholdStatus == false)
@@ -19,6 +23,7 @@ void Cusum::setThreshold(map<string, vector<double>> samples)
         {
             S_Li_prev[map_pair.first] = 0.0;
             S_Hi_prev[map_pair.first] = 0.0;
+            Cusum::total[map_pair.first] = 0.0;
         }
         Cusum::calcPrevCusum(samples);
     }
@@ -62,11 +67,19 @@ void Cusum::_setStandardDeviations(map<string, vector<double>> data)
 void Cusum::calc(map<string, vector<double>> data)
 {
     map<string, double> means = calcMultipleMeans(data);
+    Cusum::cusum_counter += 1;
     Cusum::S_Li = calcLowerSum(means);
     Cusum::S_Hi = calcHigherSum(means);
-    _PrintCusum();
+    _calcTotal(means);
+    _PrintLogCusum();
     Cusum::S_Li_prev = Cusum::S_Li;
     Cusum::S_Hi_prev = Cusum::S_Hi;
+}
+
+void Cusum::_calcTotal(map<string,double> means){
+    for (auto &map_pair : Cusum::total){
+        map_pair.second += means[map_pair.first] - target_values[map_pair.first];
+    }
 }
 
 void Cusum::calcPrevCusum(map<string, vector<double>> data)
@@ -141,7 +154,7 @@ map<string, double> Cusum::calcLowerSum(map<string, double> z)
     map<string, double> tmp;
     for (const auto &map_pair : z)
     {
-        tmp[map_pair.first] = max(0.0, (-map_pair.second + S_Li_prev[map_pair.first] + target_values[map_pair.first] - k[map_pair.first]));
+        tmp[map_pair.first] = max(0.0, (S_Li_prev[map_pair.first] - map_pair.second + target_values[map_pair.first] - k[map_pair.first]));
     }
     return tmp;
 }
@@ -224,7 +237,7 @@ void Cusum::_setDelta(double detection_rate)
     Cusum::delta = detection_rate;
 }
 
-void Cusum::_PrintCusum()
+void Cusum::_PrintLogCusum()
 {
     cout << "------------------------------------------------" << endl;
 
@@ -232,6 +245,7 @@ void Cusum::_PrintCusum()
     for (const auto &map_pair : S_Li)
     {
         cout << map_pair.first << ": " << map_pair.second << " ";
+        spdlog::get("cusum_logger")->info("{} {} {} {}", Cusum::cusum_counter, map_pair.second, Cusum::S_Hi[map_pair.first], Cusum::total[map_pair.first]);
     }
     cout << endl;
 

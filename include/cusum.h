@@ -12,8 +12,10 @@ private:
     double beta;
     double delta;
     double d;
+    int cusum_counter = 0;
     int subgroup_size = 0;
     int sample_size = 0;
+    map<string, double> total;
     map<string, double> k;
     map<string, double> h;
     map<string, double> target_values;
@@ -28,13 +30,14 @@ private:
     void _setVMaskVar(double false_positive_rate, double false_negative_rate, double detection_rate);
     void _setTargetValues(map<string, vector<double>> data);
     void _setStandardDeviations(map<string, vector<double>> data);
+    void _calcTotal(map<string,double> means);
     void _setAlpha(double false_positive_rate);
     void _setBeta(double false_negative_rate);
     void _setDelta(double detection_rate);
     void _PrintTargetValues();
     void _PrintStandardDeviations();
     void _PrintControlLimits();
-    void _PrintCusum();
+    void _PrintLogCusum();
     void _PrintSampleSize();
     void _PrintSubGroupSize();
     void _PrintGrandMeans(map<string, double> data);

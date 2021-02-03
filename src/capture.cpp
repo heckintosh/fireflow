@@ -3,6 +3,7 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <sys/time.h>
 #include <sstream>
 #include "parser.h"
 #include "packet.h"
@@ -152,7 +153,7 @@ void Capture::execution_flow(const struct pfring_pkthdr &hdr, const u_char *buff
     // track if the duration for collecting packets in a subwindow has ended yet
     duration = (chrono::duration_cast<chrono::microseconds>(current_t - subwindow_t).count()) / 1000000.0;
     duration_window = (chrono::duration_cast<chrono::microseconds>(current_t - window_t).count()) / 1000000.0;
-        entropyIsCalced = false;
+    entropyIsCalced = false;
     if (duration < Capture::subwindow)
     {
         if (hasPkt == 1)
@@ -219,7 +220,7 @@ packet Capture::parsing_pfring_packet(const struct pfring_pkthdr *header, const 
 
     // Get packet IP version to our psuedo header
     current_packet.ip_protocol_version = header->extended_hdr.parsed_pkt.ip_version;
-    //current_packet.ts.tv_nsec = header->extended_hdr.timestamp_ns;
+    current_packet.ts = header->ts;
     // Get IPv4 source/dest to our psuedo header
     if (current_packet.ip_protocol_version == 4)
     {
@@ -231,7 +232,6 @@ packet Capture::parsing_pfring_packet(const struct pfring_pkthdr *header, const 
     // Get port to our psuedo header
     current_packet.src_port = header->extended_hdr.parsed_pkt.l4_src_port;
     current_packet.dst_port = header->extended_hdr.parsed_pkt.l4_dst_port;
-    current_packet.ts = header->ts;
     // We need this for deep packet inspection
     current_packet.packet_payload_length = header->len;
     current_packet.packet_payload_pointer = (void *)buffer;
@@ -263,20 +263,16 @@ void Capture::log_packet(packet current_packet)
 {
     string src_ip_as_string = ip_int_to_string(current_packet.src_ip);
     string dst_ip_as_string = ip_int_to_string(current_packet.dst_ip);
-
-    // Defining the content to write to stdout/packet log file
-    #define writeContent    current_packet.packetCounter << " "                                             \
-                         << src_ip_as_string << " " << current_packet.src_port << " "                               \
-                         << dst_ip_as_string << " " << current_packet.dst_port << " "                               \
-                         << get_protocol(current_packet.protocol)  << " " << get_flags(current_packet.flags) << " "  \
-                         << current_packet.length                                                                   \
-                         << "\n"                                                                                    \
-
+// Defining the content to write to stdout/packet log file
+#define writeContent current_packet.packetCounter << " "                                                                                    \
+                                                  << src_ip_as_string << " " << current_packet.src_port << " "                              \
+                                                  << dst_ip_as_string << " " << current_packet.dst_port << " "                              \
+                                                  << get_protocol(current_packet.protocol) << " " << get_flags(current_packet.flags) << " " \
+                                                  << current_packet.length
     stringstream buffer;
-    buffer << writeContent;   
+    buffer << writeContent;
 
     // Return the string
     // Write to a stringstream buffer
-    spdlog::get("packet_logger")->info(buffer.str());   
+    spdlog::get("packet_logger")->info(buffer.str());
 }
-
