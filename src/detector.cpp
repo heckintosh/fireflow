@@ -11,13 +11,13 @@ void Detector::judgeCusum(Cusum CusumTask)
     map<string, double> Bound = CusumTask.getControlLimit();
     for (const auto &map_pair : Bound)
     {
-        if (Upper[map_pair.first] > map_pair.second)
+        if (Upper[map_pair.first] > CusumTask.getTargetValues()[map_pair.first] + map_pair.second)
         {
-            spdlog::get("exec_logger")->warn("UPPER CUSUM IS LARGER THAN THRESHOLD: {} {}", map_pair.first, Upper[map_pair.first]);
+            spdlog::get("exec_logger")->warn("UP SIDE CUSUM IS LARGER THAN UCL: {} {}", map_pair.first, Upper[map_pair.first]);
         }
-        if (Lower[map_pair.first] > map_pair.second)
+        if (Lower[map_pair.first] < CusumTask.getTargetValues()[map_pair.first] - map_pair.second)
         {
-            spdlog::get("exec_logger")->warn("LOWER IS LARGER THAN THRESHOLD: {} {}", map_pair.first, Lower[map_pair.first]);
+            spdlog::get("exec_logger")->warn("LOW SIDE CUSUM IS SMALLER THAN LCL : {} {}", map_pair.first, Lower[map_pair.first]);
         }
     }
 }

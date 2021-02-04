@@ -17,8 +17,7 @@ void Cusum::setThreshold(map<string, vector<double>> samples)
     {
         Cusum::thresholdStatus = true;
         _setTargetValues(samples);
-        _setStandardDeviations(samples);
-        _setVMaskVar(0.0027, 0.0001, 1);
+        _setTabularVar(samples);
         for (const auto &map_pair : samples)
         {
             S_Li_prev[map_pair.first] = 0.0;
@@ -32,6 +31,17 @@ void Cusum::setThreshold(map<string, vector<double>> samples)
         cout << "The Cusum Threshold has already been set. Check for errors in code." << endl;
         exit(1);
     }
+}
+
+void Cusum::_setTabularVar(map<string, vector<double>> data){
+    _setCorrectionFactor(Cusum::subgroup_size);
+    _setStandardDeviationsTabular(data);
+    for (const auto &map_pair : Cusum::stdevs)
+    {
+        Cusum::k[map_pair.first] = map_pair.second / 2;
+        Cusum::h[map_pair.first] = map_pair.second * 4;
+    }
+    _PrintControlLimits();
 }
 
 void Cusum::_setVMaskVar(double false_positive_rate, double false_negative_rate, double detection_rate)
@@ -51,15 +61,44 @@ void Cusum::_setVMaskVar(double false_positive_rate, double false_negative_rate,
     _PrintControlLimits();
 }
 
-void Cusum::_setStandardDeviations(map<string, vector<double>> data)
+void Cusum::_setStandardDeviationsTabular(map<string, vector<double>> data)
 {
-    map<string, double> standardDeviations;
+    map<string, vector<double>> standardDeviationOfGroup;
+    map<string, double> grand_standard_deviation_mean;
+    vector<double> tmp;
+
     //fill and calculate standard deviations all windows in data
     for (const auto &map_pair : data)
     {
-        Cusum::stdevs[map_pair.first] = calcDeviation(map_pair.second) / pow(Cusum::subgroup_size, 0.5);
+        for (int index = 0; index < sample_size; index += subgroup_size)
+        {
+            for (int j = 0; j < subgroup_size; j++)
+            {
+                if (index + j < sample_size)
+                {
+                    tmp.push_back(map_pair.second[index + j]);
+                }
+            }
+            standardDeviationOfGroup[map_pair.first].push_back(calcDeviation(tmp));
+            tmp.clear();
+        }
+    }
+
+    grand_standard_deviation_mean = calcMultipleMeans(standardDeviationOfGroup);
+    for (const auto &map_pair : grand_standard_deviation_mean)
+    {
+        Cusum::stdevs[map_pair.first] = map_pair.second / correction_factor;
     }
     _PrintStandardDeviations();
+}
+
+
+
+void Cusum::_setCorrectionFactor(int n)
+{
+    double tmp = n;
+    Cusum::correction_factor = sqrt(2 / (tmp - 1)) * (tgamma((double)tmp / 2) / tgamma((double)(tmp - 1) / 2));
+    Cusum::_PrintCorrectionFactor();
 }
 
 // Calculate and return Cusum values for detection and plotting
@@ -154,7 +193,7 @@ map<string, double> Cusum::calcLowerSum(map<string, double> z)
     map<string, double> tmp;
     for (const auto &map_pair : z)
     {
-        tmp[map_pair.first] = max(0.0, (S_Li_prev[map_pair.first] - map_pair.second + target_values[map_pair.first] - k[map_pair.first]));
+        tmp[map_pair.first] = min(0.0, (S_Li_prev[map_pair.first] + map_pair.second - target_values[map_pair.first] + k[map_pair.first]));
     }
     return tmp;
 }
@@ -245,7 +284,7 @@ void Cusum::_PrintLogCusum()
     for (const auto &map_pair : S_Li)
     {
         cout << map_pair.first << ": " << map_pair.second << " ";
-        spdlog::get("cusum_logger")->info("{} {} {} {} {}", map_pair.first, Cusum::cusum_counter, map_pair.second, Cusum::S_Hi[map_pair.first], Cusum::total[map_pair.first]);
+        spdlog::get("cusum_logger")->info("{} {} {} {} {}", map_pair.first,Cusum::cusum_counter, map_pair.second, Cusum::S_Hi[map_pair.first], Cusum::total[map_pair.first]);
     }
     cout << endl;
 
@@ -271,6 +310,12 @@ void Cusum::_PrintLogCusum()
     cout << endl;
     cout << endl;
     cout << "------------------------------------------------" << endl;
+}
+
+void Cusum::_PrintCorrectionFactor()
+{
+    cout << "-------CORRECTION FACTOR--------: " << endl;
+    cout << Cusum::correction_factor << endl;
 }
 
 void Cusum::_PrintStandardDeviations()
@@ -319,4 +364,15 @@ void Cusum::_PrintControlLimits()
     {
         cout << map_pair.first << ": " << map_pair.second << endl;
     }
+}
+
+void Cusum::_setStandardDeviationsVMask(map<string, vector<double>> data)
+{
+    map<string, double> standardDeviations;
+    //fill and calculate standard deviations all windows in data
+    for (const auto &map_pair : data)
+    {
+        Cusum::stdevs[map_pair.first] = calcDeviation(map_pair.second) / pow(Cusum::subgroup_size, 0.5);
+    }
+    _PrintStandardDeviations();
 }

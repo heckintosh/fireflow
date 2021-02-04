@@ -84,7 +84,7 @@ double EntropyCalc::calcEntropy(vector<double> probability)
             total += -(p * log(p));
         }
     }
-    return total;
+    return total / log(size);
 };
 
 // given a dictionary which contains {header_value : the number of times a header value appear)
