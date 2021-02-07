@@ -39,24 +39,7 @@ void Cusum::_setTabularVar(map<string, vector<double>> data){
     for (const auto &map_pair : Cusum::stdevs)
     {
         Cusum::k[map_pair.first] = map_pair.second / 2;
-        Cusum::h[map_pair.first] = map_pair.second * 4;
-    }
-    _PrintControlLimits();
-}
-
-void Cusum::_setVMaskVar(double false_positive_rate, double false_negative_rate, double detection_rate)
-{
-    _setAlpha(false_positive_rate);
-    _setBeta(false_negative_rate);
-    _setDelta(detection_rate);
-    for (const auto &map_pair : Cusum::stdevs)
-    {
-        Cusum::k[map_pair.first] = (map_pair.second * delta) / 2;
-    }
-    Cusum::d = 2 / (pow(Cusum::delta, 2)) * log((1 - Cusum::beta) / (Cusum::alpha));
-    for (const auto &map_pair : Cusum::k)
-    {
-        Cusum::h[map_pair.first] = map_pair.second * Cusum::d;
+        Cusum::h[map_pair.first] = map_pair.second * 4.77;
     }
     _PrintControlLimits();
 }
@@ -106,13 +89,43 @@ void Cusum::_setCorrectionFactor(int n)
 void Cusum::calc(map<string, vector<double>> data)
 {
     map<string, double> means = calcMultipleMeans(data);
-    Cusum::cusum_counter += 1;
+    Cusum::sample_counter += 1;
     Cusum::S_Li = calcLowerSum(means);
     Cusum::S_Hi = calcHigherSum(means);
     _calcTotal(means);
+    _shiftCounter();
     _PrintLogCusum();
     Cusum::S_Li_prev = Cusum::S_Li;
     Cusum::S_Hi_prev = Cusum::S_Hi;
+}
+
+void Cusum::_shiftCounter(){
+    for (const auto &map_pair : Cusum::S_Li){
+        if (Cusum::S_Li[map_pair.first] < 0){
+            Cusum::ShiftL_counter[map_pair.first] += 1;
+        }
+        else{
+            Cusum::ShiftL_counter[map_pair.first] = 0;
+        }
+        if (Cusum::S_Hi[map_pair.first] < 0){
+            Cusum::ShiftH_counter[map_pair.first] += 1;
+        }
+        else{
+            Cusum::ShiftH_counter[map_pair.first] = 0;
+        }
+    }
+}
+
+void Cusum::reset(){
+    for (const auto &map_pair : Cusum::S_Li){
+        Cusum::S_Li[map_pair.first] = 0;
+        Cusum::S_Hi[map_pair.first] = 0;
+        Cusum::S_Li_prev[map_pair.first] = 0;
+        Cusum::S_Hi_prev[map_pair.first] = 0;
+        Cusum::ShiftH_counter[map_pair.first] = 0;
+        Cusum::ShiftL_counter[map_pair.first] = 0;
+        Cusum::total[map_pair.first] = 0;
+    }
 }
 
 void Cusum::_calcTotal(map<string,double> means){
@@ -219,10 +232,23 @@ map<string, double> Cusum::getControlLimit()
     return Cusum::h;
 }
 
+int Cusum::getSampleCounter(){
+    return Cusum::sample_counter;
+}
+
 map<string, double> Cusum::getUpperCusum()
 {
     return Cusum::S_Hi;
 }
+
+map<string, int> Cusum::getShiftCounterUpper(){
+    return Cusum::ShiftH_counter;
+}
+
+map<string, int> Cusum::getShiftCounterLower(){
+    return Cusum::ShiftL_counter;
+}
+
 
 map<string, double> Cusum::getLowerCusum()
 {
@@ -284,7 +310,7 @@ void Cusum::_PrintLogCusum()
     for (const auto &map_pair : S_Li)
     {
         cout << map_pair.first << ": " << map_pair.second << " ";
-        spdlog::get("cusum_logger")->info("{} {} {} {} {}", map_pair.first,Cusum::cusum_counter, map_pair.second, Cusum::S_Hi[map_pair.first], Cusum::total[map_pair.first]);
+        spdlog::get("cusum_logger")->info("{} {} {} {} {}", map_pair.first,Cusum::sample_counter, map_pair.second, Cusum::S_Hi[map_pair.first], Cusum::total[map_pair.first]);
     }
     cout << endl;
 
