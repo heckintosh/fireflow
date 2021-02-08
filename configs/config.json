@@ -1,8 +1,8 @@
 {
   "interface": "ens33",
-  "window": 30.0,
-  "subwindow": 10.0,
-  "estimator": 4,
+  "window": 60.0,
+  "subwindow": 20.0,
+  "estimator": 2,
   "max_sizelog": 10485760,
   "max_files": 3,
   "debugpath": "../logs/fireflow.log",
