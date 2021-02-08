@@ -49,7 +49,7 @@ private:
 
 public:
     void setThreshold(map<string, vector<double>> entropies);
-    void reset();
+    void reset(string LiOrHi, string header2reset);
     void calc(map<string, vector<double>> data);
     bool getThresholdStatus();
     void setSubGroupSize(int size);

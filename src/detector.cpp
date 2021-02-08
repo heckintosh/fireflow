@@ -16,14 +16,15 @@ void Detector::judgeCusum(Cusum CusumTask)
             spdlog::get("exec_logger")->warn("UP SIDE CUSUM IS LARGER THAN UCL: {} {}", map_pair.first, Upper[map_pair.first]);
             spdlog::get("exec_logger")->warn("DETECTED AT {}th SAMPLE", CusumTask.getSampleCounter());
             spdlog::get("exec_logger")->warn("THE DDOS ATTACK IS GUESSED TO HAVE STARTED AT SAMPLE: {}", CusumTask.getSampleCounter() - CusumTask.getShiftCounterUpper()[map_pair.first]);
+            CusumTask.reset("Upper", map_pair.first);
         }
         if (Lower[map_pair.first] < CusumTask.getTargetValues()[map_pair.first] - map_pair.second)
         {
             spdlog::get("exec_logger")->warn("LOW SIDE CUSUM IS SMALLER THAN LCL : {} {}", map_pair.first, Lower[map_pair.first]);
             spdlog::get("exec_logger")->warn("DETECTED AT {}th SAMPLE", CusumTask.getSampleCounter());
             spdlog::get("exec_logger")->warn("THE DDOS ATTACK IS GUESSED TO HAVE STARTED AT SAMPLE: {}", CusumTask.getSampleCounter() - CusumTask.getShiftCounterLower()[map_pair.first]);
+            CusumTask.reset("Lower", map_pair.first);
         }
     }
     spdlog::get("exec_logger")->info("CUSUM VALUE IS RESETTED");
-    CusumTask.reset();
 }

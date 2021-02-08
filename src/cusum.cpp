@@ -116,15 +116,20 @@ void Cusum::_shiftCounter(){
     }
 }
 
-void Cusum::reset(){
-    for (const auto &map_pair : Cusum::S_Li){
-        Cusum::S_Li[map_pair.first] = 0;
+void Cusum::reset(string LiOrHi, string header2reset){
+    if (LiOrHi == "Li"){
+            Cusum::S_Li[header2reset] = 0;
+            Cusum::S_Li_prev[header2reset] = 0;
+            Cusum::total[header2reset] = 0;
+            Cusum::ShiftL_counter[header2reset] = 0;
+        }
+    }
+    else if (LiOrHi == "Hi"){
         Cusum::S_Hi[map_pair.first] = 0;
-        Cusum::S_Li_prev[map_pair.first] = 0;
         Cusum::S_Hi_prev[map_pair.first] = 0;
         Cusum::ShiftH_counter[map_pair.first] = 0;
-        Cusum::ShiftL_counter[map_pair.first] = 0;
-        Cusum::total[map_pair.first] = 0;
+    }
+        
     }
 }
 
