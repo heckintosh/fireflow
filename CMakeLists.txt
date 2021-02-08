@@ -5,7 +5,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
  
 # Locate GTest
-find_package(GTest REQUIRED)
 
 #Link fireflow_test with what we want to test
 
