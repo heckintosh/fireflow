@@ -1,0 +1,12 @@
+[08/02/2021 21:01:34.956] [info] ------Fireflow v1.0 execution logger----
+[08/02/2021 21:01:34.956] [info] PF_RING plugin started
+[08/02/2021 21:01:34.956] [info] We selected interface: ens33
+[08/02/2021 21:01:34.977] [info] Successully binded to: ens33
+[08/02/2021 21:01:34.977] [info] Device RX channels number: 1
+[08/02/2021 21:01:34.977] [info] Using PF_RING v.7.8.0
+[08/02/2021 22:23:00.873] [info] ------Fireflow v1.0 execution logger----
+[08/02/2021 22:23:00.873] [info] PF_RING plugin started
+[08/02/2021 22:23:00.873] [info] We selected interface: ens33
+[08/02/2021 22:23:00.912] [info] Successully binded to: ens33
+[08/02/2021 22:23:00.912] [info] Device RX channels number: 1
+[08/02/2021 22:23:00.912] [info] Using PF_RING v.7.8.0

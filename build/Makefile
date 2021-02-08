@@ -150,60 +150,6 @@ src/capture.cpp.s:
 	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/capture.cpp.s
 .PHONY : src/capture.cpp.s
 
-src/cusum.o: src/cusum.cpp.o
-
-.PHONY : src/cusum.o
-
-# target to build an object file
-src/cusum.cpp.o:
-	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/cusum.cpp.o
-.PHONY : src/cusum.cpp.o
-
-src/cusum.i: src/cusum.cpp.i
-
-.PHONY : src/cusum.i
-
-# target to preprocess a source file
-src/cusum.cpp.i:
-	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/cusum.cpp.i
-.PHONY : src/cusum.cpp.i
-
-src/cusum.s: src/cusum.cpp.s
-
-.PHONY : src/cusum.s
-
-# target to generate assembly for a file
-src/cusum.cpp.s:
-	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/cusum.cpp.s
-.PHONY : src/cusum.cpp.s
-
-src/detector.o: src/detector.cpp.o
-
-.PHONY : src/detector.o
-
-# target to build an object file
-src/detector.cpp.o:
-	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/detector.cpp.o
-.PHONY : src/detector.cpp.o
-
-src/detector.i: src/detector.cpp.i
-
-.PHONY : src/detector.i
-
-# target to preprocess a source file
-src/detector.cpp.i:
-	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/detector.cpp.i
-.PHONY : src/detector.cpp.i
-
-src/detector.s: src/detector.cpp.s
-
-.PHONY : src/detector.s
-
-# target to generate assembly for a file
-src/detector.cpp.s:
-	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/detector.cpp.s
-.PHONY : src/detector.cpp.s
-
 src/entropy.o: src/entropy.cpp.o
 
 .PHONY : src/entropy.o
@@ -324,12 +270,6 @@ help:
 	@echo "... src/capture.o"
 	@echo "... src/capture.i"
 	@echo "... src/capture.s"
-	@echo "... src/cusum.o"
-	@echo "... src/cusum.i"
-	@echo "... src/cusum.s"
-	@echo "... src/detector.o"
-	@echo "... src/detector.i"
-	@echo "... src/detector.s"
 	@echo "... src/entropy.o"
 	@echo "... src/entropy.i"
 	@echo "... src/entropy.s"

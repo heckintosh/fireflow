@@ -1,0 +1,12 @@
+{
+  "interface": "ens33",
+  "window": 30.0,
+  "subwindow": 10.0,
+  "estimator": 4,
+  "max_sizelog": 10485760,
+  "max_files": 3,
+  "debugpath": "../logs/fireflow.log",
+  "packetpath": "../logs/packet.log",
+  "cusumpath": "../logs/cusum.log",
+  "substatpath": "../logs/substat.log"
+}

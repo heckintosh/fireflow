@@ -1,7 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/fireflow.dir/src/capture.cpp.o"
-  "CMakeFiles/fireflow.dir/src/cusum.cpp.o"
-  "CMakeFiles/fireflow.dir/src/detector.cpp.o"
   "CMakeFiles/fireflow.dir/src/entropy.cpp.o"
   "CMakeFiles/fireflow.dir/src/fireflow.cpp.o"
   "CMakeFiles/fireflow.dir/src/mapping.cpp.o"

@@ -81,57 +81,9 @@ CMakeFiles/fireflow.dir/src/capture.cpp.o.provides: CMakeFiles/fireflow.dir/src/
 CMakeFiles/fireflow.dir/src/capture.cpp.o.provides.build: CMakeFiles/fireflow.dir/src/capture.cpp.o
 
 
-CMakeFiles/fireflow.dir/src/cusum.cpp.o: CMakeFiles/fireflow.dir/flags.make
-CMakeFiles/fireflow.dir/src/cusum.cpp.o: ../src/cusum.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Tools/fireflow/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/fireflow.dir/src/cusum.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/fireflow.dir/src/cusum.cpp.o -c /home/ubuntu/Tools/fireflow/src/cusum.cpp
-
-CMakeFiles/fireflow.dir/src/cusum.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/fireflow.dir/src/cusum.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ubuntu/Tools/fireflow/src/cusum.cpp > CMakeFiles/fireflow.dir/src/cusum.cpp.i
-
-CMakeFiles/fireflow.dir/src/cusum.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/fireflow.dir/src/cusum.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ubuntu/Tools/fireflow/src/cusum.cpp -o CMakeFiles/fireflow.dir/src/cusum.cpp.s
-
-CMakeFiles/fireflow.dir/src/cusum.cpp.o.requires:
-
-.PHONY : CMakeFiles/fireflow.dir/src/cusum.cpp.o.requires
-
-CMakeFiles/fireflow.dir/src/cusum.cpp.o.provides: CMakeFiles/fireflow.dir/src/cusum.cpp.o.requires
-	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/cusum.cpp.o.provides.build
-.PHONY : CMakeFiles/fireflow.dir/src/cusum.cpp.o.provides
-
-CMakeFiles/fireflow.dir/src/cusum.cpp.o.provides.build: CMakeFiles/fireflow.dir/src/cusum.cpp.o
-
-
-CMakeFiles/fireflow.dir/src/detector.cpp.o: CMakeFiles/fireflow.dir/flags.make
-CMakeFiles/fireflow.dir/src/detector.cpp.o: ../src/detector.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Tools/fireflow/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/fireflow.dir/src/detector.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/fireflow.dir/src/detector.cpp.o -c /home/ubuntu/Tools/fireflow/src/detector.cpp
-
-CMakeFiles/fireflow.dir/src/detector.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/fireflow.dir/src/detector.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ubuntu/Tools/fireflow/src/detector.cpp > CMakeFiles/fireflow.dir/src/detector.cpp.i
-
-CMakeFiles/fireflow.dir/src/detector.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/fireflow.dir/src/detector.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ubuntu/Tools/fireflow/src/detector.cpp -o CMakeFiles/fireflow.dir/src/detector.cpp.s
-
-CMakeFiles/fireflow.dir/src/detector.cpp.o.requires:
-
-.PHONY : CMakeFiles/fireflow.dir/src/detector.cpp.o.requires
-
-CMakeFiles/fireflow.dir/src/detector.cpp.o.provides: CMakeFiles/fireflow.dir/src/detector.cpp.o.requires
-	$(MAKE) -f CMakeFiles/fireflow.dir/build.make CMakeFiles/fireflow.dir/src/detector.cpp.o.provides.build
-.PHONY : CMakeFiles/fireflow.dir/src/detector.cpp.o.provides
-
-CMakeFiles/fireflow.dir/src/detector.cpp.o.provides.build: CMakeFiles/fireflow.dir/src/detector.cpp.o
-
-
 CMakeFiles/fireflow.dir/src/entropy.cpp.o: CMakeFiles/fireflow.dir/flags.make
 CMakeFiles/fireflow.dir/src/entropy.cpp.o: ../src/entropy.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Tools/fireflow/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/fireflow.dir/src/entropy.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Tools/fireflow/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/fireflow.dir/src/entropy.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/fireflow.dir/src/entropy.cpp.o -c /home/ubuntu/Tools/fireflow/src/entropy.cpp
 
 CMakeFiles/fireflow.dir/src/entropy.cpp.i: cmake_force
@@ -155,7 +107,7 @@ CMakeFiles/fireflow.dir/src/entropy.cpp.o.provides.build: CMakeFiles/fireflow.di
 
 CMakeFiles/fireflow.dir/src/fireflow.cpp.o: CMakeFiles/fireflow.dir/flags.make
 CMakeFiles/fireflow.dir/src/fireflow.cpp.o: ../src/fireflow.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Tools/fireflow/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/fireflow.dir/src/fireflow.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Tools/fireflow/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/fireflow.dir/src/fireflow.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/fireflow.dir/src/fireflow.cpp.o -c /home/ubuntu/Tools/fireflow/src/fireflow.cpp
 
 CMakeFiles/fireflow.dir/src/fireflow.cpp.i: cmake_force
@@ -179,7 +131,7 @@ CMakeFiles/fireflow.dir/src/fireflow.cpp.o.provides.build: CMakeFiles/fireflow.d
 
 CMakeFiles/fireflow.dir/src/mapping.cpp.o: CMakeFiles/fireflow.dir/flags.make
 CMakeFiles/fireflow.dir/src/mapping.cpp.o: ../src/mapping.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Tools/fireflow/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/fireflow.dir/src/mapping.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Tools/fireflow/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/fireflow.dir/src/mapping.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/fireflow.dir/src/mapping.cpp.o -c /home/ubuntu/Tools/fireflow/src/mapping.cpp
 
 CMakeFiles/fireflow.dir/src/mapping.cpp.i: cmake_force
@@ -203,7 +155,7 @@ CMakeFiles/fireflow.dir/src/mapping.cpp.o.provides.build: CMakeFiles/fireflow.di
 
 CMakeFiles/fireflow.dir/src/parser.cpp.o: CMakeFiles/fireflow.dir/flags.make
 CMakeFiles/fireflow.dir/src/parser.cpp.o: ../src/parser.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Tools/fireflow/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/fireflow.dir/src/parser.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/Tools/fireflow/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/fireflow.dir/src/parser.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/fireflow.dir/src/parser.cpp.o -c /home/ubuntu/Tools/fireflow/src/parser.cpp
 
 CMakeFiles/fireflow.dir/src/parser.cpp.i: cmake_force
@@ -228,8 +180,6 @@ CMakeFiles/fireflow.dir/src/parser.cpp.o.provides.build: CMakeFiles/fireflow.dir
 # Object files for target fireflow
 fireflow_OBJECTS = \
 "CMakeFiles/fireflow.dir/src/capture.cpp.o" \
-"CMakeFiles/fireflow.dir/src/cusum.cpp.o" \
-"CMakeFiles/fireflow.dir/src/detector.cpp.o" \
 "CMakeFiles/fireflow.dir/src/entropy.cpp.o" \
 "CMakeFiles/fireflow.dir/src/fireflow.cpp.o" \
 "CMakeFiles/fireflow.dir/src/mapping.cpp.o" \
@@ -239,15 +189,13 @@ fireflow_OBJECTS = \
 fireflow_EXTERNAL_OBJECTS =
 
 fireflow: CMakeFiles/fireflow.dir/src/capture.cpp.o
-fireflow: CMakeFiles/fireflow.dir/src/cusum.cpp.o
-fireflow: CMakeFiles/fireflow.dir/src/detector.cpp.o
 fireflow: CMakeFiles/fireflow.dir/src/entropy.cpp.o
 fireflow: CMakeFiles/fireflow.dir/src/fireflow.cpp.o
 fireflow: CMakeFiles/fireflow.dir/src/mapping.cpp.o
 fireflow: CMakeFiles/fireflow.dir/src/parser.cpp.o
 fireflow: CMakeFiles/fireflow.dir/build.make
 fireflow: CMakeFiles/fireflow.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ubuntu/Tools/fireflow/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable fireflow"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ubuntu/Tools/fireflow/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable fireflow"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/fireflow.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -256,8 +204,6 @@ CMakeFiles/fireflow.dir/build: fireflow
 .PHONY : CMakeFiles/fireflow.dir/build
 
 CMakeFiles/fireflow.dir/requires: CMakeFiles/fireflow.dir/src/capture.cpp.o.requires
-CMakeFiles/fireflow.dir/requires: CMakeFiles/fireflow.dir/src/cusum.cpp.o.requires
-CMakeFiles/fireflow.dir/requires: CMakeFiles/fireflow.dir/src/detector.cpp.o.requires
 CMakeFiles/fireflow.dir/requires: CMakeFiles/fireflow.dir/src/entropy.cpp.o.requires
 CMakeFiles/fireflow.dir/requires: CMakeFiles/fireflow.dir/src/fireflow.cpp.o.requires
 CMakeFiles/fireflow.dir/requires: CMakeFiles/fireflow.dir/src/mapping.cpp.o.requires

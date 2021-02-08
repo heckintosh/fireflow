@@ -28,7 +28,7 @@ string ip_int_to_string(uint32_t ip_as_integer)
 }
 
 // extract_bit_value(): Get the value of nth bit of an 8-bit variable.
-int extract_bit_value(uint8_t num, int bit)
+int extract_bit_value(uint num, int bit)
 {
     if (bit > 0 && bit <= 8)
         return ((num >> (bit - 1)) & 1);
@@ -37,7 +37,7 @@ int extract_bit_value(uint8_t num, int bit)
 }
 
 // get_flags(): Get values of a TCP flag in string format: example: "RST, ACK"
-string get_flags(uint8_t flag)
+string get_flags(uint flag)
 {
 
     if (flag == 0)
@@ -70,7 +70,7 @@ string get_flags(uint8_t flag)
 }
 
 // get_protocol(): Get protocol of the packet.
-string get_protocol(uint8_t protocol)
+string get_protocol(uint protocol)
 {
     if (protocol == IPPROTO_ICMP)
         return "ICMP";
@@ -83,7 +83,7 @@ string get_protocol(uint8_t protocol)
 }
 
 // print_binary(): Print the binary representations of the flags.
-uint8_t print_binary(uint8_t flags)
+uint print_flags(uint flags)
 {
 
     // 0     0     0     0     0      0     0         0
