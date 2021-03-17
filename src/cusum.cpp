@@ -47,13 +47,14 @@ void Cusum::setThreshold(int subsize, int samplesize, map<string, vector<double>
         }
         Cusum::_calcPrevCusum(samples);
         spdlog::get("exec_logger")->info("Threshold is reached and set.");
+        cout << "Threshold is set." << endl;
     }
     else if (Cusum::thresholdStatus == true)
     {
         cout << "The Cusum Threshold has already been set. The setThreshold function should not be called if its already set." << endl;
         exit(1);
     }
-    Cusum::_logCusum(Cusum::cusumTable, "threshold_logger");
+    Cusum::logCusum(Cusum::cusumTable, "threshold_logger");
 }
 
 // Loop through each samples before the threshold point, calculate Cusum for each windows
@@ -99,10 +100,6 @@ void Cusum::calc(map<string, vector<double>> data)
     Cusum::S_Li_prev = Cusum::S_Li;
     Cusum::S_Hi_prev = Cusum::S_Hi;
     updateCusumTable(Cusum::cusumTable, Cusum::subgroup_counter, Cusum::S_Li, Cusum::S_Hi);
-    if (Cusum::thresholdStatus == true)
-    {
-        Cusum::_logCusum(Cusum::cusumTable, "cusum_logger");
-    }
 }
 
 void Cusum::_setStandardDeviationsTabular(map<string, vector<double>> data)
@@ -224,7 +221,7 @@ void Cusum::_setTabularVar(map<string, vector<double>> data)
     for (const auto &map_pair : Cusum::stdevs)
     {
         Cusum::k[map_pair.first] = map_pair.second / 2;
-        Cusum::h[map_pair.first] = map_pair.second * 4.77;
+        Cusum::h[map_pair.first] = map_pair.second * 5.7;
     }
 }
 
@@ -276,7 +273,7 @@ void Cusum::updateCusumTable(map<string, Table> &cusumTable, int index, map<stri
 }
 
 // Function for logging sum values
-void Cusum::_logCusum(map<string, Table> cusumTable, string loggername)
+void Cusum::logCusum(map<string, Table> cusumTable, string loggername)
 {
     std::stringstream ss;
     //Only loop through the lowerSum keys, because both have the same keys

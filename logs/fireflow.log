@@ -1,19 +1,19 @@
-[17/03/2021 22:24:35.572] [info] ------Fireflow v1.0 execution logger----
-[17/03/2021 22:24:35.572] [info] PF_RING plugin started
-[17/03/2021 22:24:35.572] [info] We selected interface: ens33
-[17/03/2021 22:24:35.603] [info] Successully binded to: ens33
-[17/03/2021 22:24:35.603] [info] Device RX channels number: 1
-[17/03/2021 22:24:35.603] [info] Using PF_RING v.7.8.0
-[17/03/2021 22:32:55.607] [info] Threshold is going to be set now.
-[17/03/2021 22:32:55.608] [info] SAMPLE SIZE FOR THIS THRESHOLD: 50
-[17/03/2021 22:32:55.608] [info] Target values of flags: 1.3896347434494476
-[17/03/2021 22:32:55.608] [info] Target values of src_ip: 1.17683768064979
-[17/03/2021 22:32:55.608] [info] Target values of src_port: 1.3896347434494476
-[17/03/2021 22:32:55.608] [info] SAMPLE SIZE FOR THIS THRESHOLD: 50
-[17/03/2021 22:32:55.820] [info] Threshold is reached and set.
-[17/03/2021 22:36:57.617] [info] ------Fireflow v1.0 execution logger----
-[17/03/2021 22:36:57.617] [info] PF_RING plugin started
-[17/03/2021 22:36:57.617] [info] We selected interface: ens33
-[17/03/2021 22:36:57.655] [info] Successully binded to: ens33
-[17/03/2021 22:36:57.655] [info] Device RX channels number: 1
-[17/03/2021 22:36:57.655] [info] Using PF_RING v.7.8.0
+[18/03/2021 02:43:42.006] [info] ------Fireflow v1.0 execution logger----
+[18/03/2021 02:43:42.006] [info] PF_RING plugin started
+[18/03/2021 02:43:42.006] [info] We selected interface: ens33
+[18/03/2021 02:43:42.040] [info] Successully binded to: ens33
+[18/03/2021 02:43:42.040] [info] Device RX channels number: 1
+[18/03/2021 02:43:42.040] [info] Using PF_RING v.7.8.0
+[18/03/2021 02:44:52.788] [info] ------Fireflow v1.0 execution logger----
+[18/03/2021 02:44:52.788] [info] PF_RING plugin started
+[18/03/2021 02:44:52.788] [info] We selected interface: ens33
+[18/03/2021 02:44:52.820] [info] Successully binded to: ens33
+[18/03/2021 02:44:52.820] [info] Device RX channels number: 1
+[18/03/2021 02:44:52.820] [info] Using PF_RING v.7.8.0
+[18/03/2021 02:46:32.822] [info] Threshold is going to be set now.
+[18/03/2021 02:46:32.822] [info] SAMPLE SIZE FOR THIS THRESHOLD: 20
+[18/03/2021 02:46:32.822] [info] Target values of flags: 0.5589465892186846
+[18/03/2021 02:46:32.822] [info] Target values of src_ip: 0.26003116746893773
+[18/03/2021 02:46:32.822] [info] Target values of src_port: 0.5589465892186846
+[18/03/2021 02:46:32.822] [info] SAMPLE SIZE FOR THIS THRESHOLD: 20
+[18/03/2021 02:46:32.864] [info] Threshold is reached and set.

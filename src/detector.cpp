@@ -16,11 +16,15 @@ void Detector::judge(Cusum CusumTask)
         {
             cout << "DDOS incidents detected, check the log for more details" << endl;
             spdlog::get("alert_logger")->warn("A DDoS incident is detected at subgroup {}. Upper SUM is larger than UCL: {} {}", count, map_pair.first, Upper[map_pair.first]);
+            CusumTask.logCusum(CusumTask.cusumTable, "cusum_logger");
+            exit(1);
         }
         if (Lower[map_pair.first] < CusumTask.getTargetValues()[map_pair.first] - map_pair.second)
         {
             cout << "DDoS incidents detected, check the log for more details" << endl;
             spdlog::get("alert_logger")->warn("A DDoS incident is detected at subgroup {}. Lower SUM is smaller than LCL : {} {}", count, map_pair.first, Lower[map_pair.first]);
+            CusumTask.logCusum(CusumTask.cusumTable, "cusum_logger");
+            exit(1);
         }
     }
 }
