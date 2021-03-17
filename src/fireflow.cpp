@@ -19,7 +19,7 @@ Capture *capture_interface = NULL;
 int main(int argc, char *argv[])
 {
     signal(SIGINT, sigIntHandler);
-    string interface, debuglog, packetlog, cusumlog, substatlog = "";
+    string interface, debuglog, packetlog, cusumlog, substatlog, thresholdlog, alertlog = "";
     vector<string> attributes;
     double window, subwindow = 0;
     int estimator, max_files, max_sizelog = 0;
@@ -32,7 +32,8 @@ int main(int argc, char *argv[])
         debuglog = j["debugpath"];
         packetlog = j["packetpath"];
         cusumlog = j["cusumpath"];
-        substatlog = j["substatpath"];
+        thresholdlog = j["thresholdpath"];
+        alertlog = j["alertpath"];
         window = j["window"]; //seconds
         subwindow = j["subwindow"];
         estimator = j["estimator"];
@@ -51,13 +52,12 @@ int main(int argc, char *argv[])
     auto exec_logger = spdlog::rotating_logger_mt("exec_logger", debuglog, max_sizelog, max_files);
     auto packet_logger = spdlog::rotating_logger_mt("packet_logger",  packetlog, max_sizelog, max_files);
     auto cusum_logger = spdlog::rotating_logger_mt("cusum_logger",  cusumlog, max_sizelog, max_files);
-    auto table_logger = spdlog::rotating_logger_mt("table_logger",  cusumlog, max_sizelog, max_files);
-    auto substat_logger = spdlog::rotating_logger_mt("substat_logger",  substatlog, max_sizelog, max_files);
+    auto threshold_logger = spdlog::rotating_logger_mt("threshold_logger",  thresholdlog, max_sizelog, max_files);
+    auto alert_logger = spdlog::rotating_logger_mt("alert_logger",  alertlog, max_sizelog, max_files);
     exec_logger->set_pattern("[%d/%m/%Y %T.%e] [%^%l%$] %v");
     cusum_logger->set_pattern("[%d/%m/%Y %T.%e] %v");
     packet_logger->set_pattern("[%d/%m/%Y %T.%e] %v");
-    substat_logger->set_pattern("%v");
-    table_logger->set_pattern("%v");
+    threshold_logger->set_pattern("%v");
     capture_interface->start_pfring_capture();
 }
 

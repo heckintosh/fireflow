@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sstream>
+#include "detector.h"
 #include "cusum.h"
 #include "mapper.h"
 #include "parser.h"
@@ -48,7 +49,7 @@ void Capture::execution_flow(const struct pfring_pkthdr &hdr, const u_char *buff
     static uint packet_queue = 0;
     static EntropyCalc EntropyTask;
     static Cusum CusumTask;
-    //static Detector DetectorTask;
+    static Detector DetectorTask;
 
     //If threshold for calculating cusum is not reached, then  
     if (CusumTask.getThresholdStatus() == false)
@@ -100,7 +101,7 @@ void Capture::execution_flow(const struct pfring_pkthdr &hdr, const u_char *buff
         if (duration_window >= Capture::window)
         {
             CusumTask.calc(EntropyTask.getLatestEntropies());
-            //DetectorTask.judge(CusumTask);
+            DetectorTask.judge(CusumTask);
             window_t = chrono::steady_clock::now();
         }
     }

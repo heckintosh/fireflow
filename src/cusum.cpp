@@ -21,7 +21,8 @@ void Cusum::setThreshold(int subsize, int samplesize, map<string, vector<double>
 {
     Cusum::cusumTable = generateCusumTable(Capture::attributes);
     // If not initialized then initialized
-    if (Cusum::subgroup_size == 0 || Cusum::sample_size == 0){
+    if (Cusum::subgroup_size == 0 || Cusum::sample_size == 0)
+    {
         Cusum::sample_size = samplesize;
         Cusum::subgroup_size = subsize;
     }
@@ -32,13 +33,18 @@ void Cusum::setThreshold(int subsize, int samplesize, map<string, vector<double>
         _setTargetValues(samples);
         // Set Tabular variables: (Correaction Factor + Standard deviation + k + h)
         _setTabularVar(samples);
-        // Initialize some essential values to 0 
+        // Initialize some essential values to 0
+        spdlog::get("exec_logger")->info("Threshold is going to be set now.");
+        spdlog::get("exec_logger")->info("SAMPLE SIZE FOR THIS THRESHOLD: {}", Cusum::sample_size);
         for (const auto &map_pair : samples)
         {
             S_Li_prev[map_pair.first] = 0.0;
             S_Hi_prev[map_pair.first] = 0.0;
+            spdlog::get("exec_logger")->info("Target values of {}: {}", map_pair.first, Cusum::getControlLimit()[map_pair.first]);
         }
-        spdlog::get("exec_logger")->info("Threshold is going to be set now.");
+        for (const auto &map_pair : samples)
+        {
+        }
         Cusum::_calcPrevCusum(samples);
         spdlog::get("exec_logger")->info("Threshold is reached and set.");
     }
@@ -47,7 +53,7 @@ void Cusum::setThreshold(int subsize, int samplesize, map<string, vector<double>
         cout << "The Cusum Threshold has already been set. The setThreshold function should not be called if its already set." << endl;
         exit(1);
     }
-    Cusum::_logCusum(Cusum::cusumTable);
+    Cusum::_logCusum(Cusum::cusumTable, "threshold_logger");
 }
 
 // Loop through each samples before the threshold point, calculate Cusum for each windows
@@ -93,6 +99,10 @@ void Cusum::calc(map<string, vector<double>> data)
     Cusum::S_Li_prev = Cusum::S_Li;
     Cusum::S_Hi_prev = Cusum::S_Hi;
     updateCusumTable(Cusum::cusumTable, Cusum::subgroup_counter, Cusum::S_Li, Cusum::S_Hi);
+    if (Cusum::thresholdStatus == true)
+    {
+        Cusum::_logCusum(Cusum::cusumTable, "cusum_logger");
+    }
 }
 
 void Cusum::_setStandardDeviationsTabular(map<string, vector<double>> data)
@@ -131,8 +141,10 @@ void Cusum::_setCorrectionFactor(int n)
     Cusum::correction_factor = sqrt(2 / (tmp - 1)) * (tgamma((double)tmp / 2) / tgamma((double)(tmp - 1) / 2));
 }
 
-void Cusum::_calcTotal(map<string,double> means){
-    for (auto &map_pair : Cusum::total){
+void Cusum::_calcTotal(map<string, double> means)
+{
+    for (auto &map_pair : Cusum::total)
+    {
         map_pair.second += means[map_pair.first] - target_values[map_pair.first];
     }
 }
@@ -205,7 +217,8 @@ map<string, double> Cusum::calcMultipleMeans(map<string, vector<double>> data)
     return means;
 }
 
-void Cusum::_setTabularVar(map<string, vector<double>> data){
+void Cusum::_setTabularVar(map<string, vector<double>> data)
+{
     _setCorrectionFactor(Cusum::subgroup_size);
     _setStandardDeviationsTabular(data);
     for (const auto &map_pair : Cusum::stdevs)
@@ -225,7 +238,8 @@ map<string, double> Cusum::getTargetValues()
     return Cusum::target_values;
 }
 
-int Cusum::getSubCount(){
+int Cusum::getSubCount()
+{
     return Cusum::subgroup_counter;
 }
 
@@ -239,32 +253,37 @@ map<string, double> Cusum::getLowerCusum()
     return Cusum::S_Li;
 }
 
-map<string, Table> Cusum::generateCusumTable(vector<string> tableNames){
+map<string, Table> Cusum::generateCusumTable(vector<string> tableNames)
+{
     map<string, Table> titleTables;
     map<string, Table> cusumTables;
-    for (int i = 0; i < tableNames.size(); i++){
+    for (int i = 0; i < tableNames.size(); i++)
+    {
         titleTables[tableNames[i]].add_row(Row_t{tableNames[i]});
         cusumTables[tableNames[i]].add_row(Row_t{titleTables[tableNames[i]]});
     }
     return cusumTables;
 }
 
-void Cusum::updateCusumTable(map<string, Table> &cusumTable, int index, map<string, double> S_Li, map<string, double> S_Hi){
-    for (auto &map_pair : cusumTable){
+void Cusum::updateCusumTable(map<string, Table> &cusumTable, int index, map<string, double> S_Li, map<string, double> S_Hi)
+{
+    for (auto &map_pair : cusumTable)
+    {
         Table tmp;
-        tmp.add_row(Row_t{to_string(index), to_string(S_Li[map_pair.first]),to_string(S_Hi[map_pair.first])});
+        tmp.add_row(Row_t{to_string(index), to_string(S_Li[map_pair.first]), to_string(S_Hi[map_pair.first])});
         map_pair.second.add_row(Row_t{tmp});
     }
 }
 
 // Function for logging sum values
-void Cusum::_logCusum(map<string, Table> cusumTable){
+void Cusum::_logCusum(map<string, Table> cusumTable, string loggername)
+{
     std::stringstream ss;
     //Only loop through the lowerSum keys, because both have the same keys
-    for (const auto &map_pair : cusumTable){
+    for (const auto &map_pair : cusumTable)
+    {
         ss << map_pair.second;
-        spdlog::get("cusum_logger")->info("{}", ss.str());
+        spdlog::get(loggername)->info("{}", ss.str());
         ss.str("");
     }
 }
-

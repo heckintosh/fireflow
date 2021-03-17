@@ -39,7 +39,7 @@ private:
     void _shiftCounter();
     void _PrintGrandMeans(map<string, double> data);
     void _calcPrevCusum(map<string, vector<double>> data);
-    void _logCusum(map<string, Table> tableObject);
+    void _logCusum(map<string, Table> tableObject, string loggername);
     map<string, double> _calcLowerSum(map<string, double> z);
     map<string, double> _calcHigherSum(map<string, double> z);
     map<string, Table> generateCusumTable(vector<string> tableNames);

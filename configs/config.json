@@ -1,13 +1,14 @@
 {
   "interface": "ens33",
-  "window": 2.0,
-  "subwindow": 1.0,
-  "estimator": 5,
+  "window": 100.0,
+  "subwindow": 20.0,
+  "estimator": 20,
   "max_sizelog": 10485760,
   "max_files": 3,
   "debugpath": "../logs/fireflow.log",
   "packetpath": "../logs/packet.log",
   "cusumpath": "../logs/cusum.log",
-  "substatpath": "../logs/substat.log",
+  "thresholdpath": "../logs/threshold.log",
+  "alertpath" : "../logs/alert.log",
   "attributes" : ["src_ip", "src_port", "flags"]
 }

@@ -1,9 +1,19 @@
-[17/03/2021 13:09:40.337] [info] ------Fireflow v1.0 execution logger----
-[17/03/2021 13:09:40.337] [info] PF_RING plugin started
-[17/03/2021 13:09:40.337] [info] We selected interface: ens33
-[17/03/2021 13:09:40.363] [info] Successully binded to: ens33
-[17/03/2021 13:09:40.363] [info] Device RX channels number: 1
-[17/03/2021 13:09:40.363] [info] Using PF_RING v.7.8.0
-[17/03/2021 13:09:50.365] [info] Threshold is going to be set now.
-[17/03/2021 13:09:50.365] [info] SAMPLE SIZE FOR THIS THRESHOLD: 10
-[17/03/2021 13:09:50.386] [info] Threshold is reached and set.
+[17/03/2021 22:24:35.572] [info] ------Fireflow v1.0 execution logger----
+[17/03/2021 22:24:35.572] [info] PF_RING plugin started
+[17/03/2021 22:24:35.572] [info] We selected interface: ens33
+[17/03/2021 22:24:35.603] [info] Successully binded to: ens33
+[17/03/2021 22:24:35.603] [info] Device RX channels number: 1
+[17/03/2021 22:24:35.603] [info] Using PF_RING v.7.8.0
+[17/03/2021 22:32:55.607] [info] Threshold is going to be set now.
+[17/03/2021 22:32:55.608] [info] SAMPLE SIZE FOR THIS THRESHOLD: 50
+[17/03/2021 22:32:55.608] [info] Target values of flags: 1.3896347434494476
+[17/03/2021 22:32:55.608] [info] Target values of src_ip: 1.17683768064979
+[17/03/2021 22:32:55.608] [info] Target values of src_port: 1.3896347434494476
+[17/03/2021 22:32:55.608] [info] SAMPLE SIZE FOR THIS THRESHOLD: 50
+[17/03/2021 22:32:55.820] [info] Threshold is reached and set.
+[17/03/2021 22:36:57.617] [info] ------Fireflow v1.0 execution logger----
+[17/03/2021 22:36:57.617] [info] PF_RING plugin started
+[17/03/2021 22:36:57.617] [info] We selected interface: ens33
+[17/03/2021 22:36:57.655] [info] Successully binded to: ens33
+[17/03/2021 22:36:57.655] [info] Device RX channels number: 1
+[17/03/2021 22:36:57.655] [info] Using PF_RING v.7.8.0

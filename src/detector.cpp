@@ -14,14 +14,13 @@ void Detector::judge(Cusum CusumTask)
         int count = CusumTask.getSubCount();
         if (Upper[map_pair.first] > CusumTask.getTargetValues()[map_pair.first] + map_pair.second)
         {
-            spdlog::get("exec_logger")->warn("UP SIDE CUSUM IS LARGER THAN UCL: {} {}", map_pair.first, Upper[map_pair.first]);
-            spdlog::get("exec_logger")->warn("DETECTED AT {}th SAMPLE", count);
+            cout << "DDOS incidents detected, check the log for more details" << endl;
+            spdlog::get("alert_logger")->warn("A DDoS incident is detected at subgroup {}. Upper SUM is larger than UCL: {} {}", count, map_pair.first, Upper[map_pair.first]);
         }
         if (Lower[map_pair.first] < CusumTask.getTargetValues()[map_pair.first] - map_pair.second)
         {
-            spdlog::get("exec_logger")->warn("LOW SIDE CUSUM IS SMALLER THAN LCL : {} {}", map_pair.first, Lower[map_pair.first]);
-            spdlog::get("exec_logger")->warn("DETECTED AT {}th SAMPLE", count);
+            cout << "DDoS incidents detected, check the log for more details" << endl;
+            spdlog::get("alert_logger")->warn("A DDoS incident is detected at subgroup {}. Lower SUM is smaller than LCL : {} {}", count, map_pair.first, Lower[map_pair.first]);
         }
     }
-    spdlog::get("exec_logger")->info("CUSUM VALUE IS RESETTED");
 }
