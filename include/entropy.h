@@ -1,10 +1,11 @@
 #ifndef ENTROPY_HEADER
 #define ENTROPY_HEADER
-#include "capture.h"
-#include "packet.h"
 #include <vector>
 #include <map>
 #include <string>
+#include "capture.h"
+#include "packet.h"
+#include "mapper.h"
 
 using namespace std;
 class EntropyCalc

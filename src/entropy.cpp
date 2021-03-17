@@ -1,10 +1,30 @@
-#include "entropy.h"
-#include "mapping.h"
 #include <vector>
 #include <map>
 #include <string>
 #include <math.h>
+#include "entropy.h"
+#include "mapper.h"
 using namespace std;
+
+//Push packets into the vector and calculate entropy of the subwindow
+void EntropyCalc::accumulate_subwindow_entropies(packet &current_packet)
+{
+    Mapper mapObject = Mapper();
+    p_vector.push_back(current_packet);
+    vector<double> temp;
+    map<string, map<uint, uint>> tmp_map = mapObject.GetValCountAllHeaders(p_vector);
+    for (const auto &map_pair : EntropyCalc::calcMultiEntropy(tmp_map))
+    {
+        entropies_of_headers[map_pair.first].push_back(map_pair.second);
+    }
+    p_vector.clear();
+}
+
+// Push packets when the subwindow is not reached yet
+void EntropyCalc::accumulate_packets(packet &current_packet)
+{
+    p_vector.push_back(current_packet);
+}
 
 void EntropyCalc::_saveLatestEntropies()
 {
@@ -22,24 +42,7 @@ void EntropyCalc::_saveLatestEntropies()
 map<string, vector<double>> EntropyCalc::getLatestEntropies()
 {
     _saveLatestEntropies();
-    PrintLatestEntropies();
     return EntropyCalc::latest_entropies;
-}
-
-void EntropyCalc::accumulate_packets(packet &current_packet)
-{
-    p_vector.push_back(current_packet);
-}
-
-void EntropyCalc::accumulate_subwindow_entropies(packet &current_packet)
-{
-    p_vector.push_back(current_packet);
-    vector<double> temp;
-    for (const auto &map_pair : EntropyCalc::calcMultiEntropy(count_values_all_headers(p_vector)))
-    {
-        entropies_of_headers[map_pair.first].push_back(map_pair.second);
-    }
-    p_vector.clear();
 }
 
 void EntropyCalc::zero_entropy()
@@ -107,7 +110,7 @@ vector<double> EntropyCalc::calcProb(map<uint, uint> header_value_counter)
 void EntropyCalc::PrintFullEntropies()
 {
     cout << "-----------FULL ENTROPIES-----------------" << endl;
-    for (const auto &map_pair : entropies_of_headers)
+    for (const auto &map_pair : EntropyCalc::entropies_of_headers)
     {
         cout << map_pair.first << ": ";
         for (const auto &entropy : map_pair.second)

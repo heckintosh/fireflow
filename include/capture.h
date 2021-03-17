@@ -2,6 +2,7 @@
 #define CAPTURE_HEADER
 #include <string>
 #include <pfring.h>
+#include <vector>
 #include "packet.h"
 using namespace std;
 
@@ -12,16 +13,13 @@ private:
 
 public:
     static unsigned int total_unparsed_packets;
+    static int subwindow_counter;
     static double window;
     static int estimator;
     static double subwindow;
-
+    static vector<string> attributes;
     unsigned int pfring_sampling_rate; // Sample rate (packets/second?)
-    int max_sizelog;
-    int max_files;
-    string debugpath;  // Fireflow execution logger
     string interface;  // The ethernet interface to capture packet
-    string packetpath; // The file contains packet's content
 
     /* Constructor
         - interface 
@@ -31,7 +29,7 @@ public:
         - max_size: 10mb
         - max_files: 3
     */
-    Capture(string _interface, string _debugpath, string _packetpath, double _window, double _subwindow, int _estimator, int _max_sizelog, int _max_files);
+    Capture(string _interface, double _window, double _subwindow, int _estimator, vector<string> &_attributes);
 
     //parsing_pfring_packet(): oosw = out of subwindow; oow = out of window
     static packet parsing_pfring_packet(const struct pfring_pkthdr *header, const u_char *buffer);

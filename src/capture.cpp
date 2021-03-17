@@ -5,12 +5,12 @@
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sstream>
+#include "cusum.h"
+#include "mapper.h"
 #include "parser.h"
 #include "packet.h"
 #include "entropy.h"
 #include "capture.h"
-#include "cusum.h"
-#include "detector.h"
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/sinks/rotating_file_sink.h"
@@ -19,20 +19,98 @@
 using namespace std;
 uint Capture::total_unparsed_packets = 0;
 int Capture::estimator = 0;
+int Capture::subwindow_counter = 0;
 double Capture::window = 0;
 double Capture::subwindow = 0;
 ulong packet::totalPackets = 0;
+vector<string> Capture::attributes;
 
-Capture::Capture(string _interface, string _debugpath, string _packetpath, double _window, double _subwindow, int _estimator, int _max_sizelog, int _max_files)
+Capture::Capture(string _interface, double _window, double _subwindow, int _estimator, vector<string> &_attributes)
 {
     Capture::interface = _interface;
-    Capture::debugpath = _debugpath;
-    Capture::packetpath = _packetpath;
     Capture::window = _window;
     Capture::subwindow = _subwindow;
     Capture::estimator = _estimator;
-    Capture::max_sizelog = _max_sizelog;
-    Capture::max_files = _max_files;
+    Capture::attributes = _attributes;
+}
+
+void Capture::execution_flow(const struct pfring_pkthdr &hdr, const u_char *buffer, int hasPkt)
+{
+    auto current_t = chrono::steady_clock::now();
+    bool entropyIsCalced = false;
+    double duration;
+    double duration_window;
+    double threshold_tracking;
+    packet current_packet;
+    static auto runtime = chrono::steady_clock::now();
+    static auto subwindow_t = chrono::steady_clock::now();
+    static auto window_t = chrono::steady_clock::now();
+    static uint packet_queue = 0;
+    static EntropyCalc EntropyTask;
+    static Cusum CusumTask;
+    //static Detector DetectorTask;
+
+    //If threshold for calculating cusum is not reached, then  
+    if (CusumTask.getThresholdStatus() == false)
+    {
+        threshold_tracking = (chrono::duration_cast<chrono::microseconds>(current_t - runtime).count()) / 1000000.0;
+    }
+
+    // track if the duration for collecting packets in a subwindow has ended yet
+    duration = (chrono::duration_cast<chrono::microseconds>(current_t - subwindow_t).count()) / 1000000.0;
+    duration_window = (chrono::duration_cast<chrono::microseconds>(current_t - window_t).count()) / 1000000.0;
+    entropyIsCalced = false;
+    if (duration < Capture::subwindow)
+    {
+        // if there are packets before the duration is reached, parse that packet and add it to a vector
+        if (hasPkt == 1)
+        {
+            packet_queue += 1;
+            current_packet = parsing_pfring_packet(&hdr, buffer);
+            EntropyTask.accumulate_packets(current_packet);
+        };
+    }
+
+    // if the duration for collecting packets has ended, start calculating entropies of that duration
+    if (duration >= Capture::subwindow)
+    {
+        //if there are packets in queue
+        if (packet_queue > 0)
+        {
+            //Parsing packets because the queue is > 0
+            current_packet = parsing_pfring_packet(&hdr, buffer);
+            //Counting the number of subwindows have been passed
+            Capture::subwindow_counter += 1;
+            //Push packets into the vector and calculate entropy of the subwindow
+            EntropyTask.accumulate_subwindow_entropies(current_packet);
+        }
+        else
+        {
+            // if no packets were received then 0 entropy
+            EntropyTask.zero_entropy();
+        }
+        packet_queue = 0;
+        entropyIsCalced = true;
+        subwindow_t = chrono::steady_clock::now();
+    }
+
+    //Start detecting abnormality when the threshold has been set
+    if (CusumTask.getThresholdStatus() == true && entropyIsCalced == true)
+    {
+        if (duration_window >= Capture::window)
+        {
+            CusumTask.calc(EntropyTask.getLatestEntropies());
+            //DetectorTask.judge(CusumTask);
+            window_t = chrono::steady_clock::now();
+        }
+    }
+    if (CusumTask.getThresholdStatus() == false && entropyIsCalced == true){
+        if (threshold_tracking > window * estimator)
+        {
+            // subgroup_size, sample_size Data from beginning to threshold
+            CusumTask.setThreshold(Capture::window / Capture::subwindow , Capture::window / Capture::subwindow * Capture::estimator, EntropyTask.GetFullEntropies());
+        } 
+    }
 }
 
 void Capture::start_pfring_capture()
@@ -128,79 +206,6 @@ bool Capture::start_pfring_packet_preprocessing(const char *dev)
     return true;
 };
 
-void Capture::execution_flow(const struct pfring_pkthdr &hdr, const u_char *buffer, int hasPkt)
-{
-    auto current_t = chrono::steady_clock::now();
-    bool entropyIsCalced = false;
-    double duration;
-    double duration_window;
-    double threshold_tracking;
-    packet current_packet;
-    static auto runtime = chrono::steady_clock::now();
-    static auto subwindow_t = chrono::steady_clock::now();
-    static auto window_t = chrono::steady_clock::now();
-    static uint packet_queue = 0;
-    static EntropyCalc EntropyTask;
-    static Cusum CusumTask;
-    static Detector DetectorTask;
-
-    //track if the time for setting threshold has been reached yet
-    if (CusumTask.getThresholdStatus() == false)
-    {
-        threshold_tracking = (chrono::duration_cast<chrono::microseconds>(current_t - runtime).count()) / 1000000.0;
-    }
-
-    // track if the duration for collecting packets in a subwindow has ended yet
-    duration = (chrono::duration_cast<chrono::microseconds>(current_t - subwindow_t).count()) / 1000000.0;
-    duration_window = (chrono::duration_cast<chrono::microseconds>(current_t - window_t).count()) / 1000000.0;
-    entropyIsCalced = false;
-    if (duration < Capture::subwindow)
-    {
-        if (hasPkt == 1)
-        {
-            packet_queue += 1;
-            current_packet = parsing_pfring_packet(&hdr, buffer);
-            EntropyTask.accumulate_packets(current_packet);
-        };
-    }
-
-    // if the durat ion for collecting packets has ended, start calculating entropies of that duration
-    if (duration >= Capture::subwindow)
-    {
-        if (packet_queue > 0)
-        {
-            current_packet = parsing_pfring_packet(&hdr, buffer);
-            EntropyTask.accumulate_subwindow_entropies(current_packet);
-        }
-        else
-        {
-            // if no packets were received then 0 entropy
-            EntropyTask.zero_entropy();
-        }
-        packet_queue = 0;
-        entropyIsCalced = true;
-        subwindow_t = chrono::steady_clock::now();
-    }
-    if (CusumTask.getThresholdStatus() == true && entropyIsCalced == true)
-    {
-        if (duration_window >= Capture::window)
-        {
-            CusumTask.calc(EntropyTask.getLatestEntropies());
-            DetectorTask.judgeCusum(CusumTask);
-            window_t = chrono::steady_clock::now();
-        }
-    }
-    if (CusumTask.getThresholdStatus() == false && entropyIsCalced == true)
-    {
-        if (threshold_tracking > window * estimator)
-        {
-            CusumTask.setSampleSize(Capture::window / Capture::subwindow * Capture::estimator);
-            CusumTask.setSubGroupSize(Capture::window / Capture::subwindow);
-            CusumTask.setThreshold(EntropyTask.GetFullEntropies());
-        }
-    }
-}
-
 packet Capture::parsing_pfring_packet(const struct pfring_pkthdr *header, const u_char *buffer)
 {
     // A packet. Description of all fields: "packet.h"
@@ -217,7 +222,6 @@ packet Capture::parsing_pfring_packet(const struct pfring_pkthdr *header, const 
     {
         Capture::total_unparsed_packets++;
     }
-
     // Get packet IP version to our psuedo header
     current_packet.ip_protocol_version = header->extended_hdr.parsed_pkt.ip_version;
     current_packet.ts = header->ts;
@@ -232,9 +236,6 @@ packet Capture::parsing_pfring_packet(const struct pfring_pkthdr *header, const 
     // Get port to our psuedo header
     current_packet.src_port = header->extended_hdr.parsed_pkt.l4_src_port;
     current_packet.dst_port = header->extended_hdr.parsed_pkt.l4_dst_port;
-    // We need this for deep packet inspection
-    current_packet.packet_payload_length = header->len;
-    current_packet.packet_payload_pointer = (void *)buffer;
 
     // Get other data to our psuedo header
     current_packet.length = header->len;
@@ -249,7 +250,6 @@ packet Capture::parsing_pfring_packet(const struct pfring_pkthdr *header, const 
     {
         current_packet.flags = 0;
     }
-    log_packet(current_packet);
     return current_packet;
 }
 
@@ -259,6 +259,7 @@ void Capture::stop_pfring_capture()
     pfring_breakloop(ring);
 }
 
+//helper function for logging packet
 void Capture::log_packet(packet current_packet)
 {
     string src_ip_as_string = ip_int_to_string(current_packet.src_ip);

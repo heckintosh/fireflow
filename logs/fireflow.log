@@ -1,0 +1,9 @@
+[17/03/2021 13:09:40.337] [info] ------Fireflow v1.0 execution logger----
+[17/03/2021 13:09:40.337] [info] PF_RING plugin started
+[17/03/2021 13:09:40.337] [info] We selected interface: ens33
+[17/03/2021 13:09:40.363] [info] Successully binded to: ens33
+[17/03/2021 13:09:40.363] [info] Device RX channels number: 1
+[17/03/2021 13:09:40.363] [info] Using PF_RING v.7.8.0
+[17/03/2021 13:09:50.365] [info] Threshold is going to be set now.
+[17/03/2021 13:09:50.365] [info] SAMPLE SIZE FOR THIS THRESHOLD: 10
+[17/03/2021 13:09:50.386] [info] Threshold is reached and set.

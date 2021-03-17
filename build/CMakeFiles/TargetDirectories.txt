@@ -1,3 +1,0 @@
-/home/ubuntu/Tools/fireflow/build/CMakeFiles/rebuild_cache.dir
-/home/ubuntu/Tools/fireflow/build/CMakeFiles/fireflow.dir
-/home/ubuntu/Tools/fireflow/build/CMakeFiles/edit_cache.dir

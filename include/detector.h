@@ -5,6 +5,6 @@ using namespace std;
 class Detector
 {
 public:
-    void judgeCusum(Cusum cusum_object);
+    void judge(Cusum cusum_object);
 };
 #endif
