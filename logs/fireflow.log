@@ -1,19 +1,15 @@
-[18/03/2021 02:43:42.006] [info] ------Fireflow v1.0 execution logger----
-[18/03/2021 02:43:42.006] [info] PF_RING plugin started
-[18/03/2021 02:43:42.006] [info] We selected interface: ens33
-[18/03/2021 02:43:42.040] [info] Successully binded to: ens33
-[18/03/2021 02:43:42.040] [info] Device RX channels number: 1
-[18/03/2021 02:43:42.040] [info] Using PF_RING v.7.8.0
-[18/03/2021 02:44:52.788] [info] ------Fireflow v1.0 execution logger----
-[18/03/2021 02:44:52.788] [info] PF_RING plugin started
-[18/03/2021 02:44:52.788] [info] We selected interface: ens33
-[18/03/2021 02:44:52.820] [info] Successully binded to: ens33
-[18/03/2021 02:44:52.820] [info] Device RX channels number: 1
-[18/03/2021 02:44:52.820] [info] Using PF_RING v.7.8.0
-[18/03/2021 02:46:32.822] [info] Threshold is going to be set now.
-[18/03/2021 02:46:32.822] [info] SAMPLE SIZE FOR THIS THRESHOLD: 20
-[18/03/2021 02:46:32.822] [info] Target values of flags: 0.5589465892186846
-[18/03/2021 02:46:32.822] [info] Target values of src_ip: 0.26003116746893773
-[18/03/2021 02:46:32.822] [info] Target values of src_port: 0.5589465892186846
-[18/03/2021 02:46:32.822] [info] SAMPLE SIZE FOR THIS THRESHOLD: 20
-[18/03/2021 02:46:32.864] [info] Threshold is reached and set.
+[18/03/2021 15:28:23.087] [info] ------Fireflow v1.0 execution logger----
+[18/03/2021 15:28:23.087] [info] PF_RING plugin started
+[18/03/2021 15:28:23.087] [info] We selected interface: ens33
+[18/03/2021 15:28:23.127] [info] Successully binded to: ens33
+[18/03/2021 15:28:23.127] [info] Device RX channels number: 1
+[18/03/2021 15:28:23.127] [info] Using PF_RING v.7.8.0
+[18/03/2021 15:45:03.132] [info] Threshold is going to be set now.
+[18/03/2021 15:45:03.132] [info] Number of subgroups for setting this threshold 50
+[18/03/2021 15:45:03.132] [info] UCL of flags: 2.815592490890734
+[18/03/2021 15:45:03.132] [info] LCL of flags: -2.2619059341393815
+[18/03/2021 15:45:03.132] [info] UCL of src_ip: 1.2625122832492077
+[18/03/2021 15:45:03.132] [info] LCL of src_ip: -1.0480601143085537
+[18/03/2021 15:45:03.132] [info] UCL of src_port: 2.815592490890734
+[18/03/2021 15:45:03.132] [info] LCL of src_port: -2.2619059341393815
+[18/03/2021 15:45:03.174] [info] Threshold is reached and set.

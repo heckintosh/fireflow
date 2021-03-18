@@ -35,12 +35,13 @@ void Cusum::setThreshold(int subsize, int samplesize, map<string, vector<double>
         _setTabularVar(samples);
         // Initialize some essential values to 0
         spdlog::get("exec_logger")->info("Threshold is going to be set now.");
-        spdlog::get("exec_logger")->info("SAMPLE SIZE FOR THIS THRESHOLD: {}", Cusum::sample_size);
+        spdlog::get("exec_logger")->info("Number of subgroups for setting this threshold {}", Cusum::sample_size);
         for (const auto &map_pair : samples)
         {
             S_Li_prev[map_pair.first] = 0.0;
             S_Hi_prev[map_pair.first] = 0.0;
-            spdlog::get("exec_logger")->info("Target values of {}: {}", map_pair.first, Cusum::getControlLimit()[map_pair.first]);
+            spdlog::get("exec_logger")->info("UCL of {}: {}", map_pair.first, Cusum::getControlLimit()[map_pair.first] + Cusum::getTargetValues()[map_pair.first]);
+            spdlog::get("exec_logger")->info("LCL of {}: {}", map_pair.first, Cusum::getTargetValues()[map_pair.first] - Cusum::getControlLimit()[map_pair.first]);
         }
         for (const auto &map_pair : samples)
         {
@@ -61,7 +62,6 @@ void Cusum::setThreshold(int subsize, int samplesize, map<string, vector<double>
 void Cusum::_calcPrevCusum(map<string, vector<double>> data)
 {
     map<string, vector<double>> dataPiece;
-    spdlog::get("exec_logger")->info("SAMPLE SIZE FOR THIS THRESHOLD: {}", Cusum::sample_size);
     for (int j = 0; j < Cusum::sample_size; j += Cusum::subgroup_size)
     {
         //Take data samples from one window and put into a tmp map
@@ -221,7 +221,7 @@ void Cusum::_setTabularVar(map<string, vector<double>> data)
     for (const auto &map_pair : Cusum::stdevs)
     {
         Cusum::k[map_pair.first] = map_pair.second / 2;
-        Cusum::h[map_pair.first] = map_pair.second * 5.7;
+        Cusum::h[map_pair.first] = map_pair.second * 7.7;
     }
 }
 

@@ -101,6 +101,7 @@ void Capture::execution_flow(const struct pfring_pkthdr &hdr, const u_char *buff
         if (duration_window >= Capture::window)
         {
             CusumTask.calc(EntropyTask.getLatestEntropies());
+            cout << CusumTask.getSubCount() << endl;
             DetectorTask.judge(CusumTask);
             window_t = chrono::steady_clock::now();
         }
