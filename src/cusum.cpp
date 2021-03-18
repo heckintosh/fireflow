@@ -221,7 +221,7 @@ void Cusum::_setTabularVar(map<string, vector<double>> data)
     for (const auto &map_pair : Cusum::stdevs)
     {
         Cusum::k[map_pair.first] = map_pair.second / 2;
-        Cusum::h[map_pair.first] = map_pair.second * 10.7;
+        Cusum::h[map_pair.first] = map_pair.second * 4.7;
     }
 }
 
