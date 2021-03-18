@@ -14,7 +14,7 @@ private:
     uint packet_queue = 0;
     int subgroup_size = Capture::window / Capture::subwindow;
     vector<packet> p_vector;
-    vector<string> headers = {"src_ip", "src_port", "dst_port", "flags"};
+    vector<string> headers = {"src_ip", "src_port", "flags"};
     map<string, vector<double>> entropies_of_headers;
     map<string, vector<double>> latest_entropies;
     void _saveLatestEntropies();
